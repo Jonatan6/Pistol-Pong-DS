@@ -3,8 +3,6 @@
 #include <man.h>
 #include <woman.h>
 
-#define FRAMES_PER_ANIMATION 1
-
 // The pistol (man) sprite
 typedef struct 
 {
@@ -18,7 +16,6 @@ typedef struct
 	int anim_frame;
 }Man;
 
-
 // The bullet (woman) sprite
 typedef struct
 {
@@ -30,7 +27,6 @@ typedef struct
 
 	int state;
 	int anim_frame;
-
 
 }Woman;
 
@@ -54,7 +50,7 @@ void initMan(Man *sprite, u8* gfx)
 
 void animateWoman(Woman *sprite)
 {
-	sprite->gfx_frame = sprite->anim_frame + sprite->state * FRAMES_PER_ANIMATION;
+	sprite->gfx_frame = sprite->anim_frame + sprite->state;
 }
 
 void initWoman(Woman *sprite, u8* gfx)
@@ -68,8 +64,6 @@ void initWoman(Woman *sprite, u8* gfx)
 		gfx += 32*32;
 	}
 }
-
-
 //---------------------------------------------------------------------
 int main(void) 
 //---------------------------------------------------------------------
@@ -91,8 +85,7 @@ int main(void)
 
 	dmaCopy(manPal, SPRITE_PALETTE, 512);
 	dmaCopy(womanPal, SPRITE_PALETTE_SUB, 512);
-	
-			
+		
 		bool bulletlactivate = false;
 		bool bulletractivate = false;
 	
@@ -107,10 +100,9 @@ int main(void)
 	while(1) 
 	{
 
-
 		if (bulletly == woman.y && bulletlx == 225 && bulletlactivate) {man.y = 10; woman.y =10;}
-		
-		
+
+
 		if (bulletlx < 230 && bulletlactivate)
 		  bulletlx = bulletlx + 2;
 		else {
@@ -126,13 +118,11 @@ int main(void)
 		  bulletractivate = false;
 		  bulletry = woman.y;
 		}
-		
-		
 
 		scanKeys();
 
 		int keys = keysHeld();
-		
+
 			if(keys & KEY_UP)
 			{
 				if(man.y >= 1) man.y--;
@@ -147,10 +137,7 @@ int main(void)
 				if(man.y <= 158) man.y++;
 				if(bulletly <= 158 && !bulletlactivate) bulletly++;
 			}
-			
-			
-			
-			
+
 			if(keys & KEY_X)
 			{
 				if(woman.y >= 1) woman.y--;
@@ -169,23 +156,19 @@ int main(void)
 
 		animateMan(&man);
 		animateWoman(&woman);
-		
-		
-		
+
 		oamSet(&oamMain, 0, 1, man.y, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, 
 			man.sprite_gfx_mem, -1, false, false, false, false, false);
 		
 		oamSet(&oamMain, 1, 225, woman.y, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, 
 			man.sprite_gfx_mem, -1, false, false, true, false, false);
-			
-			
+
 		oamSet(&oamMain, 2, bulletlx, bulletly, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, 
 			woman.sprite_gfx_mem[woman.gfx_frame], -1, false, !bulletlactivate, false, false, false);
 		
 		oamSet(&oamMain, 3, bulletrx, bulletry, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, 
 			woman.sprite_gfx_mem[woman.gfx_frame], -1, false, !bulletractivate, true, false, false);
-		
-		
+
 		oamSet(&oamMain, 4, 127, 75, 0, 0, SpriteSize_16x8, SpriteColorFormat_256Color, 
 			man.sprite_gfx_mem, -1, false, false, false, false, false);
 			
@@ -202,8 +185,6 @@ int main(void)
 		oamSet(&oamMain, 15, 127, 160, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, man.sprite_gfx_mem, -1, false, false, false, false, false);
 		oamSet(&oamMain, 16, 127, 176, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, man.sprite_gfx_mem, -1, false, false, false, false, false);
 		oamSet(&oamMain, 17, 127, 192, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, man.sprite_gfx_mem, -1, false, false, false, false, false);
-
-
 
 		swiWaitForVBlank();
 
