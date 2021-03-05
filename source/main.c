@@ -34,7 +34,7 @@ enum SpriteState {W_UP = 0, W_RIGHT = 1, W_DOWN = 2, W_LEFT = 3};
 
 void animateMan(Man *sprite)
 {
-	int frame = sprite->anim_frame + sprite->state * FRAMES_PER_ANIMATION;
+	int frame = sprite->anim_frame + sprite->state;
 
 	u8* offset = sprite->frame_gfx + frame * 32*32;
 
@@ -100,8 +100,11 @@ int main(void)
 	while(1) 
 	{
 
-		if (bulletly == woman.y && bulletlx == 225 && bulletlactivate) {man.y = 10; woman.y =10;}
-
+		if (bulletly == woman.y && bulletlx == 225 && bulletlactivate)
+		{
+			man.y = 10;
+			woman.y =10;
+		}
 
 		if (bulletlx < 230 && bulletlactivate)
 		  bulletlx = bulletlx + 2;
@@ -171,7 +174,7 @@ int main(void)
 
 		oamSet(&oamMain, 4, 127, 75, 0, 0, SpriteSize_16x8, SpriteColorFormat_256Color, 
 			man.sprite_gfx_mem, -1, false, false, false, false, false);
-			
+
 		oamSet(&oamMain, 5, 127, 0, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, man.sprite_gfx_mem, -1, false, false, false, false, false);
 		oamSet(&oamMain, 6, 127, 16, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, man.sprite_gfx_mem, -1, false, false, false, false, false);
 		oamSet(&oamMain, 7, 127, 32, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, man.sprite_gfx_mem, -1, false, false, false, false, false);
