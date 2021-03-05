@@ -24,19 +24,48 @@ int main(void)
 	dmaCopy(manPal, SPRITE_PALETTE, 512);
 	dmaCopy(womanPal, SPRITE_PALETTE_SUB, 512);
 		
-		bool bulletlactivate = false;
-		bool bulletractivate = false;
-	
-		int bulletlx = 0;
-		int bulletrx = 225;	
-		int bulletly = 0;
-		int bulletry = 0;
+	bool bulletlactivate = false;
+	bool bulletractivate = false;
+
+	bool lturn = true;
+
+	int ballx = 127;
+	int bally = 0;
+	int ballspeed = -1;
+
+	int bulletlx = 0;
+	int bulletrx = 225;	
+	int bulletly = 0;
+	int bulletry = 0;
 		
-		man.y = 50;
-		woman.y = 50;
+	man.y = 50;
+	woman.y = 50;
 
 	while(1) 
 	{
+
+		if (lturn)
+		{
+			ballx++;
+			bally = bally + ballspeed;
+		}
+		else
+		{
+			ballx--;
+			bally = ballspeed * -1 + bally;
+		}
+
+		if (bally > 182 || bally < 0)
+		{
+			ballspeed = ballspeed * -1;
+		}
+
+
+		if ((ballx == 8 && bally > man.y - 12 && bally < man.y + 34) || (ballx == 228 && bally > woman.y - 12 && bally < woman.y + 34))
+		{
+			lturn = !lturn;
+			ballspeed = rand() % 2 + 1;
+		}
 
 		if (bulletly == woman.y && bulletlx == 225 && bulletlactivate)
 		{
@@ -64,54 +93,48 @@ int main(void)
 
 		int keys = keysHeld();
 
-			if(keys & KEY_UP)
-			{
-				if(man.y >= 1) man.y--;
-				if(bulletly >= 1 && !bulletlactivate) bulletly--;
-			}
-			if(keys & KEY_RIGHT)
-			{
-				bulletlactivate = true;
-			}
-			if(keys & KEY_DOWN)
-			{
-				if(man.y <= 158) man.y++;
-				if(bulletly <= 158 && !bulletlactivate) bulletly++;
-			}
+		if(keys & KEY_UP)
+		{
+			if(man.y >= 1) man.y = man.y - 2;
+			if(bulletly >= 1 && !bulletlactivate) bulletly--;
+		}
+		if(keys & KEY_RIGHT)
+		{
+			bulletlactivate = true;
+		}
+		if(keys & KEY_DOWN)
+		{
+			if(man.y <= 158) man.y = man.y + 2;
+			if(bulletly <= 158 && !bulletlactivate) bulletly++;
+		}
 
-			if(keys & KEY_X)
-			{
-				if(woman.y >= 1) woman.y--;
-				if(bulletly >= 1 && !bulletractivate) bulletry++;
-
-			}
-			if(keys & KEY_Y)
-			{
-				bulletractivate = true;
-			}
-			if(keys & KEY_B)
-			{
-				if(woman.y <= 158) woman.y++;
-				if(bulletry <= 158 && !bulletractivate) bulletry++;	
+		if(keys & KEY_X)
+		{
+			if(woman.y >= 1) woman.y = woman.y - 2;
+			if(bulletly >= 1 && !bulletractivate) bulletry++;
+		}
+		if(keys & KEY_Y)
+		{
+			bulletractivate = true;
+		}
+		if(keys & KEY_B)
+		{
+			if(woman.y <= 158) woman.y = woman.y + 2;
+			if(bulletry <= 158 && !bulletractivate) bulletry++;	
 		}
 
 		animateMan(&man);
 		animateWoman(&woman);
 
-		oamSet(&oamMain, 0, 1, man.y, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, 
-			man.sprite_gfx_mem, -1, false, false, false, false, false);
+		oamSet(&oamMain, 0, 0, man.y, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, man.sprite_gfx_mem, -1, false, false, false, false, false);
 		
-		oamSet(&oamMain, 1, 225, woman.y, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, 
-			man.sprite_gfx_mem, -1, false, false, true, false, false);
+		oamSet(&oamMain, 1, 225, woman.y, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, man.sprite_gfx_mem, -1, false, false, true, false, false);
 
-		oamSet(&oamMain, 2, bulletlx, bulletly, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, 
-			woman.sprite_gfx_mem[woman.gfx_frame], -1, false, !bulletlactivate, false, false, false);
+		oamSet(&oamMain, 2, bulletlx, bulletly, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, woman.sprite_gfx_mem[woman.gfx_frame], -1, false, !bulletlactivate, false, false, false);
 		
-		oamSet(&oamMain, 3, bulletrx, bulletry, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, 
-			woman.sprite_gfx_mem[woman.gfx_frame], -1, false, !bulletractivate, true, false, false);
+		oamSet(&oamMain, 3, bulletrx, bulletry, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, woman.sprite_gfx_mem[woman.gfx_frame], -1, false, !bulletractivate, true, false, false);
 
-		oamSet(&oamMain, 4, 127, 75, 0, 0, SpriteSize_16x8, SpriteColorFormat_256Color, 
-			man.sprite_gfx_mem, -1, false, false, false, false, false);
+		oamSet(&oamMain, 4, ballx, bally, 0, 0, SpriteSize_16x8, SpriteColorFormat_256Color, man.sprite_gfx_mem, -1, false, false, false, false, false);
 
 		oamSet(&oamMain, 5, 127, 0, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, man.sprite_gfx_mem, -1, false, false, false, false, false);
 		oamSet(&oamMain, 6, 127, 16, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, man.sprite_gfx_mem, -1, false, false, false, false, false);
