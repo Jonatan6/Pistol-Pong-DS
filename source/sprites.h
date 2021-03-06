@@ -1,3 +1,6 @@
+#include <man.h>
+#include <woman.h>
+
 typedef struct 
 {
 	int x;

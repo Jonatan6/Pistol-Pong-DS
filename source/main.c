@@ -1,8 +1,7 @@
 #include <nds.h>
 #include <stdio.h>
-#include <man.h>
-#include <woman.h>
 #include "sprites.h"
+#include "title.h"
 
 int main(void) 
 {
@@ -23,7 +22,9 @@ int main(void)
 
 	dmaCopy(manPal, SPRITE_PALETTE, 512);
 	dmaCopy(womanPal, SPRITE_PALETTE_SUB, 512);
-		
+
+	bool at_title = true;
+
 	bool bulletlactivate = false;
 	bool bulletractivate = false;
 
@@ -43,6 +44,12 @@ int main(void)
 
 	while(1) 
 	{
+
+		if (at_title)
+		{
+			title_screen();
+			at_title = false;
+		}
 
 		if (lturn)
 		{
@@ -153,7 +160,7 @@ int main(void)
 		swiWaitForVBlank();
 
 		oamUpdate(&oamMain); // Write the changes to the top screen
-		oamUpdate(&oamSub); // Write the changes to the bottom screen
+		//oamUpdate(&oamSub); // Write the changes to the bottom screen
 	}
 
 	return 0;
