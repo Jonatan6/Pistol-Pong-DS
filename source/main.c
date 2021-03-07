@@ -30,8 +30,8 @@ int main(void)
 
 	bool lturn = true;
 
-	int ballx = 127;
-	int bally = 0;
+	int ballx = 123;
+	int bally = 92;
 	int ballspeed = -1;
 
 	int bulletlx = 0;
@@ -148,19 +148,19 @@ int main(void)
 
 		oamSet(&oamMain, 4, ballx, bally, 0, 0, SpriteSize_16x8, SpriteColorFormat_256Color, man.sprite_gfx_mem, -1, false, false, false, false, false);
 
-		oamSet(&oamMain, 5, 127, 0, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, man.sprite_gfx_mem, -1, false, false, false, false, false);
-		oamSet(&oamMain, 6, 127, 16, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, man.sprite_gfx_mem, -1, false, false, false, false, false);
-		oamSet(&oamMain, 7, 127, 32, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, man.sprite_gfx_mem, -1, false, false, false, false, false);
-		oamSet(&oamMain, 8, 127, 48, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, man.sprite_gfx_mem, -1, false, false, false, false, false);
-		oamSet(&oamMain, 9, 127, 64, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, man.sprite_gfx_mem, -1, false, false, false, false, false);
-		oamSet(&oamMain, 10, 127, 80, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, man.sprite_gfx_mem, -1, false, false, false, false, false);
-		oamSet(&oamMain, 11, 127, 96, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, man.sprite_gfx_mem, -1, false, false, false, false, false);
-		oamSet(&oamMain, 12, 127, 112, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, man.sprite_gfx_mem, -1, false, false, false, false, false);
-		oamSet(&oamMain, 13, 127, 128, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, man.sprite_gfx_mem, -1, false, false, false, false, false);
-		oamSet(&oamMain, 14, 127, 144, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, man.sprite_gfx_mem, -1, false, false, false, false, false);
-		oamSet(&oamMain, 15, 127, 160, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, man.sprite_gfx_mem, -1, false, false, false, false, false);
-		oamSet(&oamMain, 16, 127, 176, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, man.sprite_gfx_mem, -1, false, false, false, false, false);
-		oamSet(&oamMain, 17, 127, 192, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, man.sprite_gfx_mem, -1, false, false, false, false, false);
+		oamSet(&oamMain, 5, 127, 4, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, man.sprite_gfx_mem, -1, false, false, false, false, false);
+		oamSet(&oamMain, 6, 127, 20, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, man.sprite_gfx_mem, -1, false, false, false, false, false);
+		oamSet(&oamMain, 7, 127, 36, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, man.sprite_gfx_mem, -1, false, false, false, false, false);
+		oamSet(&oamMain, 8, 127, 52, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, man.sprite_gfx_mem, -1, false, false, false, false, false);
+		oamSet(&oamMain, 9, 127, 68, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, man.sprite_gfx_mem, -1, false, false, false, false, false);
+		oamSet(&oamMain, 10, 127, 84, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, man.sprite_gfx_mem, -1, false, false, false, false, false);
+		oamSet(&oamMain, 11, 127, 100, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, man.sprite_gfx_mem, -1, false, false, false, false, false);
+		oamSet(&oamMain, 12, 127, 116, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, man.sprite_gfx_mem, -1, false, false, false, false, false);
+		oamSet(&oamMain, 13, 127, 132, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, man.sprite_gfx_mem, -1, false, false, false, false, false);
+		oamSet(&oamMain, 14, 127, 148, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, man.sprite_gfx_mem, -1, false, false, false, false, false);
+		oamSet(&oamMain, 15, 127, 164, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, man.sprite_gfx_mem, -1, false, false, false, false, false);
+		oamSet(&oamMain, 16, 127, 180, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, man.sprite_gfx_mem, -1, false, false, false, false, false);
+		oamSet(&oamMain, 17, 127, 196, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, man.sprite_gfx_mem, -1, false, false, false, false, false);
 
 		swiWaitForVBlank();
 

@@ -15,14 +15,14 @@ void title_screen()
 	touchPosition touch;
 
 	consoleSelect(&bottomScreen);
-	consoleSetWindow(&bottomScreen, 1, 15, 30, 30);
+	consoleSetWindow(&bottomScreen, 1, 17, 30, 30);
 	iprintf("       VS OTHER PLAYER");
-	consoleSetWindow(&bottomScreen, 1, 10, 30, 30);
+	consoleSetWindow(&bottomScreen, 1, 11, 30, 30);
 	iprintf("------------------------------");
 	consoleSetWindow(&bottomScreen, 1, 5, 30, 30);
 	iprintf("         VS COMPUTER");
 	consoleSelect(&topScreen);
-	consoleSetWindow(&topScreen, 1, 10, 30, 30);
+	consoleSetWindow(&topScreen, 1, 11, 30, 30);
 	iprintf("      TOUCH TO CONTINUE!");
 
 	while(1)
