@@ -11,9 +11,6 @@ int main(void)
 	videoSetMode(MODE_0_2D);
 	videoSetModeSub(MODE_0_2D);
 
-	vramSetBankA(VRAM_A_MAIN_SPRITE);
-	vramSetBankD(VRAM_D_SUB_SPRITE);
-
 	oamInit(&oamMain, SpriteMapping_1D_128, false);
 	oamInit(&oamSub, SpriteMapping_1D_128, false);
 
@@ -49,6 +46,8 @@ int main(void)
 		{
 			title_screen();
 			at_title = false;
+			vramSetBankA(VRAM_A_MAIN_SPRITE);
+			vramSetBankC(VRAM_D_SUB_SPRITE);
 		}
 
 		if (lturn)
@@ -81,23 +80,28 @@ int main(void)
 		}
 
 		if (bulletlx < 230 && bulletlactivate)
-		  bulletlx = bulletlx + 2;
-		else {
-		  bulletlx = 0;
-		  bulletlactivate = false;
-		  bulletly = man.y;
+		{
+			bulletlx = bulletlx + 2;
+		}
+		else
+		{
+			bulletlx = 0;
+			bulletlactivate = false;
+			bulletly = man.y;
 		}
 
 		if (bulletrx > -16 && bulletractivate)
-		  bulletrx = bulletrx - 2;
-		else {
-		  bulletrx = 230;
-		  bulletractivate = false;
-		  bulletry = woman.y;
+		{
+			bulletrx = bulletrx - 2;
+		}
+		else
+		{
+			bulletrx = 230;
+			bulletractivate = false;
+			bulletry = woman.y;
 		}
 
 		scanKeys();
-
 		int keys = keysHeld();
 
 		if(keys & KEY_UP)
