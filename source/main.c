@@ -11,6 +11,9 @@ int main(void)
 	videoSetMode(MODE_0_2D);
 	videoSetModeSub(MODE_0_2D);
 
+	vramSetBankA(VRAM_A_MAIN_SPRITE);
+	vramSetBankD(VRAM_D_SUB_SPRITE);
+
 	oamInit(&oamMain, SpriteMapping_1D_128, false);
 	oamInit(&oamSub, SpriteMapping_1D_128, false);
 
@@ -46,8 +49,6 @@ int main(void)
 		{
 			title_screen();
 			at_title = false;
-			vramSetBankA(VRAM_A_MAIN_SPRITE);
-			vramSetBankC(VRAM_D_SUB_SPRITE);
 		}
 
 		if (lturn)

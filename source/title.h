@@ -46,5 +46,4 @@ void title_screen()
 			break;
 		}
 	}
-	consoleClear();
 }
