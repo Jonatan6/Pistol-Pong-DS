@@ -1,0 +1,5 @@
+# Exclude the "build" folder
+build
+# Exclude all files ending in ".nds" or ".elf"
+*.nds
+*.elf
