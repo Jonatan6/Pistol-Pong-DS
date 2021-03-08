@@ -81,7 +81,6 @@ int title_screen(void)
 			consoleClear();
 			consoleSelect(&bottomScreen);
 			consoleClear();
-			//difficulty = 0;
 			break;
 		}
 		else if (touch.px > 0 && touch.py > 97)
@@ -90,7 +89,6 @@ int title_screen(void)
 			consoleClear();
 			consoleSelect(&bottomScreen);
 			consoleClear();
-			difficulty = 0;
 			break;
 		}
 	}

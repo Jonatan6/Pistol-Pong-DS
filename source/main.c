@@ -52,21 +52,6 @@ int main(void)
 			at_title = false;
 		}
 
-		if (difficulty == 1)
-		{
-			
-		}
-
-		if (difficulty == 2)
-		{
-			
-		}
-
-		if (difficulty == 3)
-		{
-		
-		}
-
 		if (lturn)
 		{
 			ballx++;
