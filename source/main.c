@@ -24,6 +24,7 @@ int main(void)
 	dmaCopy(womanPal, SPRITE_PALETTE_SUB, 512);
 
 	bool at_title = true;
+	int difficulty = 0;
 
 	bool bulletlactivate = false;
 	bool bulletractivate = false;
@@ -38,7 +39,7 @@ int main(void)
 	int bulletrx = 225;	
 	int bulletly = 0;
 	int bulletry = 0;
-		
+
 	man.y = 50;
 	woman.y = 50;
 
@@ -47,8 +48,23 @@ int main(void)
 
 		if (at_title)
 		{
-			title_screen();
+			difficulty = title_screen();
 			at_title = false;
+		}
+
+		if (difficulty == 1)
+		{
+			
+		}
+
+		if (difficulty == 2)
+		{
+			
+		}
+
+		if (difficulty == 3)
+		{
+		
 		}
 
 		if (lturn)
@@ -64,7 +80,7 @@ int main(void)
 
 		if (bally > 182 || bally < 0)
 		{
-			ballspeed = ballspeed * -1;
+			ballspeed = ballspeed * - 1;
 		}
 
 
@@ -105,34 +121,84 @@ int main(void)
 		scanKeys();
 		int keys = keysHeld();
 
-		if(keys & KEY_UP)
+		if (keys & KEY_UP)
 		{
 			if(man.y >= 1) man.y = man.y - 2;
 			if(bulletly >= 1 && !bulletlactivate) bulletly--;
 		}
-		if(keys & KEY_RIGHT)
+		if (keys & KEY_RIGHT)
 		{
 			bulletlactivate = true;
 		}
-		if(keys & KEY_DOWN)
+		if (keys & KEY_DOWN)
 		{
 			if(man.y <= 158) man.y = man.y + 2;
 			if(bulletly <= 158 && !bulletlactivate) bulletly++;
 		}
 
-		if(keys & KEY_X)
+		if (difficulty == 0)
 		{
-			if(woman.y >= 1) woman.y = woman.y - 2;
-			if(bulletly >= 1 && !bulletractivate) bulletry++;
+			if (keys & KEY_X)
+			{
+				if(woman.y >= 1) woman.y = woman.y - 2;
+				if(bulletly >= 1 && !bulletractivate) bulletry++;
+			}
+			if (keys & KEY_Y)
+			{
+				bulletractivate = true;
+			}
+			if (keys & KEY_B)
+			{
+				if (woman.y <= 158) woman.y = woman.y + 2;
+				if (bulletry <= 158 && !bulletractivate) bulletry++;	
+			}
 		}
-		if(keys & KEY_Y)
+		else if (difficulty == 1)
 		{
-			bulletractivate = true;
+			if (bally > woman.y)
+			{
+				if (woman.y <= 158)
+				{
+					woman.y = woman.y + (1 + rand() % 2);
+				}
+			}
+			else
+			{
+				woman.y = woman.y - (1 + rand() % 2);
+			}
 		}
-		if(keys & KEY_B)
+		else if (difficulty == 2)
 		{
-			if(woman.y <= 158) woman.y = woman.y + 2;
-			if(bulletry <= 158 && !bulletractivate) bulletry++;	
+			if (bally > woman.y)
+			{
+				if (woman.y <= 158)
+				{
+					woman.y = woman.y + 2;
+				}
+			}
+			else
+			{
+				woman.y = woman.y - 2;
+			}
+			if (rand() % 360 == 0)
+			{
+				bulletractivate = true;
+			}
+		}
+		else if (difficulty == 3)
+		{
+			if (bally > woman.y)
+			{
+				if (woman.y <= 158)
+				{
+					woman.y = woman.y + 2;
+				}
+			}
+			else
+			{
+				woman.y = woman.y - 2;
+			}
+				bulletractivate = true;
 		}
 
 		animateMan(&man);
