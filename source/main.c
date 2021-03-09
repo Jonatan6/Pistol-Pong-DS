@@ -21,7 +21,6 @@ int main(void)
 	initWoman(&woman, (u8*)womanTiles);
 
 	dmaCopy(manPal, SPRITE_PALETTE, 512);
-	dmaCopy(womanPal, SPRITE_PALETTE_SUB, 512);
 
 	bool at_title = true;
 	int difficulty = 0;
@@ -29,7 +28,7 @@ int main(void)
 	bool bulletlactivate = false;
 	bool bulletractivate = false;
 
-	bool lturn = true;
+	bool lturn = rand() % 2;
 
 	int ballx = 123;
 	int bally = 92;
@@ -40,8 +39,15 @@ int main(void)
 	int bulletly = 0;
 	int bulletry = 0;
 
-	man.y = 50;
-	woman.y = 50;
+	int pingi = 0;
+	int pongi = 0;
+	int ping = 0;
+	int pong = 0;
+	bool pings = false;
+	bool pongs = false;
+
+	man.y = 80;
+	woman.y = 80;
 
 	void reset()
 	{
@@ -51,7 +57,7 @@ int main(void)
 		bulletlactivate = false;
 		bulletractivate = false;
 
-		lturn = true;
+		lturn = rand() % 2;
 
 		ballx = 123;
 		bally = 92;
@@ -62,12 +68,11 @@ int main(void)
 		bulletly = 0;
 		bulletry = 0;
 
-		man.y = 50;
-		woman.y = 50;
-
-		oamClear(&oamMain, 0, 0); // Clear all of the sprites
-		oamUpdate(&oamMain); // Write the changes to the top screen
+		man.y = 80;
+		woman.y = 80;
 	}
+
+	soundEnable(); 
 
 	while(1) 
 	{
@@ -86,15 +91,18 @@ int main(void)
 		if (bally > 182 || bally < 0)
 		{
 			ballspeed = ballspeed * - 1;
+			pong = soundPlayPSG(1, 2400, 64, 64);
+			pongs = true;
 		}
-
 
 		if ((ballx == 8 && bally > man.y - 12 && bally < man.y + 34) || (ballx == 228 && bally > woman.y - 12 && bally < woman.y + 34))
 		{
 			lturn = !lturn;
 			ballspeed = rand() % 2 + 1;
+			ping = soundPlayPSG(1, 4400, 64, 64);
+			pings = true;
 		}
-		
+
 		if (ballx == -16 || ballx == 256)
 		{
 			reset();
@@ -156,7 +164,7 @@ int main(void)
 			if(bulletly <= 158 && !bulletlactivate) bulletly++;
 		}
 
-		if (difficulty == 0)
+		if (difficulty % 10 == 0)
 		{
 			if (keys & KEY_X)
 			{
@@ -173,7 +181,7 @@ int main(void)
 				if (bulletry <= 158 && !bulletractivate) bulletry++;	
 			}
 		}
-		else if (difficulty == 1)
+		else if (difficulty % 10 == 1)
 		{
 			if (bally > woman.y)
 			{
@@ -187,7 +195,7 @@ int main(void)
 				woman.y = woman.y - (1 + rand() % 2);
 			}
 		}
-		else if (difficulty == 2)
+		else if (difficulty % 10 == 2)
 		{
 			if (bally > woman.y)
 			{
@@ -205,7 +213,7 @@ int main(void)
 				bulletractivate = true;
 			}
 		}
-		else if (difficulty == 3)
+		else if (difficulty % 10 == 3)
 		{
 			if (bally > woman.y)
 			{
@@ -225,7 +233,7 @@ int main(void)
 		animateWoman(&woman);
 
 		oamSet(&oamMain, 0, 0, man.y, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, man.sprite_gfx_mem, -1, false, false, false, false, false);
-		
+
 		oamSet(&oamMain, 1, 225, woman.y, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, man.sprite_gfx_mem, -1, false, false, true, false, false);
 
 		oamSet(&oamMain, 2, bulletlx, bulletly, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, woman.sprite_gfx_mem[woman.gfx_frame], -1, false, !bulletlactivate, false, false, false);
@@ -247,15 +255,43 @@ int main(void)
 		oamSet(&oamMain, 15, 123, 164, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, man.sprite_gfx_mem, -1, false, false, false, false, false);
 		oamSet(&oamMain, 16, 123, 180, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, man.sprite_gfx_mem, -1, false, false, false, false, false);
 		oamSet(&oamMain, 17, 123, 196, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, man.sprite_gfx_mem, -1, false, false, false, false, false);
+		
+		oamSet(&oamMain, 17, 123, 196, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, man.sprite_gfx_mem, -1, false, false, false, false, false);
 
 		swiWaitForVBlank();
-
 		oamUpdate(&oamMain); // Write the changes to the top screen
+
+		if (pongi == 10)
+		{
+			soundKill(pong);
+			pongi = 0;
+			pongs = false;
+		}
+		else if (pongs)
+		{
+			pongi++;
+		}
+
+		if (pingi == 10)
+		{
+			soundKill(ping);
+			pingi = 0;
+			pings = false;
+		}
+		else if (pings)
+		{
+			pingi++;
+		}
 
 		if (at_title)
 		{
 			difficulty = title_screen();
 			at_title = false;
+		}
+
+		if (difficulty > 9)
+		{
+			man.state = woman.state = 3;
 		}
 	}
 

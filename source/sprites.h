@@ -1,5 +1,14 @@
-#include <man.h>
-#include <woman.h>
+#define manTilesLen 12288
+extern const unsigned int manTiles[3072];
+
+#define manPalLen 512
+extern const unsigned short manPal[256];
+
+#define womanTilesLen 12288
+extern const unsigned int womanTiles[3072];
+
+#define womanPalLen 512
+extern const unsigned short womanPal[256];
 
 typedef struct 
 {

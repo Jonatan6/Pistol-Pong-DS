@@ -1,7 +1,7 @@
 #include <nds/input.h>
 #include <nds/touch.h>
 
-int title_screen(void)
+int title_screen()
 {
 	int difficulty = 0;
 
@@ -50,17 +50,17 @@ int title_screen(void)
 
 				if (touch.px > 0 && touch.py < 64)
 				{
-					difficulty = 1;
+					difficulty = difficulty + 1;
 					break;
 				}
 				else if (touch.px > 0 && touch.py < 128)
 				{
-					difficulty = 2;
+					difficulty = difficulty + 2;
 					break;
 				}
 				else if (touch.px > 0 && touch.py < 192)
 				{
-					difficulty = 3;
+					difficulty = difficulty + 3;
 					break;
 				}
 			}
@@ -73,5 +73,15 @@ int title_screen(void)
 			break;
 		}
 	}
-return difficulty;
+
+	scanKeys();
+	int keys = keysHeld();
+	if (keys & KEY_R && keys & KEY_L)
+	{
+		return difficulty + 10;
+	}
+	else 
+	{
+		return difficulty;
+	}
 }
