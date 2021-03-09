@@ -43,14 +43,34 @@ int main(void)
 	man.y = 50;
 	woman.y = 50;
 
+	void reset()
+	{
+		at_title = true;
+		difficulty = 0;
+
+		bulletlactivate = false;
+		bulletractivate = false;
+
+		lturn = true;
+
+		ballx = 123;
+		bally = 92;
+		ballspeed = -1;
+
+		bulletlx = 0;
+		bulletrx = 225;	
+		bulletly = 0;
+		bulletry = 0;
+
+		man.y = 50;
+		woman.y = 50;
+
+		oamClear(&oamMain, 0, 0); // Clear all of the sprites
+		oamUpdate(&oamMain); // Write the changes to the top screen
+	}
+
 	while(1) 
 	{
-
-		if (at_title)
-		{
-			difficulty = title_screen();
-			at_title = false;
-		}
 
 		if (lturn)
 		{
@@ -74,6 +94,11 @@ int main(void)
 			lturn = !lturn;
 			ballspeed = rand() % 2 + 1;
 		}
+		
+		if (ballx == -16 || ballx == 256)
+		{
+			reset();
+		}
 
 		if (bulletly == woman.y && bulletlx == 225 && bulletlactivate)
 		{
@@ -81,7 +106,7 @@ int main(void)
 			woman.y =10;
 		}
 
-		if (bulletlx < 230 && bulletlactivate)
+		if (bulletlx < 256 && bulletlactivate)
 		{
 			bulletlx = bulletlx + 2;
 		}
@@ -101,6 +126,16 @@ int main(void)
 			bulletrx = 230;
 			bulletractivate = false;
 			bulletry = woman.y;
+		}
+
+		if (bulletrx == 0 && bulletry > man.y - 16 && bulletry < man.y + 20)
+		{
+			reset();
+		}
+
+		if (bulletlx == 230 && bulletly > woman.y - 16 && bulletly < woman.y + 20)
+		{
+			reset();
 		}
 
 		scanKeys();
@@ -197,26 +232,31 @@ int main(void)
 		
 		oamSet(&oamMain, 3, bulletrx, bulletry, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, woman.sprite_gfx_mem[woman.gfx_frame], -1, false, !bulletractivate, true, false, false);
 
-		oamSet(&oamMain, 4, ballx, bally, 0, 0, SpriteSize_16x8, SpriteColorFormat_256Color, man.sprite_gfx_mem, -1, false, false, false, false, false);
+		oamSet(&oamMain, 4, ballx, bally, 0, 0, SpriteSize_16x8, SpriteColorFormat_256Color, man.sprite_gfx_mem, -1, false, at_title, false, false, false);
 
-		oamSet(&oamMain, 5, 127, 4, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, man.sprite_gfx_mem, -1, false, false, false, false, false);
-		oamSet(&oamMain, 6, 127, 20, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, man.sprite_gfx_mem, -1, false, false, false, false, false);
-		oamSet(&oamMain, 7, 127, 36, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, man.sprite_gfx_mem, -1, false, false, false, false, false);
-		oamSet(&oamMain, 8, 127, 52, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, man.sprite_gfx_mem, -1, false, false, false, false, false);
-		oamSet(&oamMain, 9, 127, 68, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, man.sprite_gfx_mem, -1, false, false, false, false, false);
-		oamSet(&oamMain, 10, 127, 84, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, man.sprite_gfx_mem, -1, false, false, false, false, false);
-		oamSet(&oamMain, 11, 127, 100, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, man.sprite_gfx_mem, -1, false, false, false, false, false);
-		oamSet(&oamMain, 12, 127, 116, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, man.sprite_gfx_mem, -1, false, false, false, false, false);
-		oamSet(&oamMain, 13, 127, 132, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, man.sprite_gfx_mem, -1, false, false, false, false, false);
-		oamSet(&oamMain, 14, 127, 148, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, man.sprite_gfx_mem, -1, false, false, false, false, false);
-		oamSet(&oamMain, 15, 127, 164, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, man.sprite_gfx_mem, -1, false, false, false, false, false);
-		oamSet(&oamMain, 16, 127, 180, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, man.sprite_gfx_mem, -1, false, false, false, false, false);
-		oamSet(&oamMain, 17, 127, 196, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, man.sprite_gfx_mem, -1, false, false, false, false, false);
+		oamSet(&oamMain, 5, 123, 4, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, man.sprite_gfx_mem, -1, false, false, false, false, false);
+		oamSet(&oamMain, 6, 123, 20, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, man.sprite_gfx_mem, -1, false, false, false, false, false);
+		oamSet(&oamMain, 7, 123, 36, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, man.sprite_gfx_mem, -1, false, false, false, false, false);
+		oamSet(&oamMain, 8, 123, 52, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, man.sprite_gfx_mem, -1, false, false, false, false, false);
+		oamSet(&oamMain, 9, 123, 68, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, man.sprite_gfx_mem, -1, false, false, false, false, false);
+		oamSet(&oamMain, 10, 123, 84, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, man.sprite_gfx_mem, -1, false, false, false, false, false);
+		oamSet(&oamMain, 11, 123, 100, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, man.sprite_gfx_mem, -1, false, false, false, false, false);
+		oamSet(&oamMain, 12, 123, 116, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, man.sprite_gfx_mem, -1, false, false, false, false, false);
+		oamSet(&oamMain, 13, 123, 132, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, man.sprite_gfx_mem, -1, false, false, false, false, false);
+		oamSet(&oamMain, 14, 123, 148, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, man.sprite_gfx_mem, -1, false, false, false, false, false);
+		oamSet(&oamMain, 15, 123, 164, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, man.sprite_gfx_mem, -1, false, false, false, false, false);
+		oamSet(&oamMain, 16, 123, 180, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, man.sprite_gfx_mem, -1, false, false, false, false, false);
+		oamSet(&oamMain, 17, 123, 196, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, man.sprite_gfx_mem, -1, false, false, false, false, false);
 
 		swiWaitForVBlank();
 
 		oamUpdate(&oamMain); // Write the changes to the top screen
-		//oamUpdate(&oamSub); // Write the changes to the bottom screen
+
+		if (at_title)
+		{
+			difficulty = title_screen();
+			at_title = false;
+		}
 	}
 
 	return 0;

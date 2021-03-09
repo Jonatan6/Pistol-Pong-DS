@@ -5,13 +5,10 @@ int title_screen(void)
 {
 	int difficulty = 0;
 
-	PrintConsole topScreen;
 	PrintConsole bottomScreen;
 
-	vramSetBankA(VRAM_A_MAIN_BG);
 	vramSetBankC(VRAM_C_SUB_BG);
 
-	consoleInit(&topScreen, 0, BgType_Text4bpp, BgSize_T_256x256, 2, 0, true, true);
 	consoleInit(&bottomScreen, 0, BgType_Text4bpp, BgSize_T_256x256, 2, 0, false, true);;
 
 	touchPosition touch;
@@ -23,34 +20,24 @@ int title_screen(void)
 	iprintf("------------------------------");
 	consoleSetWindow(&bottomScreen, 1, 5, 30, 30);
 	iprintf("         VS COMPUTER");
-	consoleSelect(&topScreen);
-	consoleSetWindow(&topScreen, 1, 11, 30, 30);
-	iprintf("      TOUCH TO CONTINUE!");
-
 	while(1)
 	{
 		touchRead(&touch);
 
 		if (touch.px > 0 && touch.py < 97)
 		{
-			consoleSelect(&topScreen);
-			consoleClear();
-			consoleSelect(&bottomScreen);
 			consoleClear();
 			consoleSelect(&bottomScreen);
 			consoleSetWindow(&bottomScreen, 1, 6, 30, 30);
-			iprintf("            EASY              ");
+			iprintf("             EASY");
 			consoleSetWindow(&bottomScreen, 1, 9, 30, 30);
 			iprintf("------------------------------");
 			consoleSetWindow(&bottomScreen, 1, 12, 30, 30);
-			iprintf("           MEDIUM");
+			iprintf("            MEDIUM");
 			consoleSetWindow(&bottomScreen, 1, 15, 30, 30);
 			iprintf("------------------------------");
 			consoleSetWindow(&bottomScreen, 1, 18, 30, 30);
-			iprintf("            HARD");
-			consoleSelect(&topScreen);
-			consoleSetWindow(&topScreen, 1, 11, 30, 30);
-			iprintf("       CHOOSE DIFICULTY");
+			iprintf("             HARD");
 
 			while(touch.px > 0 && touch.py > 0)
 			{
@@ -77,17 +64,11 @@ int title_screen(void)
 					break;
 				}
 			}
-			consoleSelect(&topScreen);
-			consoleClear();
-			consoleSelect(&bottomScreen);
 			consoleClear();
 			break;
 		}
 		else if (touch.px > 0 && touch.py > 97)
 		{
-			consoleSelect(&topScreen);
-			consoleClear();
-			consoleSelect(&bottomScreen);
 			consoleClear();
 			break;
 		}
