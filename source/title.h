@@ -27,9 +27,6 @@ int title_screen()
 		if (touch.px > 0 && touch.py < 97)
 		{
 			consoleClear();
-			consoleSelect(&bottomScreen);
-			consoleSetWindow(&bottomScreen, 1, 6, 30, 30);
-			iprintf("             EASY");
 			consoleSetWindow(&bottomScreen, 1, 9, 30, 30);
 			iprintf("------------------------------");
 			consoleSetWindow(&bottomScreen, 1, 12, 30, 30);
@@ -38,6 +35,8 @@ int title_screen()
 			iprintf("------------------------------");
 			consoleSetWindow(&bottomScreen, 1, 18, 30, 30);
 			iprintf("             HARD");
+			consoleSetWindow(&bottomScreen, 1, 6, 30, 30);
+			iprintf("             EASY");
 
 			while(touch.px > 0 && touch.py > 0)
 			{

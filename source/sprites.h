@@ -1,71 +1,68 @@
-#define manTilesLen 12288
-extern const unsigned int manTiles[3072];
+#define paddleTilesLen 12288
+extern const unsigned int paddleTiles[3072];
 
-#define manPalLen 512
-extern const unsigned short manPal[256];
+#define paddlePalLen 512
+extern const unsigned short paddlePal[256];
 
-#define womanTilesLen 12288
-extern const unsigned int womanTiles[3072];
+#define bulletTilesLen 12288
+extern const unsigned int bulletTiles[3072];
 
-#define womanPalLen 512
-extern const unsigned short womanPal[256];
+#define bulletPalLen 512
+extern const unsigned short bulletPal[256];
 
 typedef struct 
 {
-	int x;
-	int y;
-
 	u16* sprite_gfx_mem;
 	u8*  frame_gfx;
 
 	int state;
 	int anim_frame;
-}Man;
+}Paddle;
 
 typedef struct
 {
-	int x;
-	int y;
-
 	u16* sprite_gfx_mem[12];
 	int gfx_frame;
 
 	int state;
 	int anim_frame;
 
-}Woman;
+}Bullet;
+
+Paddle paddle = {};
+Bullet bullet = {};
 
 enum SpriteState {W_UP = 0, W_RIGHT = 1, W_DOWN = 2, W_LEFT = 3};
 
-void animateMan(Man *sprite)
+void animatePaddle(Paddle *sprite)
 {
-	int frame = sprite->anim_frame + sprite->state;
+	int frame = sprite->anim_frame + sprite->state * 3;
 
 	u8* offset = sprite->frame_gfx + frame * 32*32;
 
 	dmaCopy(offset, sprite->sprite_gfx_mem, 32*32);
 }
 
-void initMan(Man *sprite, u8* gfx)
+void initPaddle(Paddle *sprite, u8* gfx)
 {
 	sprite->sprite_gfx_mem = oamAllocateGfx(&oamMain, SpriteSize_32x32, SpriteColorFormat_256Color);
 			
 	sprite->frame_gfx = (u8*)gfx;
 }
 
-void animateWoman(Woman *sprite)
+void animateBullet(Bullet *sprite)
 {
 	sprite->gfx_frame = sprite->anim_frame + sprite->state;
 }
 
-void initWoman(Woman *sprite, u8* gfx)
+void initBullet(Bullet *sprite, u8* gfx)
 {
 	int i;
 
 	for(i = 0; i < 12; i++)
 	{
-	sprite->sprite_gfx_mem[i] = oamAllocateGfx(&oamMain, SpriteSize_32x32, SpriteColorFormat_256Color);
-	dmaCopy(gfx, sprite->sprite_gfx_mem[i], 32*32);
-	gfx += 32*32;
+		sprite->sprite_gfx_mem[i] = oamAllocateGfx(&oamMain, SpriteSize_32x32, SpriteColorFormat_256Color);
+		dmaCopy(gfx, sprite->sprite_gfx_mem[i], 32*32);
+		gfx += 32*32;
 	}
 }
