@@ -58,6 +58,9 @@ int main(void)
 		bullet.state = 0;
 		paddle.state = 0;
 
+		bullet.anim_frame = 0;
+		paddle.anim_frame = 0;
+
 		at_title = true;
 		difficulty = 0;
 
@@ -265,6 +268,7 @@ int main(void)
 			}
 			else if (difficulty % 10 == 3)
 			{
+
 				if (bally > paddlery)
 				{
 					if (paddlery <= 158)
@@ -361,7 +365,7 @@ int main(void)
 
 		if (difficulty > 9)
 		{
-			paddle.state = 1;
+			paddle.anim_frame = 1;
 		}
 
 		if ((rdead && difficulty % 10 == 0) || ldead)
