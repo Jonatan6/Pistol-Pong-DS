@@ -368,7 +368,7 @@ int main(void)
 		{
 			bullet.state = 3;
 
-			if (deathcount > 10)
+			if (deathcount > 9)
 			{
 				soundKill(sadlife);
 				sadlife = soundPlayPSG(1, -1 * deathcount * 100 + 10000, 64, 64);
@@ -383,7 +383,7 @@ int main(void)
 				deathcount++;
 			}
 		}
-		if (rdead && difficulty % 10 != 0)
+		else if (rdead)
 		{
 			bullet.state = 3;
 
@@ -392,17 +392,17 @@ int main(void)
 				soundKill(sadlife);
 				sadlife = soundPlayPSG(1, 2637, 64, 64);
 			}
-			else if (deathcount == 40)
+			if (deathcount == 40)
 			{
 				soundKill(sadlife);
 				sadlife = soundPlayPSG(1, 3136, 64, 64);
 			}
-			else if (deathcount == 70)
+			if (deathcount == 70)
 			{
 				soundKill(sadlife);
 				sadlife = soundPlayPSG(1, 4186, 64, 64);
 			}
-			else if (deathcount == 100) 
+			if (deathcount == 100) 
 			{
 				reset();
 			}
