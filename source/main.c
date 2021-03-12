@@ -1,7 +1,20 @@
 #include <nds.h>
 #include <stdio.h>
+#include <math.h>
 #include "sprites.h"
 #include "title.h"
+#include "score.h"
+
+float getdx(int x0, int y0, float v, float dy)
+{
+	float nexty = (float) y0 + dy;
+	return sqrt(v * v - nexty * nexty) - (float) x0;
+}
+
+int ballspeed(float vx, float vy)
+{
+	return round(sqrt(vx * vx + vy * vy));
+}
 
 int main(void) 
 {
@@ -25,14 +38,11 @@ int main(void)
 	bool bulletlactivate = false;
 	bool bulletractivate = false;
 
-	bool lturn = rand() % 2;
-
 	int paddlely = 80;
 	int paddlery = 80;
 
 	int ballx = 123;
 	int bally = 92;
-	int ballspeed = -1;
 
 	int bulletlx = 0;
 	int bulletrx = 225;	
@@ -47,11 +57,24 @@ int main(void)
 	bool pongs = false;
 
 	int sadlife = 0;
+	int ballout = 0;
 
 	bool ldead = false;
 	bool rdead = false;
-	int deathcount = 0;
+	int lscore = 9;
+	int rscore = 18;
 	bool animationdone = false;
+
+	int deathcount = 0;
+	int stalcount = 0;
+
+	int t = 0; // time
+	float vx = 1;
+	float vy = 1;
+
+	// ball start position
+	int x0 = ballx;
+	int y0 = bally;
 
 	void reset()
 	{
@@ -61,17 +84,14 @@ int main(void)
 		bullet.anim_frame = 0;
 		paddle.anim_frame = 0;
 
-		at_title = true;
-		difficulty = 0;
+		//at_title = true;
+		//difficulty = 0;
 
 		bulletlactivate = false;
 		bulletractivate = false;
 
-		lturn = rand() % 2;
-
 		ballx = 123;
 		bally = 92;
-		ballspeed = -1;
 
 		bulletlx = 0;
 		bulletrx = 225;	
@@ -90,51 +110,84 @@ int main(void)
 
 		ldead = false;
 		rdead = false;
-		deathcount = 0;
 		animationdone = false;
+
+		deathcount = 0;
+		stalcount = 0;
 
 		soundKill(pong);
 		soundKill(ping);
 		soundKill(sadlife);
+		soundKill(ballout);
+
+		t = 0;
+		vx = 1;
+		vy = 1;
+		x0 = ballx;
+		y0 = bally;
+
 	}
 
 	soundEnable(); 
 
 	while(1) 
 	{
-		if (deathcount == 0)
-		{
-			if (lturn)
-			{
-				ballx++;
-				bally = bally + ballspeed;
-			}
-			else
-			{
-				ballx--;
-				bally = ballspeed * -1 + bally;
-			}
+		if (deathcount == 0 && stalcount == 0)
+		{	
+			t++;
+			ballx = x0 + vx * t;
+			bally = y0 + vy * t;
 
 			if (bally > 182 || bally < 0)
 			{
-				ballspeed = ballspeed * - 1;
+				vy = -vy;
+				x0 = ballx;
+				y0 = bally;
+				t = 0;
+
 				pong = soundPlayPSG(1, 2400, 64, 64);
 				pongs = true;
 			}
 
 			if ((ballx == 8 && bally > paddlely - 12 && bally < paddlely + 34) || (ballx == 228 && bally > paddlery - 12 && bally < paddlery + 34))
 			{
-				lturn = !lturn;
-				ballspeed = rand() % 2 + 1;
+				if (bally < paddlely + 33/3 || bally < paddlery + 33/3)
+				{
+					// UPPER
+					vx = -vx;
+				}
+				else if (bally < paddlely + 33/3*2 || bally < paddlery + 33/3*2)
+				{
+					// LOWER
+					vx = -vx;
+				}
+				else
+				{
+					// MIDPOINT
+					vx = -vx;
+				}
+				
+				
+				x0 = ballx;
+				y0 = bally;
+				t = 0;
+
 				ping = soundPlayPSG(1, 4400, 64, 64);
 				pings = true;
 			}
 
-			if (ballx == -16 || ballx == 256)
+			if (ballx < -16)
 			{
-				reset();
+				rscore++;
+				stalcount = 1;
+				ballout = soundPlayPSG(1, 1000, 64, 64);
 			}
-
+			if (ballx > 256)
+			{
+				lscore++;
+				stalcount = 1;
+				ballout = soundPlayPSG(1, 1000, 64, 64);
+			}
 			if (bulletlx < 256 && bulletlactivate)
 			{
 				bulletlx = bulletlx + 2;
@@ -333,6 +386,20 @@ int main(void)
 		oamSet(&oamMain, 18, 0, paddlely, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[bullet.gfx_frame], -1, false, !ldead || animationdone, false, false, false);
 		oamSet(&oamMain, 19, 225, paddlery, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[bullet.gfx_frame], -1, false, !rdead || animationdone, true, false, false);
 
+		drawscore(20, 90 - (lscore > 9 ? 24 : 0), 10, lscore);
+
+		if (lscore > 9)
+		{
+			drawscore(28, 90, 10, lscore % 10);
+		}
+
+		drawscore(36, 140, 10, rscore);
+
+		if (rscore > 9)
+		{
+			drawscore(44, 164, 10, rscore % 10);
+		}
+
 		oamUpdate(&oamMain); // Write the changes to the top screen
 
 		if (pongi == 10)
@@ -368,7 +435,7 @@ int main(void)
 			paddle.anim_frame = 1;
 		}
 
-		if ((rdead && difficulty % 10 == 0) || ldead)
+		if (rdead || ldead)
 		{
 			bullet.state = 3;
 
@@ -380,6 +447,16 @@ int main(void)
 
 			if (deathcount == 100) 
 			{
+				if (rdead)
+				{
+					lscore++;
+				}
+
+				if (ldead) 
+				{
+					rscore++;
+				}
+
 				reset();
 			}
 			else 
@@ -387,35 +464,19 @@ int main(void)
 				deathcount++;
 			}
 		}
-		else if (rdead)
+
+		if (stalcount != 0)
 		{
-			bullet.state = 3;
-
-			if (deathcount == 10)
+			stalcount++;
+			if (stalcount == 20)
 			{
-				soundKill(sadlife);
-				sadlife = soundPlayPSG(1, 2637, 64, 64);
+				soundKill(ballout);
 			}
-			if (deathcount == 40)
-			{
-				soundKill(sadlife);
-				sadlife = soundPlayPSG(1, 3136, 64, 64);
-			}
-			if (deathcount == 70)
-			{
-				soundKill(sadlife);
-				sadlife = soundPlayPSG(1, 4186, 64, 64);
-			}
-			if (deathcount == 100) 
+			else if (stalcount == 100)
 			{
 				reset();
 			}
-			else 
-			{
-				deathcount++;
-			}
 		}
-
 
 		swiWaitForVBlank(); // Wait until the next frame
 	}
