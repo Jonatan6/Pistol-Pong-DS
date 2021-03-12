@@ -32,8 +32,6 @@ typedef struct
 Paddle paddle = {};
 Bullet bullet = {};
 
-enum SpriteState {W_UP = 0, W_RIGHT = 1, W_DOWN = 2, W_LEFT = 3};
-
 void animatePaddle(Paddle *sprite)
 {
 	int frame = sprite->anim_frame + sprite->state * 3;

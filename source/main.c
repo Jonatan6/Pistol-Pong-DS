@@ -27,6 +27,9 @@ int main(void)
 
 	bool lturn = rand() % 2;
 
+	int paddlely = 80;
+	int paddlery = 80;
+
 	int ballx = 123;
 	int bally = 92;
 	int ballspeed = -1;
@@ -49,9 +52,6 @@ int main(void)
 	bool rdead = false;
 	int deathcount = 0;
 	bool animationdone = false;
-
-	int paddlely = 80;
-	int paddlery = 80;
 
 	void reset()
 	{
