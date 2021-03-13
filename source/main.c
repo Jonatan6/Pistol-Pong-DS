@@ -61,8 +61,8 @@ int main(void)
 
 	bool ldead = false;
 	bool rdead = false;
-	int lscore = 9;
-	int rscore = 18;
+	int lscore = 0;
+	int rscore = 0;
 	bool animationdone = false;
 
 	int deathcount = 0;
@@ -83,9 +83,6 @@ int main(void)
 
 		bullet.anim_frame = 0;
 		paddle.anim_frame = 0;
-
-		//at_title = true;
-		//difficulty = 0;
 
 		bulletlactivate = false;
 		bulletractivate = false;
@@ -129,6 +126,21 @@ int main(void)
 	}
 
 	soundEnable(); 
+
+	// This is the dotted line in the middle of the field... Yes, I am loading each and every line as a seperate sprite
+	oamSet(&oamMain, 5, 123, 4, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, paddle.sprite_gfx_mem, -1, false, false, false, false, false);
+	oamSet(&oamMain, 6, 123, 20, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, paddle.sprite_gfx_mem, -1, false, false, false, false, false);
+	oamSet(&oamMain, 7, 123, 36, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, paddle.sprite_gfx_mem, -1, false, false, false, false, false);
+	oamSet(&oamMain, 8, 123, 52, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, paddle.sprite_gfx_mem, -1, false, false, false, false, false);
+	oamSet(&oamMain, 9, 123, 68, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, paddle.sprite_gfx_mem, -1, false, false, false, false, false);
+	oamSet(&oamMain, 10, 123, 84, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, paddle.sprite_gfx_mem, -1, false, false, false, false, false);
+	oamSet(&oamMain, 11, 123, 100, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, paddle.sprite_gfx_mem, -1, false, false, false, false, false);
+	oamSet(&oamMain, 12, 123, 116, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, paddle.sprite_gfx_mem, -1, false, false, false, false, false);
+	oamSet(&oamMain, 13, 123, 132, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, paddle.sprite_gfx_mem, -1, false, false, false, false, false);
+	oamSet(&oamMain, 14, 123, 148, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, paddle.sprite_gfx_mem, -1, false, false, false, false, false);
+	oamSet(&oamMain, 15, 123, 164, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, paddle.sprite_gfx_mem, -1, false, false, false, false, false);
+	oamSet(&oamMain, 16, 123, 180, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, paddle.sprite_gfx_mem, -1, false, false, false, false, false);
+	oamSet(&oamMain, 17, 123, 196, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, paddle.sprite_gfx_mem, -1, false, false, false, false, false);
 
 	while(1) 
 	{
@@ -361,43 +373,38 @@ int main(void)
 		animatePaddle(&paddle);
 		animateBullet(&bullet);
 
-		oamSet(&oamMain, 0, 0, paddlely, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, paddle.sprite_gfx_mem, -1, false, ldead, false, false, false);
-		oamSet(&oamMain, 1, 225, paddlery, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, paddle.sprite_gfx_mem, -1, false, rdead, true, false, false);
-
-		oamSet(&oamMain, 2, bulletlx, bulletly, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[bullet.gfx_frame], -1, false, !bulletlactivate || ldead || rdead, false, false, false);
-		oamSet(&oamMain, 3, bulletrx, bulletry, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[bullet.gfx_frame], -1, false, !bulletractivate || ldead || rdead, true, false, false);
-
-		oamSet(&oamMain, 4, ballx, bally, 0, 0, SpriteSize_16x8, SpriteColorFormat_256Color, paddle.sprite_gfx_mem, -1, false, at_title, false, false, false);
-
-		oamSet(&oamMain, 5, 123, 4, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, paddle.sprite_gfx_mem, -1, false, false, false, false, false);
-		oamSet(&oamMain, 6, 123, 20, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, paddle.sprite_gfx_mem, -1, false, false, false, false, false);
-		oamSet(&oamMain, 7, 123, 36, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, paddle.sprite_gfx_mem, -1, false, false, false, false, false);
-		oamSet(&oamMain, 8, 123, 52, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, paddle.sprite_gfx_mem, -1, false, false, false, false, false);
-		oamSet(&oamMain, 9, 123, 68, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, paddle.sprite_gfx_mem, -1, false, false, false, false, false);
-		oamSet(&oamMain, 10, 123, 84, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, paddle.sprite_gfx_mem, -1, false, false, false, false, false);
-		oamSet(&oamMain, 11, 123, 100, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, paddle.sprite_gfx_mem, -1, false, false, false, false, false);
-		oamSet(&oamMain, 12, 123, 116, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, paddle.sprite_gfx_mem, -1, false, false, false, false, false);
-		oamSet(&oamMain, 13, 123, 132, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, paddle.sprite_gfx_mem, -1, false, false, false, false, false);
-		oamSet(&oamMain, 14, 123, 148, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, paddle.sprite_gfx_mem, -1, false, false, false, false, false);
-		oamSet(&oamMain, 15, 123, 164, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, paddle.sprite_gfx_mem, -1, false, false, false, false, false);
-		oamSet(&oamMain, 16, 123, 180, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, paddle.sprite_gfx_mem, -1, false, false, false, false, false);
-		oamSet(&oamMain, 17, 123, 196, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, paddle.sprite_gfx_mem, -1, false, false, false, false, false);
-
-		oamSet(&oamMain, 18, 0, paddlely, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[bullet.gfx_frame], -1, false, !ldead || animationdone, false, false, false);
-		oamSet(&oamMain, 19, 225, paddlery, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[bullet.gfx_frame], -1, false, !rdead || animationdone, true, false, false);
-
-		drawscore(20, 90 - (lscore > 9 ? 24 : 0), 10, lscore);
-
-		if (lscore > 9)
+		if (deathcount == 0 && stalcount == 0)
 		{
-			drawscore(28, 90, 10, lscore % 10);
+			// The paddle
+			oamSet(&oamMain, 0, 0, paddlely, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, paddle.sprite_gfx_mem, -1, false, ldead, false, false, false);
+			oamSet(&oamMain, 1, 225, paddlery, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, paddle.sprite_gfx_mem, -1, false, rdead, true, false, false);
+
+			// The bullet
+			oamSet(&oamMain, 2, bulletlx, bulletly, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[bullet.gfx_frame], -1, false, !bulletlactivate || ldead || rdead, false, false, false);
+			oamSet(&oamMain, 3, bulletrx, bulletry, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[bullet.gfx_frame], -1, false, !bulletractivate || ldead || rdead, true, false, false);
+
+			// The ball
+			oamSet(&oamMain, 4, ballx, bally, 0, 0, SpriteSize_16x8, SpriteColorFormat_256Color, paddle.sprite_gfx_mem, -1, false, at_title, false, false, false);
+
+			drawscore(20, 90 - (lscore > 9 ? 24 : 0), 10, lscore);
+
+			if (lscore > 9)
+			{
+				drawscore(28, 90, 10, lscore % 10);
+			}
+
+			drawscore(36, 140, 10, rscore);
+
+			if (rscore > 9)
+			{
+				drawscore(44, 164, 10, rscore % 10);
+			}
 		}
-
-		drawscore(36, 140, 10, rscore);
-
-		if (rscore > 9)
+		else
 		{
-			drawscore(44, 164, 10, rscore % 10);
+			// The explosion
+			oamSet(&oamMain, 18, 0, paddlely, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[bullet.gfx_frame], -1, false, !ldead || animationdone, false, false, false);
+			oamSet(&oamMain, 19, 225, paddlery, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[bullet.gfx_frame], -1, false, !rdead || animationdone, true, false, false);
 		}
 
 		oamUpdate(&oamMain); // Write the changes to the top screen
