@@ -32,6 +32,7 @@ int main(void)
 
 	dmaCopy(paddlePal, SPRITE_PALETTE, 512);
 
+	bool title_ready = false;
 	bool at_title = true;
 	int difficulty = 0;
 
@@ -373,19 +374,37 @@ int main(void)
 		animatePaddle(&paddle);
 		animateBullet(&bullet);
 
+		scanKeys();
+		int keys = keysHeld();
+
+		if (!(keys & KEY_TOUCH) && !at_title)
+		{
+			title_ready = true;
+		}
+		else if (title_ready)
+		{
+			title_ready = false;
+			at_title = true;
+			lscore = 0;
+			rscore = 0;
+
+			reset();
+		}
+
 		if (deathcount == 0 && stalcount == 0)
 		{
-			// The paddle
+			// The paddles
 			oamSet(&oamMain, 0, 0, paddlely, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, paddle.sprite_gfx_mem, -1, false, ldead, false, false, false);
 			oamSet(&oamMain, 1, 225, paddlery, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, paddle.sprite_gfx_mem, -1, false, rdead, true, false, false);
 
-			// The bullet
+			// The bullets
 			oamSet(&oamMain, 2, bulletlx, bulletly, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[bullet.gfx_frame], -1, false, !bulletlactivate || ldead || rdead, false, false, false);
 			oamSet(&oamMain, 3, bulletrx, bulletry, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[bullet.gfx_frame], -1, false, !bulletractivate || ldead || rdead, true, false, false);
 
 			// The ball
 			oamSet(&oamMain, 4, ballx, bally, 0, 0, SpriteSize_16x8, SpriteColorFormat_256Color, paddle.sprite_gfx_mem, -1, false, at_title, false, false, false);
 
+			// The scores
 			drawscore(20, 90 - (lscore > 9 ? 24 : 0), 10, lscore);
 
 			if (lscore > 9)

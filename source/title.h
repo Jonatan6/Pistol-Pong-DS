@@ -20,6 +20,14 @@ int title_screen()
 	iprintf("------------------------------");
 	consoleSetWindow(&bottomScreen, 1, 5, 30, 30);
 	iprintf("         VS COMPUTER");
+
+	touchRead(&touch);
+
+	while(touch.px > 0 && touch.py > 0)
+	{
+		touchRead(&touch);
+	}
+
 	while(1)
 	{
 		touchRead(&touch);
@@ -73,6 +81,12 @@ int title_screen()
 		}
 	}
 
+	consoleSetWindow(&bottomScreen, 1, 17, 30, 30);
+	iprintf("------------------------------");
+	consoleSetWindow(&bottomScreen, 1, 11, 30, 30);
+	iprintf("      RETURN TO THE MENU");
+	consoleSetWindow(&bottomScreen, 1, 5, 30, 30);
+	iprintf("------------------------------");
 	scanKeys();
 	int keys = keysHeld();
 	if (keys & KEY_R && keys & KEY_L)
