@@ -50,12 +50,12 @@ int main(void)
 	int bulletly = 0;
 	int bulletry = 0;
 
-	int pingi = 0;
 	int pongi = 0;
-	int ping = 0;
 	int pong = 0;
-	bool pings = false;
 	bool pongs = false;
+	int pingi = 0;
+	int ping = 0;
+	bool pings = false;
 
 	int sadlife = 0;
 	int ballout = 0;
@@ -70,8 +70,8 @@ int main(void)
 	int stalcount = 0;
 
 	int t = 0; // time
-	float vx = 1;
-	float vy = 1;
+	float vx = (float)(rand() % 2 * 2 - 1);
+	float vy = (float)(rand() % 2 * 2 - 1);
 
 	// ball start position
 	int x0 = ballx;
@@ -99,12 +99,14 @@ int main(void)
 		paddlely = 80;
 		paddlery = 80;
 
-		pingi = 0;
 		pongi = 0;
-		ping = 0;
 		pong = 0;
-		pings = false;
 		pongs = false;
+
+		pingi = 0;
+		ping = 0;
+		pings = false;
+
 
 		ldead = false;
 		rdead = false;
@@ -114,16 +116,14 @@ int main(void)
 		stalcount = 0;
 
 		soundKill(pong);
-		soundKill(ping);
 		soundKill(sadlife);
 		soundKill(ballout);
 
 		t = 0;
-		vx = 1;
-		vy = 1;
+		vx = (float)(rand() % 2 * 2 - 1);;
+		vy = (float)(rand() % 2 * 2 - 1);;
 		x0 = ballx;
 		y0 = bally;
-
 	}
 
 	soundEnable(); 
@@ -142,6 +142,10 @@ int main(void)
 	oamSet(&oamMain, 15, 123, 164, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, paddle.sprite_gfx_mem, -1, false, false, false, false, false);
 	oamSet(&oamMain, 16, 123, 180, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, paddle.sprite_gfx_mem, -1, false, false, false, false, false);
 	oamSet(&oamMain, 17, 123, 196, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, paddle.sprite_gfx_mem, -1, false, false, false, false, false);
+
+	// Draw the scores of both playes
+	drawscore(20, 90, 10, 0);
+	drawscore(36, 140, 10, 0);
 
 	while(1) 
 	{
@@ -162,25 +166,19 @@ int main(void)
 				pongs = true;
 			}
 
-			if ((ballx == 8 && bally > paddlely - 12 && bally < paddlely + 34) || (ballx == 228 && bally > paddlery - 12 && bally < paddlery + 34))
+			if (((ballx < 9 && ballx > 0 && bally > paddlely - 12 && bally < paddlely + 34) || (ballx > 228 && ballx < 237 && bally > paddlery - 12 && bally < paddlery + 34)) && t > 5)
 			{
-				if (bally < paddlely + 33/3 || bally < paddlery + 33/3)
+				if (ballx < 9)
 				{
-					// UPPER
-					vx = -vx;
-				}
-				else if (bally < paddlely + 33/3*2 || bally < paddlery + 33/3*2)
-				{
-					// LOWER
-					vx = -vx;
+					vy = vy + ((float)bally - (float)paddlely) / 32;
+					vx = -(vx);
 				}
 				else
 				{
-					// MIDPOINT
-					vx = -vx;
+					vy = -vy + ((float)bally - (float)paddlery) / 32;
+					vx = -(vx);
 				}
-				
-				
+
 				x0 = ballx;
 				y0 = bally;
 				t = 0;
@@ -238,12 +236,12 @@ int main(void)
 
 			if (keys & KEY_UP)
 			{
-				if (paddlely >= 1)
+				if (paddlely > 0)
 				{
 					paddlely = paddlely - 2;
 				}
 
-				if (bulletly >= 1 && !bulletlactivate)
+				if (bulletly > 0 && !bulletlactivate)
 				{
 					bulletly--;
 				}
@@ -256,12 +254,12 @@ int main(void)
 
 			if (keys & KEY_DOWN)
 			{
-				if (paddlely <= 158)
+				if (paddlely < 159)
 				{
 					paddlely = paddlely + 2;
 				}
 
-				if (bulletly <= 158 && !bulletlactivate)
+				if (bulletly < 159 && !bulletlactivate)
 				{
 					bulletly++;
 				}
@@ -271,7 +269,7 @@ int main(void)
 			{
 				if (keys & KEY_X)
 				{
-					if (paddlery >= 1)
+					if (paddlery > 0)
 					{
 						paddlery = paddlery - 2;
 					}
@@ -288,12 +286,12 @@ int main(void)
 
 				if (keys & KEY_B)
 				{
-					if (paddlery <= 158)
+					if (paddlery < 159)
 					{
 						paddlery = paddlery + 2;
 					}
 
-					if (bulletry <= 158 && !bulletractivate)
+					if (bulletry < 159 && !bulletractivate)
 					{
 						bulletry++;
 					}
@@ -301,28 +299,23 @@ int main(void)
 			}
 			else if (difficulty % 10 == 1)
 			{
-				if (bally > paddlery)
+				if (bally > paddlery + 16 && paddlery < 159)
 				{
-					if (paddlery <= 158)
-					{
-						paddlery = paddlery + (1 + rand() % 2);
-					}
+					paddlery = paddlery + (1 + rand() % 2);
 				}
-				else
+				else if (bally < paddlery + 16 && paddlery > 0)
 				{
 					paddlery = paddlery - (1 + rand() % 2);
 				}
 			}
 			else if (difficulty % 10 == 2)
 			{
-				if (bally > paddlery)
+
+				if (bally > paddlery + 16 && paddlery < 159)
 				{
-					if (paddlery <= 158)
-					{
-						paddlery = paddlery + 2;
-					}
+					paddlery = paddlery + 2;
 				}
-				else
+				else if (bally < paddlery + 16 && paddlery > 0)
 				{
 					paddlery = paddlery - 2;
 				}
@@ -335,18 +328,74 @@ int main(void)
 			else if (difficulty % 10 == 3)
 			{
 
-				if (bally > paddlery)
+				if (bally > paddlery + 16 && paddlery < 159)
 				{
-					if (paddlery <= 158)
-					{
 						paddlery = paddlery + 2;
-					}
 				}
-				else
+				else if (bally < paddlery + 16 && paddlery > 0)
 				{
 					paddlery = paddlery - 2;
 				}
 					bulletractivate = true;
+			}
+
+			// The paddles
+			oamSet(&oamMain, 0, 0, paddlely, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, paddle.sprite_gfx_mem, -1, false, ldead, false, false, false);
+			oamSet(&oamMain, 1, 225, paddlery, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, paddle.sprite_gfx_mem, -1, false, rdead, true, false, false);
+
+			// The bullets
+			oamSet(&oamMain, 2, bulletlx, bulletly, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[bullet.gfx_frame], -1, false, !bulletlactivate || ldead || rdead, false, false, false);
+			oamSet(&oamMain, 3, bulletrx, bulletry, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[bullet.gfx_frame], -1, false, !bulletractivate || ldead || rdead, true, false, false);
+
+			// The ball
+			oamSet(&oamMain, 4, ballx, bally, 0, 0, SpriteSize_16x8, SpriteColorFormat_256Color, paddle.sprite_gfx_mem, -1, false, at_title, false, false, false);
+		}
+
+		if (deathcount % 5 == 0 && deathcount != 0)
+		{
+			// The explosion
+			oamClear(&oamMain, 2, 3);
+			oamSet(&oamMain, 18, 0, paddlely, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[bullet.gfx_frame], -1, false, !ldead || animationdone, false, false, false);
+			oamSet(&oamMain, 19, 225, paddlery, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[bullet.gfx_frame], -1, false, !rdead || animationdone, true, false, false);
+		}
+
+		if (deathcount == 100 || stalcount == 100)
+		{
+			if (rdead)
+			{
+				lscore++;
+			}
+
+			if (ldead) 
+			{
+				rscore++;
+			}
+
+			// The scores
+			drawscore(20, 90 - (lscore > 9 ? 24 : 0), 10, lscore);
+
+			if (lscore > 9)
+			{
+				drawscore(28, 90, 10, lscore % 10);
+			}
+
+			drawscore(36, 140, 10, rscore);
+
+			if (rscore > 9)
+			{
+				drawscore(44, 164, 10, rscore % 10);
+			}
+
+			reset();
+		}
+
+		if (stalcount != 0)
+		{
+			stalcount++;
+
+			if (stalcount == 20)
+			{
+				soundKill(ballout);
 			}
 		}
 
@@ -385,48 +434,18 @@ int main(void)
 		{
 			title_ready = false;
 			at_title = true;
+
 			lscore = 0;
 			rscore = 0;
+
+			drawscore(20, 90, 10, 0);
+			drawscore(36, 140, 10, 0);
 
 			reset();
 		}
 
-		if (deathcount == 0 && stalcount == 0)
-		{
-			// The paddles
-			oamSet(&oamMain, 0, 0, paddlely, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, paddle.sprite_gfx_mem, -1, false, ldead, false, false, false);
-			oamSet(&oamMain, 1, 225, paddlery, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, paddle.sprite_gfx_mem, -1, false, rdead, true, false, false);
-
-			// The bullets
-			oamSet(&oamMain, 2, bulletlx, bulletly, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[bullet.gfx_frame], -1, false, !bulletlactivate || ldead || rdead, false, false, false);
-			oamSet(&oamMain, 3, bulletrx, bulletry, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[bullet.gfx_frame], -1, false, !bulletractivate || ldead || rdead, true, false, false);
-
-			// The ball
-			oamSet(&oamMain, 4, ballx, bally, 0, 0, SpriteSize_16x8, SpriteColorFormat_256Color, paddle.sprite_gfx_mem, -1, false, at_title, false, false, false);
-
-			// The scores
-			drawscore(20, 90 - (lscore > 9 ? 24 : 0), 10, lscore);
-
-			if (lscore > 9)
-			{
-				drawscore(28, 90, 10, lscore % 10);
-			}
-
-			drawscore(36, 140, 10, rscore);
-
-			if (rscore > 9)
-			{
-				drawscore(44, 164, 10, rscore % 10);
-			}
-		}
-		else
-		{
-			// The explosion
-			oamSet(&oamMain, 18, 0, paddlely, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[bullet.gfx_frame], -1, false, !ldead || animationdone, false, false, false);
-			oamSet(&oamMain, 19, 225, paddlery, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[bullet.gfx_frame], -1, false, !rdead || animationdone, true, false, false);
-		}
-
-		oamUpdate(&oamMain); // Write the changes to the top screen
+		// Write the changes to the top screen
+		oamUpdate(&oamMain);
 
 		if (pongi == 10)
 		{
@@ -471,37 +490,7 @@ int main(void)
 				sadlife = soundPlayPSG(1, -1 * deathcount * 100 + 10000, 64, 64);
 			}
 
-			if (deathcount == 100) 
-			{
-				if (rdead)
-				{
-					lscore++;
-				}
-
-				if (ldead) 
-				{
-					rscore++;
-				}
-
-				reset();
-			}
-			else 
-			{
-				deathcount++;
-			}
-		}
-
-		if (stalcount != 0)
-		{
-			stalcount++;
-			if (stalcount == 20)
-			{
-				soundKill(ballout);
-			}
-			else if (stalcount == 100)
-			{
-				reset();
-			}
+			deathcount++;
 		}
 
 		swiWaitForVBlank(); // Wait until the next frame
