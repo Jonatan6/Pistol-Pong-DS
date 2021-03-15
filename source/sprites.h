@@ -55,9 +55,7 @@ void animateBullet(Bullet *sprite)
 
 void initBullet(Bullet *sprite, u8* gfx)
 {
-	int i;
-
-	for(i = 0; i < 12; i++)
+	for(int i = 0; i < 12; i++)
 	{
 		sprite->sprite_gfx_mem[i] = oamAllocateGfx(&oamMain, SpriteSize_32x32, SpriteColorFormat_256Color);
 		dmaCopy(gfx, sprite->sprite_gfx_mem[i], 32*32);

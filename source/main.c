@@ -1,20 +1,8 @@
 #include <nds.h>
 #include <stdio.h>
-#include <math.h>
 #include "sprites.h"
 #include "title.h"
 #include "score.h"
-
-float getdx(int x0, int y0, float v, float dy)
-{
-	float nexty = (float) y0 + dy;
-	return sqrt(v * v - nexty * nexty) - (float) x0;
-}
-
-int ballspeed(float vx, float vy)
-{
-	return round(sqrt(vx * vx + vy * vy));
-}
 
 int main(void) 
 {
@@ -107,7 +95,6 @@ int main(void)
 		ping = 0;
 		pings = false;
 
-
 		ldead = false;
 		rdead = false;
 		animationdone = false;
@@ -116,6 +103,7 @@ int main(void)
 		stalcount = 0;
 
 		soundKill(pong);
+		soundKill(ping);
 		soundKill(sadlife);
 		soundKill(ballout);
 
