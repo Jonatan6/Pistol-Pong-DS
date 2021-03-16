@@ -140,8 +140,15 @@ int main(void)
 		if (deathcount == 0 && stalcount == 0)
 		{	
 			t++;
+
 			ballx = x0 + vx * t;
 			bally = y0 + vy * t;
+
+			if (vx < 0) vx = vx - 0.0004;
+			if (vx > 0) vx = vx + 0.0004;
+
+			if (vy < 0) vx = vx - 0.0004;
+			if (vy > 0) vy = vy + 0.0004;
 
 			if (bally > 182 || bally < 0)
 			{
@@ -332,8 +339,8 @@ int main(void)
 			oamSet(&oamMain, 1, 225, paddlery, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, paddle.sprite_gfx_mem, -1, false, rdead, true, false, false);
 
 			// The bullets
-			oamSet(&oamMain, 2, bulletlx, bulletly, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[bullet.gfx_frame], -1, false, rdead || ldead, false, false, false);
-			oamSet(&oamMain, 3, bulletrx, bulletry, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[bullet.gfx_frame], -1, false, rdead || ldead, true, false, false);
+			oamSet(&oamMain, 2, bulletlx, bulletly, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[bullet.gfx_frame], -1, false, rdead || ldead || !bulletlactivate, false, false, false);
+			oamSet(&oamMain, 3, bulletrx, bulletry, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[bullet.gfx_frame], -1, false, rdead || ldead || !bulletractivate, true, false, false);
 
 			// The ball
 			oamSet(&oamMain, 6, ballx, bally, 0, 0, SpriteSize_16x8, SpriteColorFormat_256Color, paddle.sprite_gfx_mem, -1, false, at_title, false, false, false);
