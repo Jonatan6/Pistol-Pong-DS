@@ -1,11 +1,15 @@
 #include <nds.h>
 #include <stdio.h>
+#include <time.h>
 #include "sprites.h"
 #include "title.h"
 #include "score.h"
 
 int main(void) 
 {
+	// Seed the rng with the time
+	srand(time(0));
+
 	videoSetMode(MODE_0_2D);
 	videoSetModeSub(MODE_0_2D);
 
