@@ -5,13 +5,13 @@ int title_screen()
 {
 	int difficulty = 0;
 
-	PrintConsole bottomScreen;
-
 	vramSetBankC(VRAM_C_SUB_BG);
 
+	PrintConsole bottomScreen;
 	consoleInit(&bottomScreen, 0, BgType_Text4bpp, BgSize_T_256x256, 2, 0, false, true);;
 
 	touchPosition touch;
+	touchRead(&touch);
 
 	consoleSelect(&bottomScreen);
 	consoleSetWindow(&bottomScreen, 1, 17, 30, 30);
@@ -20,8 +20,6 @@ int title_screen()
 	iprintf("------------------------------");
 	consoleSetWindow(&bottomScreen, 1, 5, 30, 30);
 	iprintf("         VS COMPUTER");
-
-	touchRead(&touch);
 
 	while(touch.px > 0 && touch.py > 0)
 	{

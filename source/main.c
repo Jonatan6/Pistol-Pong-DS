@@ -4,6 +4,7 @@
 #include "sprites.h"
 #include "title.h"
 #include "score.h"
+#include "settings.h"
 
 int main(void) 
 {
@@ -27,6 +28,8 @@ int main(void)
 	bool title_ready = false;
 	bool at_title = true;
 	int difficulty = 0;
+
+	int setting_choice = 0;
 
 	bool bulletlactivate = false;
 	bool bulletractivate = false;
@@ -296,9 +299,21 @@ int main(void)
 					}
 				}
 			}
+
 			else if (difficulty % 10 == 1)
 			{
-				if (bally > paddlery + 16 && paddlery < 159)
+				if (vx < 0)
+				{
+					if (paddlery > 80)
+					{
+						paddlery--;
+					}
+					else if (paddlery < 80)
+					{
+						paddlery++;
+					}
+				}
+				else if (bally > paddlery + 16 && paddlery < 159)
 				{
 					paddlery = paddlery + (1 + rand() % 2);
 				}
@@ -309,8 +324,18 @@ int main(void)
 			}
 			else if (difficulty % 10 == 2)
 			{
-
-				if (bally > paddlery + 16 && paddlery < 159)
+				if (vx < 0)
+				{
+					if (paddlery > 80)
+					{
+						paddlery--;
+					}
+					else if (paddlery < 80)
+					{
+						paddlery++;
+					}
+				}
+				else if (bally > paddlery + 16 && paddlery < 159)
 				{
 					paddlery = paddlery + 2;
 				}
@@ -326,16 +351,26 @@ int main(void)
 			}
 			else if (difficulty % 10 == 3)
 			{
-
-				if (bally > paddlery + 16 && paddlery < 159)
+				if (vx < 0)
 				{
-						paddlery = paddlery + 2;
+					if (paddlery > 80)
+					{
+						paddlery--;
+					}
+					else if (paddlery < 80)
+					{
+						paddlery++;
+					}
+				}
+				else if (bally > paddlery + 16 && paddlery < 159)
+				{
+					paddlery = paddlery + 2;
 				}
 				else if (bally < paddlery + 16 && paddlery > 0)
 				{
 					paddlery = paddlery - 2;
 				}
-					bulletractivate = true;
+				bulletractivate = true;
 			}
 
 			// The paddles
@@ -348,6 +383,13 @@ int main(void)
 
 			// The ball
 			oamSet(&oamMain, 6, ballx, bally, 0, 0, SpriteSize_16x8, SpriteColorFormat_256Color, paddle.sprite_gfx_mem, -1, false, at_title, false, false, false);
+
+			if (setting_choice == 1)
+			{
+				// The magic shperes
+				oamSet(&oamMain, 51, 122, 40, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[9], -1, false, false, false, false, false);
+				oamSet(&oamMain, 52, 122, 120, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[9], -1, false, false, false, false, false);
+			}
 		}
 
 		if (deathcount % 5 == 0 && deathcount != 0)
@@ -447,6 +489,11 @@ int main(void)
 			drawscore(36, 140, 10, 0);
 
 			reset();
+		}
+
+		if (keys & KEY_SELECT || keys & KEY_START)
+		{
+			setting_choice = settings();
 		}
 
 		// Write the changes to the top screen
