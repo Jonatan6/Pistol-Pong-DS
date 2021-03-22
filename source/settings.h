@@ -57,20 +57,24 @@ int settings()
 
 	oamUpdate(&oamMain);
 
+	consoleSetWindow(&bottomScreen, 1, 4, 30, 30);
+	iprintf("MYSTERY BOXES     MAGIC BALLS");
+	consoleSetWindow(&bottomScreen, 1, 5, 30, 30);
+
 	consoleSetWindow(&bottomScreen, 1, 5, 30, 30);
 	iprintf("  ---------        ---------");
 	consoleSetWindow(&bottomScreen, 1, 6, 30, 30);
-	iprintf("  -       -        -       -");
+	iprintf("  |       |        |       |");
 	consoleSetWindow(&bottomScreen, 1, 7, 30, 30);
-	iprintf("  -       -        -       -");
+	iprintf("  |       |        |       |");
 	consoleSetWindow(&bottomScreen, 1, 8, 30, 30);
-	iprintf("  -       -        -       -");
+	iprintf("  |       |        |       |");
 	consoleSetWindow(&bottomScreen, 1, 9, 30, 30);
-	iprintf("  -       -        -       -");
+	iprintf("  |       |        |       |");
 	consoleSetWindow(&bottomScreen, 1, 10, 30, 30);
-	iprintf("  -       -        -       -");
+	iprintf("  |       |        |       |");
 	consoleSetWindow(&bottomScreen, 1, 11, 30, 30);
-	iprintf("  -       -        -       -");
+	iprintf("  |       |        |       |");
 	consoleSetWindow(&bottomScreen, 1, 12, 30, 30);
 	iprintf("  ---------        ---------");
 
