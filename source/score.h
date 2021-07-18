@@ -82,7 +82,7 @@ void drawscore(int index, int x, int y, int number)
 			oamSet(&oamMain, index + 5, x - 6, y, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[7], -1, false, false, true, false, false);
 			oamSet(&oamMain, index + 6, x - 6, y + 16, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[7], -1, false, false, true, false, false);
 			break;
-		case >9:
+		default:
 			number = (number - (number % 10)) / 10;
 			break;
 	}
