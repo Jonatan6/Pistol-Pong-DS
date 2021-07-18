@@ -1,13 +1,6 @@
-#define paddleTilesLen 12288
 extern const unsigned int paddleTiles[3072];
-
-#define paddlePalLen 512
 extern const unsigned short paddlePal[256];
-
-#define bulletTilesLen 12288
 extern const unsigned int bulletTiles[3072];
-
-#define bulletPalLen 512
 extern const unsigned short bulletPal[256];
 
 typedef struct 
@@ -35,16 +28,13 @@ Bullet bullet = {};
 void animatePaddle(Paddle *sprite)
 {
 	int frame = sprite->anim_frame + sprite->state * 3;
-
 	u8* offset = sprite->frame_gfx + frame * 32*32;
-
 	dmaCopy(offset, sprite->sprite_gfx_mem, 32*32);
 }
 
 void initPaddle(Paddle *sprite, u8* gfx)
 {
 	sprite->sprite_gfx_mem = oamAllocateGfx(&oamMain, SpriteSize_32x32, SpriteColorFormat_256Color);
-			
 	sprite->frame_gfx = (u8*)gfx;
 }
 
