@@ -1,3 +1,6 @@
+#define SETTINGSX 20
+#define SETTINGSY 40
+
 int settings()
 {
 	int choice = 0;
@@ -16,46 +19,46 @@ int settings()
 	// Draw the word "OPTIONS" on the top screen
 
 	// O
-	oamSet(&oamMain, 0, 20+18, 20, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[6], -1, false, false, true, false, false);
-	oamSet(&oamMain, 1, 20+18, 20 + 28, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[6], -1, false, false, true, false, false);
-	oamSet(&oamMain, 2, 20+18 - 22, 20, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[7], -1, false, false, true, false, false);
-	oamSet(&oamMain, 3, 20+18 - 22, 20 + 16, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[7], -1, false, false, true, false, false);
-	oamSet(&oamMain, 4, 20+18 - 6, 20, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[7], -1, false, false, true, false, false);
-	oamSet(&oamMain, 5, 20+18 - 6, 20 + 16, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[7], -1, false, false, true, false, false);
+	oamSet(&oamMain, 0, SETTINGSX+18, SETTINGSY, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[6], -1, false, false, true, false, false);
+	oamSet(&oamMain, 1, SETTINGSX+18, SETTINGSY + 28, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[6], -1, false, false, true, false, false);
+	oamSet(&oamMain, 2, SETTINGSX+18 - 22, SETTINGSY, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[7], -1, false, false, true, false, false);
+	oamSet(&oamMain, 3, SETTINGSX+18 - 22, SETTINGSY + 16, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[7], -1, false, false, true, false, false);
+	oamSet(&oamMain, 4, SETTINGSX+18 - 6, SETTINGSY, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[7], -1, false, false, true, false, false);
+	oamSet(&oamMain, 5, SETTINGSX+18 - 6, SETTINGSY + 16, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[7], -1, false, false, true, false, false);
 	// P
-	oamSet(&oamMain, 6, 44+18, 20, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[6], -1, false, false, true, false, false);
-	oamSet(&oamMain, 7, 44+18, 20 + 16, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[6], -1, false, false, true, false, false);
-	oamSet(&oamMain, 8, 44+18 - 22, 20, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[7], -1, false, false, true, false, false);
-	oamSet(&oamMain, 9, 44+18 - 22, 20 + 16, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[7], -1, false, false, true, false, false);
-	oamSet(&oamMain, 10, 44+18 - 6, 20, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[7], -1, false, false, true, false, false);
+	oamSet(&oamMain, 6, 24+SETTINGSX+18, SETTINGSY, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[6], -1, false, false, true, false, false);
+	oamSet(&oamMain, 7, 24+SETTINGSX+18, SETTINGSY + 16, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[6], -1, false, false, true, false, false);
+	oamSet(&oamMain, 8, 24+SETTINGSX+18 - 22, SETTINGSY, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[7], -1, false, false, true, false, false);
+	oamSet(&oamMain, 9, 24+SETTINGSX+18 - 22, SETTINGSY + 16, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[7], -1, false, false, true, false, false);
+	oamSet(&oamMain, 10, 24+SETTINGSX+18 - 6, SETTINGSY, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[7], -1, false, false, true, false, false);
 	// T
-	oamSet(&oamMain, 11, 68+18, 20, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[6], -1, false, false, true, false, false);
-	oamSet(&oamMain, 12, 68+18 - 14, 20, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[7], -1, false, false, true, false, false);
-	oamSet(&oamMain, 13, 68+18 - 14, 20 + 16, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[7], -1, false, false, true, false, false);
+	oamSet(&oamMain, 11, 24+24+SETTINGSX+18, SETTINGSY, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[6], -1, false, false, true, false, false);
+	oamSet(&oamMain, 12, 24+24+SETTINGSX+18 - 14, SETTINGSY, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[7], -1, false, false, true, false, false);
+	oamSet(&oamMain, 13, 24+24+SETTINGSX+18 - 14, SETTINGSY + 16, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[7], -1, false, false, true, false, false);
 	// I
-	oamSet(&oamMain, 14, 92+18, 20, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[6], -1, false, false, true, false, false);
-	oamSet(&oamMain, 15, 92+18, 20 + 28, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[6], -1, false, false, true, false, false);
-	oamSet(&oamMain, 16, 92+18 - 14, 20, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[7], -1, false, false, true, false, false);
-	oamSet(&oamMain, 17, 92+18 - 14, 20 + 16, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[7], -1, false, false, true, false, false);
+	oamSet(&oamMain, 14, 24+24+24+SETTINGSX+18, SETTINGSY, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[6], -1, false, false, true, false, false);
+	oamSet(&oamMain, 15, 24+24+24+SETTINGSX+18, SETTINGSY + 28, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[6], -1, false, false, true, false, false);
+	oamSet(&oamMain, 16, 24+24+24+SETTINGSX+18 - 14, SETTINGSY, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[7], -1, false, false, true, false, false);
+	oamSet(&oamMain, 17, 24+24+24+SETTINGSX+18 - 14, SETTINGSY + 16, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[7], -1, false, false, true, false, false);
 	// O
-	oamSet(&oamMain, 18, 116+18, 20, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[6], -1, false, false, true, false, false);
-	oamSet(&oamMain, 19, 116+18, 20 + 28, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[6], -1, false, false, true, false, false);
-	oamSet(&oamMain, 20, 116+18 - 22, 20, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[7], -1, false, false, true, false, false);
-	oamSet(&oamMain, 21, 116+18 - 22, 20 + 16, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[7], -1, false, false, true, false, false);
-	oamSet(&oamMain, 22, 116+18 - 6, 20, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[7], -1, false, false, true, false, false);
-	oamSet(&oamMain, 23, 116+18 - 6, 20 + 16, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[7], -1, false, false, true, false, false);
+	oamSet(&oamMain, 18, 24+24+24+24+SETTINGSX+18, SETTINGSY, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[6], -1, false, false, true, false, false);
+	oamSet(&oamMain, 19, 24+24+24+24+SETTINGSX+18, SETTINGSY + 28, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[6], -1, false, false, true, false, false);
+	oamSet(&oamMain, 20, 24+24+24+24+SETTINGSX+18 - 22, SETTINGSY, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[7], -1, false, false, true, false, false);
+	oamSet(&oamMain, 21, 24+24+24+24+SETTINGSX+18 - 22, SETTINGSY + 16, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[7], -1, false, false, true, false, false);
+	oamSet(&oamMain, 22, 24+24+24+24+SETTINGSX+18 - 6, SETTINGSY, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[7], -1, false, false, true, false, false);
+	oamSet(&oamMain, 23, 24+24+24+24+SETTINGSX+18 - 6, SETTINGSY + 16, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[7], -1, false, false, true, false, false);
 	// N
-	oamSet(&oamMain, 24, 140+18 - 22, 20, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[7], -1, false, false, true, false, false);
-	oamSet(&oamMain, 25, 140+18 - 22, 20 + 16, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[7], -1, false, false, true, false, false);
-	oamSet(&oamMain, 26, 140+18 - 6, 20, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[7], -1, false, false, true, false, false);
-	oamSet(&oamMain, 27, 140+18 - 6, 20 + 16, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[7], -1, false, false, true, false, false);
-	oamSet(&oamMain, 28, 140+18+2, 20, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[8], -1, false, false, true, false, false);
+	oamSet(&oamMain, 24, 24+24+24+24+24+SETTINGSX+18 - 22, SETTINGSY, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[7], -1, false, false, true, false, false);
+	oamSet(&oamMain, 25, 24+24+24+24+24+SETTINGSX+18 - 22, SETTINGSY + 16, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[7], -1, false, false, true, false, false);
+	oamSet(&oamMain, 26, 24+24+24+24+24+SETTINGSX+18 - 6, SETTINGSY, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[7], -1, false, false, true, false, false);
+	oamSet(&oamMain, 27, 24+24+24+24+24+SETTINGSX+18 - 6, SETTINGSY + 16, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[7], -1, false, false, true, false, false);
+	oamSet(&oamMain, 28, 24+24+24+24+24+SETTINGSX+18+2, SETTINGSY, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[8], -1, false, false, true, false, false);
 	// S
-	oamSet(&oamMain, 29, 164+18, 20, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[6], -1, false, false, true, false, false);
-	oamSet(&oamMain, 30, 164+18, 20 + 14, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[6], -1, false, false, true, false, false);
-	oamSet(&oamMain, 31, 164+18, 20 + 28, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[6], -1, false, false, true, false, false);
-	oamSet(&oamMain, 32, 164+18 - 22, 20, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[7], -1, false, false, true, false, false);
-	oamSet(&oamMain, 33, 164+18 - 6, 20 + 16, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[7], -1, false, false, true, false, false);
+	oamSet(&oamMain, 29, 24+24+24+24+24+24+SETTINGSX+18, SETTINGSY, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[6], -1, false, false, true, false, false);
+	oamSet(&oamMain, 30, 24+24+24+24+24+24+SETTINGSX+18, SETTINGSY + 14, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[6], -1, false, false, true, false, false);
+	oamSet(&oamMain, 31, 24+24+24+24+24+24+SETTINGSX+18, SETTINGSY + 28, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[6], -1, false, false, true, false, false);
+	oamSet(&oamMain, 32, 24+24+24+24+24+24+SETTINGSX+18 - 22, SETTINGSY, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[7], -1, false, false, true, false, false);
+	oamSet(&oamMain, 33, 24+24+24+24+24+24+SETTINGSX+18 - 6, SETTINGSY + 16, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[7], -1, false, false, true, false, false);
 
 	oamUpdate(&oamMain);
 
