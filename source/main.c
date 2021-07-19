@@ -1,6 +1,9 @@
 #include <nds.h>
 #include <stdio.h>
 #include <time.h>
+#include <nds/input.h>
+#include <nds/touch.h>
+
 #include "sprites.h"
 #include "title.h"
 #include "score.h"
@@ -126,19 +129,10 @@ int main(void)
 	soundEnable(); 
 
 	// This is the dotted line in the middle of the field... Yes, I am loading each and every line as a seperate sprite
-	oamSet(&oamMain, 7, 123, 4, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, paddle.sprite_gfx_mem, -1, false, false, false, false, false);
-	oamSet(&oamMain, 8, 123, 20, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, paddle.sprite_gfx_mem, -1, false, false, false, false, false);
-	oamSet(&oamMain, 9, 123, 36, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, paddle.sprite_gfx_mem, -1, false, false, false, false, false);
-	oamSet(&oamMain, 10, 123, 52, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, paddle.sprite_gfx_mem, -1, false, false, false, false, false);
-	oamSet(&oamMain, 11, 123, 68, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, paddle.sprite_gfx_mem, -1, false, false, false, false, false);
-	oamSet(&oamMain, 12, 123, 84, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, paddle.sprite_gfx_mem, -1, false, false, false, false, false);
-	oamSet(&oamMain, 13, 123, 100, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, paddle.sprite_gfx_mem, -1, false, false, false, false, false);
-	oamSet(&oamMain, 14, 123, 116, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, paddle.sprite_gfx_mem, -1, false, false, false, false, false);
-	oamSet(&oamMain, 15, 123, 132, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, paddle.sprite_gfx_mem, -1, false, false, false, false, false);
-	oamSet(&oamMain, 16, 123, 148, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, paddle.sprite_gfx_mem, -1, false, false, false, false, false);
-	oamSet(&oamMain, 17, 123, 164, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, paddle.sprite_gfx_mem, -1, false, false, false, false, false);
-	oamSet(&oamMain, 18, 123, 180, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, paddle.sprite_gfx_mem, -1, false, false, false, false, false);
-	oamSet(&oamMain, 19, 123, 196, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, paddle.sprite_gfx_mem, -1, false, false, false, false, false);
+	for(int i=7, f=4; i != 19; i++, f+=16)
+	{
+		oamSet(&oamMain, i, 123, f, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, paddle.sprite_gfx_mem, -1, false, false, false, false, false);
+	}
 
 	// Draw the scores of both playes
 	drawscore(20, 90, 10, 0);

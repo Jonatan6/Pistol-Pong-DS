@@ -1,6 +1,3 @@
-#include <nds/input.h>
-#include <nds/touch.h>
-
 int title_screen()
 {
 	int difficulty = 0;
