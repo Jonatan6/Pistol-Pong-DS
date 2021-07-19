@@ -1,10 +1,8 @@
 #define SETTINGSX 20
 #define SETTINGSY 40
 
-int settings()
+int settings(int choice)
 {
-	int choice = 0;
-
 	// Clear the top screen
 	oamClear(&oamMain, 0, 0);
 
@@ -93,80 +91,82 @@ int settings()
 	while(1)
 	{
 		touchRead(&touch);
-
-		if (touch.px > 16 && touch.py < 32)
+		scanKeys();
+		int keys = keysHeld();
+		if (keys & KEY_TOUCH)
 		{
-			if (choice == 0)
+			if (touch.px > 16 && touch.py < 32)
 			{
-				consoleSetWindow(&bottomScreen, 1, 8, 30, 30);
-				iprintf("  |   X   |        |       |");
-				choice = 1;
+				switch (choice)
+				{
+					case 0:
+						consoleSetWindow(&bottomScreen, 1, 8, 30, 30);
+						iprintf("  |   X   |        |       |");
+						choice = 1;
+						break;
+					case 1:
+						consoleSetWindow(&bottomScreen, 1, 8, 30, 30);
+						iprintf("  |       |        |       |");
+						choice = 0;
+						break;
+					case 2:
+						consoleSetWindow(&bottomScreen, 1, 8, 30, 30);
+						iprintf("  |   X   |        |   X   |");
+						choice = 3;
+						break;
+					case 3:
+						consoleSetWindow(&bottomScreen, 1, 8, 30, 30);
+						iprintf("  |       |        |   X   |");
+						choice = 2;
+						break;
+				}
 			}
-			else if (choice == 1)
+			else if (touch.px < 32 && touch.py < 32)
 			{
-				consoleSetWindow(&bottomScreen, 1, 8, 30, 30);
-				iprintf("  |       |        |       |");
-				choice = 0;
+				switch(choice)
+				{
+					case 0:
+						consoleSetWindow(&bottomScreen, 1, 8, 30, 30);
+						iprintf("  |       |        |   X   |");
+						choice = 2;
+						break;
+					case 1:
+						consoleSetWindow(&bottomScreen, 1, 8, 30, 30);
+						iprintf("  |   X   |        |   X   |");
+						choice = 3;
+						break;
+					case 2:
+						consoleSetWindow(&bottomScreen, 1, 8, 30, 30);
+						iprintf("  |       |        |       |");
+						choice = 0;
+						break;
+					case 3:
+						consoleSetWindow(&bottomScreen, 1, 8, 30, 30);
+						iprintf("  |   X   |        |       |");
+						choice = 1;
+						break;
+				}
 			}
-			else if (choice == 2)
+			else if ((touch.px > 0 && touch.py > 148) || keys & KEY_SELECT || keys & KEY_START)
 			{
-				consoleSetWindow(&bottomScreen, 1, 8, 30, 30);
-				iprintf("  |   X   |        |   X   |");
-				choice = 3;
-			}
-			else if (choice == 3)
-			{
-				consoleSetWindow(&bottomScreen, 1, 8, 30, 30);
-				iprintf("  |       |        |   X   |");
-				choice = 2;
-			}
-		}
-		else if (touch.px < 32 && touch.py < 32)
-		{
-			if (choice == 0)
-			{
-				consoleSetWindow(&bottomScreen, 1, 8, 30, 30);
-				iprintf("  |       |        |   X   |");
-				choice = 2;
-			}
-			else if (choice == 1)
-			{
-				consoleSetWindow(&bottomScreen, 1, 8, 30, 30);
-				iprintf("  |   X   |        |   X   |");
-				choice = 3;
-			}
-			else if (choice == 2)
-			{
-				consoleSetWindow(&bottomScreen, 1, 8, 30, 30);
-				iprintf("  |       |        |       |");
-				choice = 0;
-			}
-			else if (choice == 3)
-			{
-				consoleSetWindow(&bottomScreen, 1, 8, 30, 30);
-				iprintf("  |   X   |        |       |");
-				choice = 1;
-			}
-		}
-		else if (touch.px > 0 && touch.py > 148)
-		{
-			oamClear(&oamMain, 0, 0);
+				oamClear(&oamMain, 0, 0);
 
-			oamSet(&oamMain, 7, 123, 4, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, paddle.sprite_gfx_mem, -1, false, false, false, false, false);
-			oamSet(&oamMain, 8, 123, 20, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, paddle.sprite_gfx_mem, -1, false, false, false, false, false);
-			oamSet(&oamMain, 9, 123, 36, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, paddle.sprite_gfx_mem, -1, false, false, false, false, false);
-			oamSet(&oamMain, 10, 123, 52, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, paddle.sprite_gfx_mem, -1, false, false, false, false, false);
-			oamSet(&oamMain, 11, 123, 68, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, paddle.sprite_gfx_mem, -1, false, false, false, false, false);
-			oamSet(&oamMain, 12, 123, 84, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, paddle.sprite_gfx_mem, -1, false, false, false, false, false);
-			oamSet(&oamMain, 13, 123, 100, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, paddle.sprite_gfx_mem, -1, false, false, false, false, false);
-			oamSet(&oamMain, 14, 123, 116, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, paddle.sprite_gfx_mem, -1, false, false, false, false, false);
-			oamSet(&oamMain, 15, 123, 132, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, paddle.sprite_gfx_mem, -1, false, false, false, false, false);
-			oamSet(&oamMain, 16, 123, 148, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, paddle.sprite_gfx_mem, -1, false, false, false, false, false);
-			oamSet(&oamMain, 17, 123, 164, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, paddle.sprite_gfx_mem, -1, false, false, false, false, false);
-			oamSet(&oamMain, 18, 123, 180, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, paddle.sprite_gfx_mem, -1, false, false, false, false, false);
-			oamSet(&oamMain, 19, 123, 196, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, paddle.sprite_gfx_mem, -1, false, false, false, false, false);
+				oamSet(&oamMain, 7, 123, 4, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, paddle.sprite_gfx_mem, -1, false, false, false, false, false);
+				oamSet(&oamMain, 8, 123, 20, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, paddle.sprite_gfx_mem, -1, false, false, false, false, false);
+				oamSet(&oamMain, 9, 123, 36, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, paddle.sprite_gfx_mem, -1, false, false, false, false, false);
+				oamSet(&oamMain, 10, 123, 52, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, paddle.sprite_gfx_mem, -1, false, false, false, false, false);
+				oamSet(&oamMain, 11, 123, 68, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, paddle.sprite_gfx_mem, -1, false, false, false, false, false);
+				oamSet(&oamMain, 12, 123, 84, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, paddle.sprite_gfx_mem, -1, false, false, false, false, false);
+				oamSet(&oamMain, 13, 123, 100, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, paddle.sprite_gfx_mem, -1, false, false, false, false, false);
+				oamSet(&oamMain, 14, 123, 116, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, paddle.sprite_gfx_mem, -1, false, false, false, false, false);
+				oamSet(&oamMain, 15, 123, 132, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, paddle.sprite_gfx_mem, -1, false, false, false, false, false);
+				oamSet(&oamMain, 16, 123, 148, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, paddle.sprite_gfx_mem, -1, false, false, false, false, false);
+				oamSet(&oamMain, 17, 123, 164, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, paddle.sprite_gfx_mem, -1, false, false, false, false, false);
+				oamSet(&oamMain, 18, 123, 180, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, paddle.sprite_gfx_mem, -1, false, false, false, false, false);
+				oamSet(&oamMain, 19, 123, 196, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, paddle.sprite_gfx_mem, -1, false, false, false, false, false);
 
-			break;
+				break;
+			}
 		}
 	}
 

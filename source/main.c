@@ -29,7 +29,7 @@ int main(void)
 	bool at_title = true;
 	int difficulty = 0;
 
-	int setting_choice = 0;
+	int settings_choices = 0;
 
 	bool bulletlactivate = false;
 	bool bulletractivate = false;
@@ -45,11 +45,11 @@ int main(void)
 	int bulletly = 0;
 	int bulletry = 0;
 
-	int pongi = 0;
 	int pong = 0;
-	bool pongs = false;
-	int pingi = 0;
 	int ping = 0;
+	int pongi = 0;
+	int pingi = 0;
+	bool pongs = false;
 	bool pings = false;
 
 	int sadlife = 0;
@@ -115,10 +115,12 @@ int main(void)
 		soundKill(ballout);
 
 		t = 0;
-		vx = (float)(rand() % 2 * 2 - 1);;
-		vy = (float)(rand() % 2 * 2 - 1);;
+		vx = (float)(rand() % 2 * 2 - 1);
+		vy = (float)(rand() % 2 * 2 - 1);
 		x0 = ballx;
 		y0 = bally;
+
+		settings_choices = 0;
 	}
 
 	soundEnable(); 
@@ -384,11 +386,22 @@ int main(void)
 			// The ball
 			oamSet(&oamMain, 6, ballx, bally, 0, 0, SpriteSize_16x8, SpriteColorFormat_256Color, paddle.sprite_gfx_mem, -1, false, at_title, false, false, false);
 
-			if (setting_choice == 1)
+			// Switch statement to check settings
+			switch (settings_choices)
 			{
-				// The magic shperes
-				oamSet(&oamMain, 51, 122, 40, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[9], -1, false, false, false, false, false);
-				oamSet(&oamMain, 52, 122, 120, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[9], -1, false, false, false, false, false);
+				case 1:
+					// Magic shperes
+					oamSet(&oamMain, 51, 122, 40, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[9], -1, false, false, false, false, false);
+					oamSet(&oamMain, 52, 122, 120, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[9], -1, false, false, false, false, false);
+					break;
+				case 2:
+					// Mystery boxes
+					break;
+				case 3:
+					// Both boxes and shperes
+					oamSet(&oamMain, 51, 122, 40, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[9], -1, false, false, false, false, false);
+					oamSet(&oamMain, 52, 122, 120, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[9], -1, false, false, false, false, false);
+					break;
 			}
 		}
 
@@ -493,7 +506,7 @@ int main(void)
 
 		if (keys & KEY_SELECT || keys & KEY_START)
 		{
-			setting_choice = settings();
+			settings_choices = settings(settings_choices);
 		}
 
 		// Write the changes to the top screen
