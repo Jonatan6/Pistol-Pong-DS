@@ -3,6 +3,7 @@ void drawscore(int index, int x, int y, int number)
 {
 	oamClear(&oamMain, index, index + 6);
 
+	letmeusecontinueffs:
 	switch(number)
 	{
 		case 0:
@@ -84,6 +85,6 @@ void drawscore(int index, int x, int y, int number)
 			break;
 		default:
 			number = (number - (number % 10)) / 10;
-			break;
+			goto letmeusecontinueffs;
 	}
 }

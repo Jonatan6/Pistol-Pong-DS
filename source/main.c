@@ -32,8 +32,6 @@ int main(void)
 	bool at_title = true;
 	int difficulty = 0;
 
-	int settings_choices = 0;
-
 	bool bulletlactivate = false;
 	bool bulletractivate = false;
 
@@ -74,6 +72,9 @@ int main(void)
 	// ball start position
 	int x0 = ballx;
 	int y0 = bally;
+
+	int settings_choices = 0;
+	bool noinput = false;
 
 	void reset()
 	{
@@ -124,6 +125,7 @@ int main(void)
 		y0 = bally;
 
 		settings_choices = 0;
+		noinput = false;
 	}
 
 	soundEnable(); 
@@ -385,6 +387,8 @@ int main(void)
 			{
 				case 1:
 					// Magic shperes
+					//oamRotateScale(&oamMain, 51, degreesToAngle(10), intToFixed(1, 8), intToFixed(1, 8));
+					//oamRotateScale(&oamMain, 52, degreesToAngle(180), intToFixed(1, 8), intToFixed(1, 8));
 					oamSet(&oamMain, 51, 122, 40, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[9], -1, false, false, false, false, false);
 					oamSet(&oamMain, 52, 122, 120, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[9], -1, false, false, false, false, false);
 					break;
@@ -498,9 +502,15 @@ int main(void)
 			reset();
 		}
 
-		if (keys & KEY_SELECT || keys & KEY_START)
+		if (!(keys & KEY_SELECT || keys & KEY_START))
+		{
+			noinput = true;
+		}
+
+		if (noinput && (keys & KEY_SELECT || keys & KEY_START))
 		{
 			settings_choices = settings(settings_choices);
+			noinput = false;
 		}
 
 		// Write the changes to the top screen

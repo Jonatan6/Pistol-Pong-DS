@@ -93,72 +93,76 @@ int settings(int choice)
 		touchRead(&touch);
 		scanKeys();
 		int keys = keysHeld();
-		if (keys & KEY_TOUCH)
+		bool noinput = false;
+		if ((touch.px > 16 && touch.py < 32 && keys & KEY_TOUCH) || keys & KEY_LEFT)
 		{
-			if (touch.px > 16 && touch.py < 32)
+			switch (choice)
 			{
-				switch (choice)
-				{
-					case 0:
-						consoleSetWindow(&bottomScreen, 1, 8, 30, 30);
-						iprintf("  |   X   |        |       |");
-						choice = 1;
-						break;
-					case 1:
-						consoleSetWindow(&bottomScreen, 1, 8, 30, 30);
-						iprintf("  |       |        |       |");
-						choice = 0;
-						break;
-					case 2:
-						consoleSetWindow(&bottomScreen, 1, 8, 30, 30);
-						iprintf("  |   X   |        |   X   |");
-						choice = 3;
-						break;
-					case 3:
-						consoleSetWindow(&bottomScreen, 1, 8, 30, 30);
-						iprintf("  |       |        |   X   |");
-						choice = 2;
-						break;
-				}
+				case 0:
+					consoleSetWindow(&bottomScreen, 1, 8, 30, 30);
+					iprintf("  |   X   |        |       |");
+					choice = 1;
+					break;
+				case 1:
+					consoleSetWindow(&bottomScreen, 1, 8, 30, 30);
+					iprintf("  |       |        |       |");
+					choice = 0;
+					break;
+				case 2:
+					consoleSetWindow(&bottomScreen, 1, 8, 30, 30);
+					iprintf("  |   X   |        |   X   |");
+					choice = 3;
+					break;
+				case 3:
+					consoleSetWindow(&bottomScreen, 1, 8, 30, 30);
+					iprintf("  |       |        |   X   |");
+					choice = 2;
+					break;
 			}
-			else if (touch.px < 32 && touch.py < 32)
+		}
+		else if ((touch.px < 32 && touch.py < 32 && keys & KEY_TOUCH) || keys & KEY_RIGHT)
+		{
+			switch(choice)
 			{
-				switch(choice)
-				{
-					case 0:
-						consoleSetWindow(&bottomScreen, 1, 8, 30, 30);
-						iprintf("  |       |        |   X   |");
-						choice = 2;
-						break;
-					case 1:
-						consoleSetWindow(&bottomScreen, 1, 8, 30, 30);
-						iprintf("  |   X   |        |   X   |");
-						choice = 3;
-						break;
-					case 2:
-						consoleSetWindow(&bottomScreen, 1, 8, 30, 30);
-						iprintf("  |       |        |       |");
-						choice = 0;
-						break;
-					case 3:
-						consoleSetWindow(&bottomScreen, 1, 8, 30, 30);
-						iprintf("  |   X   |        |       |");
-						choice = 1;
-						break;
-				}
+				case 0:
+					consoleSetWindow(&bottomScreen, 1, 8, 30, 30);
+					iprintf("  |       |        |   X   |");
+					choice = 2;
+					break;
+				case 1:
+					consoleSetWindow(&bottomScreen, 1, 8, 30, 30);
+					iprintf("  |   X   |        |   X   |");
+					choice = 3;
+					break;
+				case 2:
+					consoleSetWindow(&bottomScreen, 1, 8, 30, 30);
+					iprintf("  |       |        |       |");
+					choice = 0;
+					break;
+				case 3:
+					consoleSetWindow(&bottomScreen, 1, 8, 30, 30);
+					iprintf("  |   X   |        |       |");
+					choice = 1;
+					break;
 			}
-			else if ((touch.px > 0 && touch.py > 148) || keys & KEY_SELECT || keys & KEY_START)
-			{
-				oamClear(&oamMain, 0, 0);
+		}
 
-				// Draw the dotted line again, since it got cleared
-				for(int i=7, f=4; i != 19; i++, f+=16)
-				{
-					oamSet(&oamMain, i, 123, f, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, paddle.sprite_gfx_mem, -1, false, false, false, false, false);
-				}
+		if (!(keys & KEY_SELECT || keys & KEY_START || keys & KEY_TOUCH))
+		{
+			noinput = true;
+		}
 
-				break;
+		if (((touch.px > 0 && touch.py > 148 && keys & KEY_TOUCH) || keys & KEY_SELECT || keys & KEY_START) && noinput)
+		{
+			oamClear(&oamMain, 0, 0);
+
+			// Draw the dotted line again, since it got cleared
+			for(int i=7, f=4; i != 19; i++, f+=16)
+			{
+				oamSet(&oamMain, i, 123, f, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, paddle.sprite_gfx_mem, -1, false, false, false, false, false);
 			}
+
+			break;
 		}
 	}
 
