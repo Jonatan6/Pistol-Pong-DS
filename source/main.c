@@ -49,6 +49,7 @@ int main(void)
 	int bulletly = 0;
 	int bulletry = 0;
 
+	// Misc. sound effect stuff
 	int pong = 0;
 	int ping = 0;
 	int pongi = 0;
@@ -117,6 +118,7 @@ int main(void)
 		deathcount = 0;
 		stalcount = 0;
 
+		// Kill all the sound effects
 		soundKill(pong);
 		soundKill(ping);
 		soundKill(sadlife);
@@ -268,110 +270,108 @@ int main(void)
 				}
 			}
 
-			if (difficulty % 10 == 0)
+			switch(difficulty % 10)
 			{
-				if (keys & KEY_X)
-				{
-					if (paddlery > 0)
+				case 0:
+					if (keys & KEY_X)
 					{
-						paddlery = paddlery - 2;
+						if (paddlery > 0)
+						{
+							paddlery = paddlery - 2;
+						}
+						if (bulletly >= 1 && !bulletractivate)
+						{
+							bulletry++;
+						}
 					}
-					if (bulletly >= 1 && !bulletractivate)
+
+					if (keys & KEY_Y)
 					{
-						bulletry++;
+						bulletractivate = true;
 					}
-				}
 
-				if (keys & KEY_Y)
-				{
-					bulletractivate = true;
-				}
+					if (keys & KEY_B)
+					{
+						if (paddlery < 159)
+						{
+							paddlery = paddlery + 2;
+						}
 
-				if (keys & KEY_B)
-				{
-					if (paddlery < 159)
+						if (bulletry < 159 && !bulletractivate)
+						{
+							bulletry++;
+						}
+					}
+					break;
+				case 1:
+					if (vx < 0)
+					{
+						if (paddlery > 80)
+						{
+							paddlery--;
+						}
+						else if (paddlery < 80)
+						{
+							paddlery++;
+						}
+					}
+					else if (bally > paddlery + 16 && paddlery < 159)
+					{
+						paddlery = paddlery + (1 + rand() % 2);
+					}
+					else if (bally < paddlery + 16 && paddlery > 0)
+					{
+						paddlery = paddlery - (1 + rand() % 2);
+					}
+					break;
+				case 2:
+					if (vx < 0)
+					{
+						if (paddlery > 80)
+						{
+							paddlery--;
+						}
+						else if (paddlery < 80)
+						{
+							paddlery++;
+						}
+					}
+					else if (bally > paddlery + 16 && paddlery < 159)
 					{
 						paddlery = paddlery + 2;
 					}
+					else if (bally < paddlery + 16 && paddlery > 0)
+					{
+						paddlery = paddlery - 2;
+					}
 
-					if (bulletry < 159 && !bulletractivate)
+					if (rand() % 360 == 0)
 					{
-						bulletry++;
+						bulletractivate = true;
 					}
-				}
-			}
-
-			else if (difficulty % 10 == 1)
-			{
-				if (vx < 0)
-				{
-					if (paddlery > 80)
+					break;
+				case 3:
+					if (vx < 0)
 					{
-						paddlery--;
+						if (paddlery > 80)
+						{
+							paddlery--;
+						}
+						else if (paddlery < 80)
+						{
+							paddlery++;
+						}
 					}
-					else if (paddlery < 80)
+					else if (bally > paddlery + 16 && paddlery < 159)
 					{
-						paddlery++;
+						paddlery = paddlery + 2;
 					}
-				}
-				else if (bally > paddlery + 16 && paddlery < 159)
-				{
-					paddlery = paddlery + (1 + rand() % 2);
-				}
-				else if (bally < paddlery + 16 && paddlery > 0)
-				{
-					paddlery = paddlery - (1 + rand() % 2);
-				}
-			}
-			else if (difficulty % 10 == 2)
-			{
-				if (vx < 0)
-				{
-					if (paddlery > 80)
+					else if (bally < paddlery + 16 && paddlery > 0)
 					{
-						paddlery--;
+						paddlery = paddlery - 2;
 					}
-					else if (paddlery < 80)
-					{
-						paddlery++;
-					}
-				}
-				else if (bally > paddlery + 16 && paddlery < 159)
-				{
-					paddlery = paddlery + 2;
-				}
-				else if (bally < paddlery + 16 && paddlery > 0)
-				{
-					paddlery = paddlery - 2;
-				}
-
-				if (rand() % 360 == 0)
-				{
 					bulletractivate = true;
-				}
-			}
-			else if (difficulty % 10 == 3)
-			{
-				if (vx < 0)
-				{
-					if (paddlery > 80)
-					{
-						paddlery--;
-					}
-					else if (paddlery < 80)
-					{
-						paddlery++;
-					}
-				}
-				else if (bally > paddlery + 16 && paddlery < 159)
-				{
-					paddlery = paddlery + 2;
-				}
-				else if (bally < paddlery + 16 && paddlery > 0)
-				{
-					paddlery = paddlery - 2;
-				}
-				bulletractivate = true;
+					break;
 			}
 
 			// The paddles
@@ -390,8 +390,8 @@ int main(void)
 			{
 				case 1:
 					// Magic shperes
-					//oamRotateScale(&oamMain, 51, degreesToAngle(10), intToFixed(1, 8), intToFixed(1, 8));
-					//oamRotateScale(&oamMain, 52, degreesToAngle(180), intToFixed(1, 8), intToFixed(1, 8));
+					oamRotateScale(&oamMain, 51, degreesToAngle(10), intToFixed(1, 8), intToFixed(1, 8));
+					oamRotateScale(&oamMain, 52, degreesToAngle(25), intToFixed(1, 8), intToFixed(1, 8));
 					oamSet(&oamMain, 51, 122, 40, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[9], -1, false, false, false, false, false);
 					oamSet(&oamMain, 52, 122, 120, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[9], -1, false, false, false, false, false);
 					break;
@@ -406,7 +406,7 @@ int main(void)
 			}
 		}
 
-		if (deathcount % 5 == 0 && deathcount != 0)
+		else if (deathcount % 5 == 0)
 		{
 			// The explosion
 			if (ldead)
@@ -460,25 +460,22 @@ int main(void)
 			}
 		}
 
-		if (deathcount == 5)
+		// Animates the explosion every 5th frame until 25 frames have passed
+		switch(deathcount)
 		{
-			bullet.anim_frame++;
-		}
-		else if (deathcount == 10)
-		{
-			bullet.anim_frame++;
-		}
-		else if (deathcount == 15)
-		{
-			bullet.anim_frame--;
-		}
-		else if (deathcount == 20)
-		{
-			bullet.anim_frame--;
-		}
-		else if (deathcount == 25)
-		{
-			animationdone = true;
+			case 5:
+			case 10:
+				bullet.anim_frame++;
+				break;
+			case 15:
+			case 20:
+				bullet.anim_frame--;
+				break;
+			case 25:
+				animationdone = true;
+				break;
+			default:
+				break;
 		}
 
 		animatePaddle(&paddle);
@@ -548,6 +545,7 @@ int main(void)
 			at_title = false;
 		}
 
+		// If L+R were pressed at the title, activate the hidden paddle
 		if (difficulty > 9)
 		{
 			paddle.anim_frame = 1;
