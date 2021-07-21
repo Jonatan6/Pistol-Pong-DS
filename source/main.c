@@ -11,7 +11,7 @@
 
 int main(void) 
 {
-	// Seed the rng with the time
+	// Seed the rng with the current time
 	srand(time(0));
 
 	videoSetMode(MODE_0_2D);
@@ -27,6 +27,9 @@ int main(void)
 	initBullet(&bullet, (u8*)bulletTiles);
 
 	dmaCopy(paddlePal, SPRITE_PALETTE, 512);
+
+	// Current key being pressed
+	int keys;
 
 	bool title_ready = false;
 	bool at_title = true;
@@ -65,16 +68,17 @@ int main(void)
 	int deathcount = 0;
 	int stalcount = 0;
 
-	int t = 0; // time
+	// The time
+	int t = 0;
+
 	float vx = (float)(rand() % 2 * 2 - 1);
 	float vy = (float)(rand() % 2 * 2 - 1);
 
-	// ball start position
+	// Start position of the ball
 	int x0 = ballx;
 	int y0 = bally;
 
 	int settings_choices = 0;
-	bool noinput = false;
 
 	void reset()
 	{
@@ -125,8 +129,7 @@ int main(void)
 		y0 = bally;
 
 		settings_choices = 0;
-		noinput = false;
-	}
+		}
 
 	soundEnable(); 
 
@@ -232,7 +235,7 @@ int main(void)
 			}
 
 			scanKeys();
-			int keys = keysHeld();
+			keys = keysHeld();
 
 			if (keys & KEY_UP)
 			{
@@ -482,7 +485,7 @@ int main(void)
 		animateBullet(&bullet);
 
 		scanKeys();
-		int keys = keysHeld();
+		keys = keysHeld();
 
 		if (!(keys & KEY_TOUCH) && !at_title)
 		{
@@ -502,15 +505,16 @@ int main(void)
 			reset();
 		}
 
-		if (!(keys & KEY_SELECT || keys & KEY_START))
-		{
-			noinput = true;
-		}
-
-		if (noinput && (keys & KEY_SELECT || keys & KEY_START))
+		if (keys & KEY_SELECT || keys & KEY_START)
 		{
 			settings_choices = settings(settings_choices);
-			noinput = false;
+
+			// Stay in loop until nothing is touched and no key is pressed
+			while(keys & KEY_TOUCH || keys & KEY_START || keys & KEY_SELECT || keys & KEY_LEFT || keys & KEY_RIGHT)
+			{
+				scanKeys();
+				keys = keysHeld();
+			}
 		}
 
 		// Write the changes to the top screen
@@ -562,7 +566,8 @@ int main(void)
 			deathcount++;
 		}
 
-		swiWaitForVBlank(); // Wait until the next frame
+		// Wait until the next frame
+		swiWaitForVBlank();
 	}
 
 	return 0;

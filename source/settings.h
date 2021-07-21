@@ -87,13 +87,25 @@ int settings(int choice)
 	consoleSetWindow(&bottomScreen, 1, 20, 30, 30);
 	iprintf("      RETURN TO THE GAME");
 
-
 	while(1)
 	{
-		touchRead(&touch);
-		scanKeys();
-		int keys = keysHeld();
-		bool noinput = false;
+		int keys;
+
+		// Stay in loop until nothing is touched and no key is pressed
+		while(keys & KEY_TOUCH || keys & KEY_START || keys & KEY_SELECT || keys & KEY_LEFT || keys & KEY_RIGHT)
+		{
+			scanKeys();
+			keys = keysHeld();
+		}
+
+		// Stay in loop until something is touched or a key is pressed
+		while(!(keys & KEY_TOUCH || keys & KEY_START || keys & KEY_SELECT || keys & KEY_LEFT || keys & KEY_RIGHT))
+		{
+			touchRead(&touch);
+			scanKeys();
+			keys = keysHeld();
+		}
+
 		if ((touch.px > 16 && touch.py < 32 && keys & KEY_TOUCH) || keys & KEY_LEFT)
 		{
 			switch (choice)
@@ -146,13 +158,7 @@ int settings(int choice)
 					break;
 			}
 		}
-
-		if (!(keys & KEY_SELECT || keys & KEY_START || keys & KEY_TOUCH))
-		{
-			noinput = true;
-		}
-
-		if (((touch.px > 0 && touch.py > 148 && keys & KEY_TOUCH) || keys & KEY_SELECT || keys & KEY_START) && noinput)
+		else if ((touch.px > 0 && touch.py > 148 && keys & KEY_TOUCH) || keys & KEY_SELECT || keys & KEY_START)
 		{
 			oamClear(&oamMain, 0, 0);
 
@@ -164,6 +170,8 @@ int settings(int choice)
 
 			break;
 		}
+
+		swiWaitForVBlank();
 	}
 
 	return choice;
