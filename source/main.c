@@ -20,18 +20,32 @@ int title_screen()
 	vramSetBankC(VRAM_C_SUB_BG);
 
 	PrintConsole bottomScreen;
-	consoleInit(&bottomScreen, 0, BgType_Text4bpp, BgSize_T_256x256, 2, 0, false, true);;
+	consoleInit(&bottomScreen, 0, BgType_Text4bpp, BgSize_T_256x256, 2, 0, false, true);
 
 	touchPosition touch;
 	touchRead(&touch);
 
 	consoleSelect(&bottomScreen);
-	consoleSetWindow(&bottomScreen, 1, 17, 30, 30);
-	iprintf("       VS OTHER PLAYER");
-	consoleSetWindow(&bottomScreen, 1, 11, 30, 30);
-	iprintf("------------------------------");
-	consoleSetWindow(&bottomScreen, 1, 5, 30, 30);
-	iprintf("         VS COMPUTER");
+	//oamSet(&oamMain, 120, 20, 20, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, paddle.sprite_gfx_mem[3], -1, false, false, false, false, false);
+
+	for (int i; i < 18; i++)
+	{
+		consoleClear();
+
+		if (i < 18)
+		{
+			consoleSetWindow(&bottomScreen, 1, i, 30, 30);
+			iprintf("       VS OTHER PLAYER");
+			consoleSetWindow(&bottomScreen, 1, i-6, 30, 30);
+			iprintf("------------------------------");
+			consoleSetWindow(&bottomScreen, 1, i-12, 30, 30);
+			iprintf("         VS COMPUTER");
+		}
+
+		// Wait two frames
+		swiWaitForVBlank();
+		swiWaitForVBlank();
+	}
 
 	while(touch.px > 0 && touch.py > 0)
 	{
@@ -98,7 +112,9 @@ int title_screen()
 	consoleSetWindow(&bottomScreen, 1, 5, 30, 30);
 	iprintf("------------------------------");
 	scanKeys();
+
 	int keys = keysHeld();
+
 	if (keys & KEY_R && keys & KEY_L)
 	{
 		return difficulty + 10;
@@ -273,7 +289,7 @@ int settings(int choice)
 			// Draw the dotted line again, since it got cleared
 			for(int i=7, f=4; i != 19; i++, f+=16)
 			{
-				oamSet(&oamMain, i, 123, f, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, paddle.sprite_gfx_mem, -1, false, false, false, false, false);
+				oamSet(&oamMain, i, 123, f, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, paddle.sprite_gfx_mem[0], -1, false, false, false, false, false);
 			}
 
 			break;
@@ -400,17 +416,21 @@ int main(void)
 
 	bool title_ready = false;
 	bool at_title = true;
+
 	int difficulty = 0;
 
 	bool bulletlactivate = false;
 	bool bulletractivate = false;
 
+	// Postion of the paddles
 	int paddlely = 80;
 	int paddlery = 80;
 
+	// Postion of the balls
 	int ballx = 123;
 	int bally = 92;
 
+	// Position of the bullets
 	int bulletlx = 0;
 	int bulletrx = 225;	
 	int bulletly = 0;
@@ -436,7 +456,7 @@ int main(void)
 	int deathcount = 0;
 	int stalcount = 0;
 
-	// The time
+	// The time (increments every frame)
 	int t = 0;
 
 	float vx = (float)(rand() % 2 * 2 - 1);
@@ -498,17 +518,17 @@ int main(void)
 		y0 = bally;
 
 		settings_choices = 0;
-		}
+	}
 
 	soundEnable(); 
 
 	// This is the dotted line in the middle of the field... Yes, I am loading each and every line as a seperate sprite
 	for(int i=7, f=4; i != 19; i++, f+=16)
 	{
-		oamSet(&oamMain, i, 123, f, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, paddle.sprite_gfx_mem, -1, false, false, false, false, false);
+		oamSet(&oamMain, i, 123, f, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, paddle.sprite_gfx_mem[0], -1, false, false, false, false, false);
 	}
 
-	// Draw the scores of both playes
+	// Draw the score of both playes
 	drawscore(20, 90, 10, 0);
 	drawscore(36, 140, 10, 0);
 
@@ -742,15 +762,15 @@ int main(void)
 			}
 
 			// The paddles
-			oamSet(&oamMain, 0, 0, paddlely, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, paddle.sprite_gfx_mem, -1, false, ldead, false, false, false);
-			oamSet(&oamMain, 1, 225, paddlery, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, paddle.sprite_gfx_mem, -1, false, rdead, true, false, false);
+			oamSet(&oamMain, 0, 0, paddlely, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, paddle.sprite_gfx_mem[0], -1, false, ldead, false, false, false);
+			oamSet(&oamMain, 1, 225, paddlery, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, paddle.sprite_gfx_mem[0], -1, false, rdead, true, false, false);
 
 			// The bullets
 			oamSet(&oamMain, 2, bulletlx, bulletly, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[bullet.gfx_frame], -1, false, rdead || ldead || !bulletlactivate, false, false, false);
 			oamSet(&oamMain, 3, bulletrx, bulletry, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[bullet.gfx_frame], -1, false, rdead || ldead || !bulletractivate, true, false, false);
 
 			// The ball
-			oamSet(&oamMain, 6, ballx, bally, 0, 0, SpriteSize_16x8, SpriteColorFormat_256Color, paddle.sprite_gfx_mem, -1, false, at_title, false, false, false);
+			oamSet(&oamMain, 6, ballx, bally, 0, 0, SpriteSize_16x8, SpriteColorFormat_256Color, paddle.sprite_gfx_mem[0], -1, false, at_title, false, false, false);
 
 			// Switch statement to check settings
 			switch (settings_choices)
@@ -789,6 +809,7 @@ int main(void)
 
 		if (deathcount == 100 || stalcount == 100)
 		{
+			// If player 1 is dead, increment player 2's score and vice versa
 			if (ldead)
 			{
 				rscore++;
@@ -799,7 +820,7 @@ int main(void)
 				lscore++;
 			}
 
-			// The scores
+			// Update the scores
 			drawscore(20, 90 - (lscore > 9 ? 24 : 0), 10, lscore);
 
 			if (lscore > 9)
@@ -881,9 +902,7 @@ int main(void)
 			}
 		}
 
-		// Write the changes to the top screen
-		oamUpdate(&oamMain);
-
+		// If the pong sound has played for 10 frames, kill it and reset the frame counter
 		if (pongi == 10)
 		{
 			soundKill(pong);
@@ -895,6 +914,7 @@ int main(void)
 			pongi++;
 		}
 
+		// If the ping sound has played for 10 frames, kill it and reset the frame counter
 		if (pingi == 10)
 		{
 			soundKill(ping);
@@ -905,6 +925,9 @@ int main(void)
 		{
 			pingi++;
 		}
+
+		// Write the changes to the top screen
+		oamUpdate(&oamMain);
 
 		if (at_title)
 		{
