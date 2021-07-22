@@ -28,54 +28,61 @@ int title_screen()
 	consoleSelect(&bottomScreen);
 	//oamSet(&oamMain, 120, 20, 20, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, paddle.sprite_gfx_mem[3], -1, false, false, false, false, false);
 
-	for (int i; i < 18; i++)
+	// Make text fall from the sky
+	for (int i = 0; i < 18; i++)
 	{
 		consoleClear();
 
-		if (i < 18)
-		{
-			consoleSetWindow(&bottomScreen, 1, i, 30, 30);
-			iprintf("       VS OTHER PLAYER");
-			consoleSetWindow(&bottomScreen, 1, i-6, 30, 30);
-			iprintf("------------------------------");
-			consoleSetWindow(&bottomScreen, 1, i-12, 30, 30);
-			iprintf("         VS COMPUTER");
-		}
+		consoleSetWindow(&bottomScreen, 1, i, 30, 30);
+		iprintf("       VS OTHER PLAYER");
+		consoleSetWindow(&bottomScreen, 1, i-6, 30, 30);
+		iprintf("------------------------------");
+		consoleSetWindow(&bottomScreen, 1, i-12, 30, 30);
+		iprintf("         VS COMPUTER");
 
 		// Wait two frames
 		swiWaitForVBlank();
 		swiWaitForVBlank();
 	}
 
-	while(touch.px > 0 && touch.py > 0)
+	while (touch.px > 0 && touch.py > 0)
 	{
 		touchRead(&touch);
 	}
 
-	while(1)
+	while (1)
 	{
 		touchRead(&touch);
 
 		if (touch.px > 0 && touch.py < 97)
 		{
-			consoleClear();
-			consoleSetWindow(&bottomScreen, 1, 9, 30, 30);
-			iprintf("------------------------------");
-			consoleSetWindow(&bottomScreen, 1, 12, 30, 30);
-			iprintf("            MEDIUM");
-			consoleSetWindow(&bottomScreen, 1, 15, 30, 30);
-			iprintf("------------------------------");
-			consoleSetWindow(&bottomScreen, 1, 18, 30, 30);
-			iprintf("             HARD");
-			consoleSetWindow(&bottomScreen, 1, 6, 30, 30);
-			iprintf("             EASY");
+			// Make text fall from the sky
+			for (int i = 0; i < 19; i++)
+			{
+				consoleClear();
 
-			while(touch.px > 0 && touch.py > 0)
+				consoleSetWindow(&bottomScreen, 1, i, 30, 30);
+				iprintf("             HARD");
+				consoleSetWindow(&bottomScreen, 1, i-3, 30, 30);
+				iprintf("------------------------------");
+				consoleSetWindow(&bottomScreen, 1, i-6, 30, 30);
+				iprintf("            MEDIUM");
+				consoleSetWindow(&bottomScreen, 1, i-9, 30, 30);
+				iprintf("------------------------------");
+				consoleSetWindow(&bottomScreen, 1, i-12, 30, 30);
+				iprintf("             EASY");
+				
+				// Wait two frames
+				swiWaitForVBlank();
+				swiWaitForVBlank();
+			}
+
+			while (touch.px > 0 && touch.py > 0)
 			{
 				touchRead(&touch);
 			}
 
-			while(1)
+			while (1)
 			{
 				touchRead(&touch);
 
@@ -105,14 +112,24 @@ int title_screen()
 		}
 	}
 
-	consoleSetWindow(&bottomScreen, 1, 17, 30, 30);
-	iprintf("------------------------------");
-	consoleSetWindow(&bottomScreen, 1, 11, 30, 30);
-	iprintf("      RETURN TO THE MENU");
-	consoleSetWindow(&bottomScreen, 1, 5, 30, 30);
-	iprintf("------------------------------");
-	scanKeys();
+	// Make text fall from the sky
+	for (int i = 0; i < 18; i++)
+	{
+		consoleClear();
 
+		consoleSetWindow(&bottomScreen, 1, i, 30, 30);
+		iprintf("------------------------------");
+		consoleSetWindow(&bottomScreen, 1, i-6, 30, 30);
+		iprintf("      RETURN TO THE MENU");
+		consoleSetWindow(&bottomScreen, 1, i-12, 30, 30);
+		iprintf("------------------------------");
+
+		// Wait two frames
+		swiWaitForVBlank();
+		swiWaitForVBlank();
+	}
+
+	scanKeys();
 	int keys = keysHeld();
 
 	if (keys & KEY_R && keys & KEY_L)
@@ -133,7 +150,7 @@ int settings(int choice)
 	vramSetBankC(VRAM_C_SUB_BG);
 
 	PrintConsole bottomScreen;
-	consoleInit(&bottomScreen, 0, BgType_Text4bpp, BgSize_T_256x256, 2, 0, false, true);;
+	consoleInit(&bottomScreen, 0, BgType_Text4bpp, BgSize_T_256x256, 2, 0, false, true);
 
 	touchPosition touch;
 	touchRead(&touch);
@@ -211,19 +228,19 @@ int settings(int choice)
 	consoleSetWindow(&bottomScreen, 1, 20, 30, 30);
 	iprintf("      RETURN TO THE GAME");
 
-	while(1)
+	while (1)
 	{
 		int keys;
 
 		// Stay in loop until nothing is touched and no key is pressed
-		while(keys & KEY_TOUCH || keys & KEY_START || keys & KEY_SELECT || keys & KEY_LEFT || keys & KEY_RIGHT)
+		while (keys & KEY_TOUCH || keys & KEY_START || keys & KEY_SELECT || keys & KEY_LEFT || keys & KEY_RIGHT)
 		{
 			scanKeys();
 			keys = keysHeld();
 		}
 
 		// Stay in loop until something is touched or a key is pressed
-		while(!(keys & KEY_TOUCH || keys & KEY_START || keys & KEY_SELECT || keys & KEY_LEFT || keys & KEY_RIGHT))
+		while (!(keys & KEY_TOUCH || keys & KEY_START || keys & KEY_SELECT || keys & KEY_LEFT || keys & KEY_RIGHT))
 		{
 			touchRead(&touch);
 			scanKeys();
@@ -412,7 +429,7 @@ int main(void)
 	dmaCopy(paddlePal, SPRITE_PALETTE, 512);
 
 	// Current key being pressed
-	int keys;
+	int keys = 0;
 
 	bool title_ready = false;
 	bool at_title = true;
@@ -455,6 +472,9 @@ int main(void)
 
 	int deathcount = 0;
 	int stalcount = 0;
+
+	// Was L+R were pressed at the title?
+	bool secretdiscovered = false;
 
 	// The time (increments every frame)
 	int t = 0;
@@ -532,7 +552,7 @@ int main(void)
 	drawscore(20, 90, 10, 0);
 	drawscore(36, 140, 10, 0);
 
-	while(1) 
+	while (1) 
 	{
 		if (deathcount == 0 && stalcount == 0)
 		{	
@@ -762,8 +782,8 @@ int main(void)
 			}
 
 			// The paddles
-			oamSet(&oamMain, 0, 0, paddlely, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, paddle.sprite_gfx_mem[0], -1, false, ldead, false, false, false);
-			oamSet(&oamMain, 1, 225, paddlery, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, paddle.sprite_gfx_mem[0], -1, false, rdead, true, false, false);
+			oamSet(&oamMain, 0, 0, paddlely, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, paddle.sprite_gfx_mem[secretdiscovered], -1, false, ldead, false, false, false);
+			oamSet(&oamMain, 1, 225, paddlery, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, paddle.sprite_gfx_mem[secretdiscovered], -1, false, rdead, true, false, false);
 
 			// The bullets
 			oamSet(&oamMain, 2, bulletlx, bulletly, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[bullet.gfx_frame], -1, false, rdead || ldead || !bulletlactivate, false, false, false);
@@ -895,7 +915,7 @@ int main(void)
 			settings_choices = settings(settings_choices);
 
 			// Stay in loop until nothing is touched and no key is pressed
-			while(keys & KEY_TOUCH || keys & KEY_START || keys & KEY_SELECT || keys & KEY_LEFT || keys & KEY_RIGHT)
+			while (keys & KEY_TOUCH || keys & KEY_START || keys & KEY_SELECT || keys & KEY_LEFT || keys & KEY_RIGHT)
 			{
 				scanKeys();
 				keys = keysHeld();
@@ -938,7 +958,7 @@ int main(void)
 		// If L+R were pressed at the title, activate the hidden paddle
 		if (difficulty > 9)
 		{
-			paddle.anim_frame = 1;
+			secretdiscovered = true;
 		}
 
 		if (rdead || ldead)
