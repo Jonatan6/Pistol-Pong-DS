@@ -47,8 +47,7 @@ int title_screen()
 		consoleSetWindow(&bottomScreen, 1, i-12, 30, 30);
 		iprintf("         VS COMPUTER");
 
-		// Wait two frames
-		swiWaitForVBlank();
+		// Wait one frames
 		swiWaitForVBlank();
 	}
 
@@ -79,8 +78,7 @@ int title_screen()
 				consoleSetWindow(&bottomScreen, 1, i-12, 30, 30);
 				iprintf("             EASY");
 				
-				// Wait two frames
-				swiWaitForVBlank();
+				// Wait one frames
 				swiWaitForVBlank();
 			}
 
@@ -131,8 +129,7 @@ int title_screen()
 		consoleSetWindow(&bottomScreen, 1, i-12, 30, 30);
 		iprintf("------------------------------");
 
-		// Wait two frames
-		swiWaitForVBlank();
+		// Wait one frames
 		swiWaitForVBlank();
 	}
 
@@ -1017,6 +1014,7 @@ int main(void)
 		if (mmi == 10)
 		{
 			mmStop();
+			mmUnloadEffect(SFX_BOX_SUMMON);
 			mmi = 0;
 			mms = false;
 		}
