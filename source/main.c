@@ -13,6 +13,8 @@
 #define SETTINGSX 40
 #define SETTINGSY 40
 
+#define FRAMES_BEFORE_SPEEDUP 2880
+
 int title_screen()
 {
 	int difficulty = 0;
@@ -478,6 +480,8 @@ int main(void)
 
 	// The time (increments every frame)
 	int t = 0;
+	// The true time (increments every frame, but doesn't get reset)
+	int tt = 0;
 
 	float vx = (float)(rand() % 2 * 2 - 1);
 	float vy = (float)(rand() % 2 * 2 - 1);
@@ -532,12 +536,11 @@ int main(void)
 		soundKill(ballout);
 
 		t = 0;
+		tt = 0;
 		vx = (float)(rand() % 2 * 2 - 1);
 		vy = (float)(rand() % 2 * 2 - 1);
 		x0 = ballx;
 		y0 = bally;
-
-		settings_choices = 0;
 	}
 
 	soundEnable(); 
@@ -557,9 +560,10 @@ int main(void)
 		if (deathcount == 0 && stalcount == 0)
 		{	
 			t++;
+			tt++;
 
-			ballx = x0 + vx * t;
-			bally = y0 + vy * t;
+			ballx = (tt < FRAMES_BEFORE_SPEEDUP) ? (x0 + vx * t) : (x0 + vx * t * tt / FRAMES_BEFORE_SPEEDUP);
+			bally = (tt < FRAMES_BEFORE_SPEEDUP) ? (y0 + vy * t) : (y0 + vy * t * tt / FRAMES_BEFORE_SPEEDUP);
 
 			if (vx < 0) vx = vx - 0.0004;
 			if (vx > 0) vx = vx + 0.0004;
@@ -795,20 +799,25 @@ int main(void)
 			// Switch statement to check settings
 			switch (settings_choices)
 			{
+				// Mystery boxes
 				case 1:
-					// Magic shperes
-					oamRotateScale(&oamMain, 51, degreesToAngle(10), intToFixed(1, 8), intToFixed(1, 8));
-					oamRotateScale(&oamMain, 52, degreesToAngle(25), intToFixed(1, 8), intToFixed(1, 8));
-					oamSet(&oamMain, 51, 122, 40, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[9], -1, false, false, false, false, false);
-					oamSet(&oamMain, 52, 122, 120, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[9], -1, false, false, false, false, false);
+					oamSet(&oamMain, 51, 20, 40, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[10], -1, false, false, false, false, false);
 					break;
+				// Magic shperes
 				case 2:
-					// Mystery boxes
+					// Rotate the spheres 1° every frame
+					oamRotateScale(&oamMain, 0, degreesToAngle(tt), intToFixed(1, 8), intToFixed(1, 8));
+
+					oamSet(&oamMain, 51, 120, 40, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[9], 0, true, false, false, false, false);
+					oamSet(&oamMain, 52, 120, 120, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[9], 0, true, false, false, false, false);
 					break;
+				// Both boxes and shperes
 				case 3:
-					// Both boxes and shperes
-					oamSet(&oamMain, 51, 122, 40, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[9], -1, false, false, false, false, false);
-					oamSet(&oamMain, 52, 122, 120, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[9], -1, false, false, false, false, false);
+					oamRotateScale(&oamMain, 0, degreesToAngle(tt), intToFixed(1, 8), intToFixed(1, 8));
+
+					oamSet(&oamMain, 51, 120, 40, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[9], 0, true, false, false, false, false);
+					oamSet(&oamMain, 52, 120, 120, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[9], 0, true, false, false, false, false);
+					oamSet(&oamMain, 53, 20, 20, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[10], -1, false, false, false, false, false);
 					break;
 			}
 		}
