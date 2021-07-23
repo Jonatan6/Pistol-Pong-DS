@@ -1,10 +1,15 @@
 #include <nds.h>
+#include <maxmod9.h>
 #include <stdio.h>
 #include <time.h>
 #include <nds/input.h>
 #include <nds/touch.h>
 
 #include "sprites.h"
+
+// Maxmod headers
+#include "soundbank.h"
+#include "soundbank_bin.h"
 
 #define VERTICAL_LINE 6
 #define HORIZONTAL_LINE 7
@@ -14,6 +19,7 @@
 #define SETTINGSY 40
 
 #define FRAMES_BEFORE_SPEEDUP 2880
+#define FRAMES_BEFORE_MYSTERYBOX 500
 
 int title_screen()
 {
@@ -28,7 +34,6 @@ int title_screen()
 	touchRead(&touch);
 
 	consoleSelect(&bottomScreen);
-	//oamSet(&oamMain, 120, 20, 20, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, paddle.sprite_gfx_mem[3], -1, false, false, false, false, false);
 
 	// Make text fall from the sky
 	for (int i = 0; i < 18; i++)
@@ -413,9 +418,6 @@ void drawscore(int index, int x, int y, int number)
 
 int main(void) 
 {
-	// Seed the rng with the current time
-	srand(time(0));
-
 	videoSetMode(MODE_0_2D);
 	videoSetModeSub(MODE_0_2D);
 
@@ -427,10 +429,14 @@ int main(void)
 
 	initPaddle(&paddle, (u8*)paddleTiles);
 	initBullet(&bullet, (u8*)bulletTiles);
+	initBox(&box, (u8*)boxTiles);
 
-	dmaCopy(paddlePal, SPRITE_PALETTE, 512);
+	dmaCopy(boxPal, SPRITE_PALETTE, 512);
 
-	// Current key being pressed
+	// Seed the rng with the current time
+	srand(time(0));
+
+	// Current key(s) being pressed
 	int keys = 0;
 
 	bool title_ready = false;
@@ -460,8 +466,10 @@ int main(void)
 	int ping = 0;
 	int pongi = 0;
 	int pingi = 0;
+	int mmi = 0;
 	bool pongs = false;
 	bool pings = false;
+	bool mms = false;
 
 	int sadlife = 0;
 	int ballout = 0;
@@ -474,6 +482,11 @@ int main(void)
 
 	int deathcount = 0;
 	int stalcount = 0;
+
+	// Megacorp. Change name later
+	int megacorp = 0;
+	int gigacorpx = 0;
+	int gigacorpy = 0;
 
 	// Was L+R were pressed at the title?
 	bool secretdiscovered = false;
@@ -495,10 +508,7 @@ int main(void)
 	void reset()
 	{
 		bullet.state = 0;
-		paddle.state = 0;
-
 		bullet.anim_frame = 0;
-		paddle.anim_frame = 0;
 
 		bulletlactivate = false;
 		bulletractivate = false;
@@ -529,11 +539,16 @@ int main(void)
 		deathcount = 0;
 		stalcount = 0;
 
+		megacorp = 0;
+		gigacorpx = 0;
+		gigacorpy = 0;
+
 		// Kill all the sound effects
 		soundKill(pong);
 		soundKill(ping);
 		soundKill(sadlife);
 		soundKill(ballout);
+		mmStop();
 
 		t = 0;
 		tt = 0;
@@ -801,7 +816,38 @@ int main(void)
 			{
 				// Mystery boxes
 				case 1:
-					oamSet(&oamMain, 51, 20, 40, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[10], -1, false, false, false, false, false);
+					if (megacorp < 1)
+					{
+						megacorp = rand() % FRAMES_BEFORE_MYSTERYBOX + FRAMES_BEFORE_MYSTERYBOX/2 + tt;
+						gigacorpx = rand() % (256 - 64) + 32;
+						gigacorpy = rand() % (128 - 64) + 32;
+					}
+					if (megacorp < tt)
+					{
+						// Rotate the box 0.5° every frame
+						oamRotateScale(&oamMain, 0, degreesToAngle(tt/2), intToFixed(1, 8), intToFixed(1, 8));
+
+						oamSet(&oamMain, 52, gigacorpx, gigacorpy, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, box.sprite_gfx_mem[0], 0, true, false, false, false, false);
+						oamSet(&oamMain, 51, gigacorpx+16, gigacorpy+16, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, box.sprite_gfx_mem[1], -1, false, false, false, false, false);
+						
+						if (megacorp+1 == tt)
+						{
+							mmInitDefaultMem((mm_addr)soundbank_bin);
+							mmLoadEffect(SFX_BOX_SUMMON);
+
+							mm_sound_effect boxsummon =
+							{
+								{SFX_BOX_SUMMON} ,	// id
+								(int)(1.0f * (1<<10)),	// rate
+								0,			// handle
+								255,			// volume
+								255,			// panning
+							};
+
+							mmEffectEx(&boxsummon);
+							mms = true;
+						}
+					}
 					break;
 				// Magic shperes
 				case 2:
@@ -817,7 +863,20 @@ int main(void)
 
 					oamSet(&oamMain, 51, 120, 40, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[9], 0, true, false, false, false, false);
 					oamSet(&oamMain, 52, 120, 120, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[9], 0, true, false, false, false, false);
-					oamSet(&oamMain, 53, 20, 20, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[10], -1, false, false, false, false, false);
+
+					if (megacorp < 1)
+					{
+						megacorp = rand() % 500 + 200 + tt;
+					}
+					if (megacorp < tt)
+					{
+						oamSet(&oamMain, 52, 20, 40, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, box.sprite_gfx_mem[0], -1, false, false, false, false, false);
+						oamSet(&oamMain, 51, 20, 80, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, box.sprite_gfx_mem[1], -1, false, false, false, false, false);
+
+						//megacorp = 0;
+
+					}
+					
 					break;
 			}
 		}
@@ -895,7 +954,6 @@ int main(void)
 				break;
 		}
 
-		animatePaddle(&paddle);
 		animateBullet(&bullet);
 
 		scanKeys();
@@ -955,6 +1013,18 @@ int main(void)
 			pingi++;
 		}
 
+		// If any soundeffect loaded by Maxmod has played for 10 frames, kill it and reset the frame counter
+		if (mmi == 10)
+		{
+			mmStop();
+			mmi = 0;
+			mms = false;
+		}
+		else if (mms)
+		{
+			mmi++;
+		}
+		
 		// Write the changes to the top screen
 		oamUpdate(&oamMain);
 
