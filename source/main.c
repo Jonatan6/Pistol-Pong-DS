@@ -458,27 +458,67 @@ int main(void)
 	int bulletry = 0;
 
 	// Misc. sound effect stuff
-	int pong = 0;
-	int ping = 0;
-	int pongi = 0;
-	int pingi = 0;
-	bool pongs = false;
-	bool pings = false;
+	mmInitDefaultMem((mm_addr)soundbank_bin);
+	mmLoadEffect(SFX_BOX_SUMMON);
+	mmLoadEffect(SFX_BOOM);
+	mmLoadEffect(SFX_PING);
+	mmLoadEffect(SFX_PONG);
+	mmLoadEffect(SFX_BALLOUT);
+
+	mm_sound_effect sfx_boxsummon =
+	{
+		{SFX_BOX_SUMMON},	// id
+		(int)(1.0f * (1<<10)),	// rate
+		0,			// handle
+		255,			// volume
+		128,			// panning
+	};
+
+	mm_sound_effect sfx_boom =
+	{
+		{SFX_BOOM},		// id
+		(int)(1.0f * (1<<10)),	// rate
+		0,			// handle
+		255,			// volume
+		128,			// panning
+	};
+
+	mm_sound_effect sfx_ping =
+	{
+		{SFX_PING},		// id
+		(int)(1.0f * (1<<10)),	// rate
+		0,			// handle
+		255,			// volume
+		128,			// panning
+	};
+
+	mm_sound_effect sfx_pong =
+	{
+		{SFX_PONG},		// id
+		(int)(1.0f * (1<<10)),	// rate
+		0,			// handle
+		255,			// volume
+		128,			// panning
+	};
+
+	mm_sound_effect sfx_ballout =
+	{
+		{SFX_BALLOUT},		// id
+		(int)(1.0f * (1<<10)),	// rate
+		0,			// handle
+		255,			// volume
+		128,			// panning
+	};
 
 	// Frame of the explosion
 	int explosion_frame = 0;
-
-	int sadlife = 0;
-	int ballout = 0;
 
 	bool ldead = false;
 	bool rdead = false;
 	int lscore = 0;
 	int rscore = 0;
-	bool animationdone = false;
 
-	int deathframe = 0;
-	int balloutframe = 0;
+	bool ballout = false;
 
 	// Megacorp. Change name later
 	int megacorp = 0;
@@ -518,32 +558,18 @@ int main(void)
 		paddlely = 80;
 		paddlery = 80;
 
-		pongi = 0;
-		pong = 0;
-		pongs = false;
-
-		pingi = 0;
-		ping = 0;
-		pings = false;
-
 		ldead = false;
 		rdead = false;
 
 		explosion_frame = 0;
-		animationdone = false;
 
-		deathframe = 0;
-		balloutframe = 0;
+		ballout = false;
 
 		megacorp = 0;
 		gigacorpx = 0;
 		gigacorpy = 0;
 
 		// Kill all the sound effects
-		soundKill(pong);
-		soundKill(ping);
-		soundKill(sadlife);
-		soundKill(ballout);
 		mmStop();
 
 		t = 0;
@@ -566,348 +592,353 @@ int main(void)
 	seven_segment_draw(20, 90, 10, 0);
 	seven_segment_draw(36, 140, 10, 0);
 
-	while (1) 
+	while (true) 
 	{
-		if (deathframe == 0 && balloutframe == 0)
-		{	
-			t++;
-			tt++;
+		t++;
+		tt++;
 
-			ballx = (tt < FRAMES_BEFORE_SPEEDUP) ? (x0 + vx * t) : (x0 + vx * t * tt / FRAMES_BEFORE_SPEEDUP);
-			bally = (tt < FRAMES_BEFORE_SPEEDUP) ? (y0 + vy * t) : (y0 + vy * t * tt / FRAMES_BEFORE_SPEEDUP);
+		ballx = (tt < FRAMES_BEFORE_SPEEDUP) ? (x0 + vx * t) : (x0 + vx * t * tt / FRAMES_BEFORE_SPEEDUP);
+		bally = (tt < FRAMES_BEFORE_SPEEDUP) ? (y0 + vy * t) : (y0 + vy * t * tt / FRAMES_BEFORE_SPEEDUP);
 
-			if (vx < 0) vx = vx - 0.0004;
-			if (vx > 0) vx = vx + 0.0004;
+		if (vx < 0) vx = vx - 0.0004;
+		if (vx > 0) vx = vx + 0.0004;
 
-			if (vy < 0) vx = vx - 0.0004;
-			if (vy > 0) vy = vy + 0.0004;
+		if (vy < 0) vx = vx - 0.0004;
+		if (vy > 0) vy = vy + 0.0004;
 
-			if (bally > 182 || bally < 0)
+		if (bally > 182 || bally < 0)
+		{
+			vy = -vy;
+			x0 = ballx;
+			y0 = bally;
+			t = 0;
+
+			mmEffectEx(&sfx_pong);
+		}
+
+		if (((ballx < 9 && ballx > 0 && bally > paddlely - 12 && bally < paddlely + 34) || (ballx > 228 && ballx < 237 && bally > paddlery - 12 && bally < paddlery + 34)) && t > 5)
+		{
+			if (ballx < 9)
 			{
-				vy = -vy;
-				x0 = ballx;
-				y0 = bally;
-				t = 0;
-
-				pong = soundPlayPSG(1, 2400, 64, 64);
-				pongs = true;
-			}
-
-			if (((ballx < 9 && ballx > 0 && bally > paddlely - 12 && bally < paddlely + 34) || (ballx > 228 && ballx < 237 && bally > paddlery - 12 && bally < paddlery + 34)) && t > 5)
-			{
-				if (ballx < 9)
-				{
-					vy = vy + ((float)bally - (float)paddlely) / 32;
-					vx = -(vx);
-				}
-				else
-				{
-					vy = -vy + ((float)bally - (float)paddlery) / 32;
-					vx = -(vx);
-				}
-
-				x0 = ballx;
-				y0 = bally;
-				t = 0;
-
-				ping = soundPlayPSG(1, 4400, 64, 64);
-				pings = true;
-			}
-
-			if (ballx < -16)
-			{
-				rscore++;
-				balloutframe = 1;
-				ballout = soundPlayPSG(1, 1000, 64, 64);
-			}
-			if (ballx > 256)
-			{
-				lscore++;
-				balloutframe = 1;
-				ballout = soundPlayPSG(1, 1000, 64, 64);
-			}
-
-			// Check if the bullet belonging to player 1 is out of bounds
-			if (bulletlx < 256 && bulletlactivate)
-			{
-				bulletlx = bulletlx + 2;
+				vy = vy + ((float)bally - (float)paddlely) / 32;
+				vx = -(vx);
 			}
 			else
 			{
-				bulletlx = 0;
-				bulletlactivate = false;
-				bulletly = paddlely;
+				vy = -vy + ((float)bally - (float)paddlery) / 32;
+				vx = -(vx);
 			}
 
-			// Check if the bullet belonging to player 2 is out of bounds
-			if (bulletrx > -16 && bulletractivate)
+			x0 = ballx;
+			y0 = bally;
+			t = 0;
+
+			mmEffectEx(&sfx_ping);
+		}
+
+		if (ballx < -16)
+		{
+			rscore++;
+			ballout = true;
+		}
+		else if (ballx > 256)
+		{
+			lscore++;
+			ballout = true;
+		}
+
+		// Check if the bullet belonging to player 1 is out of bounds
+		if (bulletlx < 256 && bulletlactivate)
+		{
+			bulletlx = bulletlx + 2;
+		}
+		else
+		{
+			bulletlx = 0;
+			bulletlactivate = false;
+			bulletly = paddlely;
+		}
+
+		// Check if the bullet belonging to player 2 is out of bounds
+		if (bulletrx > -16 && bulletractivate)
+		{
+			bulletrx = bulletrx - 2;
+		}
+		else
+		{
+			bulletrx = 230;
+			bulletractivate = false;
+			bulletry = paddlery;
+		}
+
+		// Check if player 1 has been shot
+		if (bulletrx == 0 && bulletry > paddlely - 16 && bulletry < paddlely + 20)
+		{
+			ldead = true;
+		}
+
+		// Check if player 2 has been shot
+		if (bulletlx == 230 && bulletly > paddlery - 16 && bulletly < paddlery + 20)
+		{
+			rdead = true;
+		}
+
+		scanKeys();
+		keys = keysHeld();
+
+		if (keys & KEY_UP)
+		{
+			if (paddlely > 0)
 			{
-				bulletrx = bulletrx - 2;
-			}
-			else
-			{
-				bulletrx = 230;
-				bulletractivate = false;
-				bulletry = paddlery;
-			}
-
-			// Check if player 1 has been shot
-			if (bulletrx == 0 && bulletry > paddlely - 16 && bulletry < paddlely + 20)
-			{
-				ldead = true;
-			}
-
-			// Check if player 2 has been shot
-			if (bulletlx == 230 && bulletly > paddlery - 16 && bulletly < paddlery + 20)
-			{
-				rdead = true;
-			}
-
-			scanKeys();
-			keys = keysHeld();
-
-			if (keys & KEY_UP)
-			{
-				if (paddlely > 0)
-				{
-					paddlely = paddlely - 2;
-				}
-
-				if (bulletly > 0 && !bulletlactivate)
-				{
-					bulletly--;
-				}
-			}
-
-			if (keys & KEY_RIGHT)
-			{
-				bulletlactivate = true;
-			}
-
-			if (keys & KEY_DOWN)
-			{
-				if (paddlely < 159)
-				{
-					paddlely = paddlely + 2;
-				}
-
-				if (bulletly < 159 && !bulletlactivate)
-				{
-					bulletly++;
-				}
-			}
-
-			switch(difficulty % 10)
-			{
-				case 0:
-					if (keys & KEY_X)
-					{
-						if (paddlery > 0)
-						{
-							paddlery = paddlery - 2;
-						}
-						if (bulletly >= 1 && !bulletractivate)
-						{
-							bulletry++;
-						}
-					}
-
-					if (keys & KEY_Y)
-					{
-						bulletractivate = true;
-					}
-
-					if (keys & KEY_B)
-					{
-						if (paddlery < 159)
-						{
-							paddlery = paddlery + 2;
-						}
-
-						if (bulletry < 159 && !bulletractivate)
-						{
-							bulletry++;
-						}
-					}
-					break;
-				case 1:
-					if (vx < 0)
-					{
-						if (paddlery > 80)
-						{
-							paddlery--;
-						}
-						else if (paddlery < 80)
-						{
-							paddlery++;
-						}
-					}
-					else if (bally > paddlery + 16 && paddlery < 159)
-					{
-						paddlery = paddlery + (1 + rand() % 2);
-					}
-					else if (bally < paddlery + 16 && paddlery > 0)
-					{
-						paddlery = paddlery - (1 + rand() % 2);
-					}
-					break;
-				case 2:
-					if (vx < 0)
-					{
-						if (paddlery > 80)
-						{
-							paddlery--;
-						}
-						else if (paddlery < 80)
-						{
-							paddlery++;
-						}
-					}
-					else if (bally > paddlery + 16 && paddlery < 159)
-					{
-						paddlery = paddlery + 2;
-					}
-					else if (bally < paddlery + 16 && paddlery > 0)
-					{
-						paddlery = paddlery - 2;
-					}
-
-					if (rand() % 360 == 0)
-					{
-						bulletractivate = true;
-					}
-					break;
-				case 3:
-					if (vx < 0)
-					{
-						if (paddlery > 80)
-						{
-							paddlery--;
-						}
-						else if (paddlery < 80)
-						{
-							paddlery++;
-						}
-					}
-					else if (bally > paddlery + 16 && paddlery < 159)
-					{
-						paddlery = paddlery + 2;
-					}
-					else if (bally < paddlery + 16 && paddlery > 0)
-					{
-						paddlery = paddlery - 2;
-					}
-					bulletractivate = true;
-					break;
+				paddlely = paddlely - 2;
 			}
 
-			// The paddles
-			oamSet(&oamMain, 0, 0, paddlely, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[secretdiscovered], -1, false, ldead, false, false, false);
-			oamSet(&oamMain, 1, 225, paddlery, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[secretdiscovered], -1, false, rdead, true, false, false);
-
-			// The bullets
-			oamSet(&oamMain, 2, bulletlx, bulletly, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[2], -1, false, rdead || ldead || !bulletlactivate, false, false, false);
-			oamSet(&oamMain, 3, bulletrx, bulletry, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[2], -1, false, rdead || ldead || !bulletractivate, true, false, false);
-
-			// The ball
-			oamSet(&oamMain, 6, ballx, bally, 0, 0, SpriteSize_16x8, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[0], -1, false, at_title, false, false, false);
-
-			// Switch statement to check settings
-			switch (settings_choices)
+			if (bulletly > 0 && !bulletlactivate)
 			{
-				// Mystery boxes
-				case 1:
-					if (megacorp < 1)
-					{
-						megacorp = rand() % FRAMES_BEFORE_MYSTERYBOX + FRAMES_BEFORE_MYSTERYBOX/2 + tt;
-						gigacorpx = rand() % (256 - 64) + 32;
-						gigacorpy = rand() % (128 - 64) + 32;
-					}
-
-					if (megacorp < tt)
-					{
-						// Rotate the box 0.5° every frame
-						oamRotateScale(&oamMain, 0, degreesToAngle(tt/2), intToFixed(1, 8), intToFixed(1, 8));
-
-						oamSet(&oamMain, 52, gigacorpx, gigacorpy, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[10], 0, true, false, false, false, false);
-						oamSet(&oamMain, 51, gigacorpx+16, gigacorpy+16, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[11], -1, false, false, false, false, false);
-						
-						if (megacorp+1 == tt)
-						{
-							mmInitDefaultMem((mm_addr)soundbank_bin);
-							mmLoadEffect(SFX_BOX_SUMMON);
-
-							mm_sound_effect boxsummon =
-							{
-								{SFX_BOX_SUMMON} ,	// id
-								(int)(1.0f * (1<<10)),	// rate
-								0,			// handle
-								255,			// volume
-								255,			// panning
-							};
-
-							mmEffectEx(&boxsummon);
-						}
-					}
-
-					/*
-					if (bulletrx == 0 && bulletry > paddlely - 16 && bulletry < paddlely + 20)
-					{
-						// L gets item
-					}
-					if (bulletrx == 0 && bulletry > paddlely - 16 && bulletry < paddlely + 20)
-					{
-						// R gets item
-					}
-					*/
-					break;
-				// Magic shperes
-				case 2:
-					// Rotate the spheres 1° every frame
-					oamRotateScale(&oamMain, 0, degreesToAngle(tt), intToFixed(1, 8), intToFixed(1, 8));
-
-					oamSet(&oamMain, 51, 120, 40, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[9], 0, true, false, false, false, false);
-					oamSet(&oamMain, 52, 120, 120, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[9], 0, true, false, false, false, false);
-					break;
-				// Both boxes and shperes
-				case 3:
-					oamRotateScale(&oamMain, 0, degreesToAngle(tt), intToFixed(1, 8), intToFixed(1, 8));
-
-					oamSet(&oamMain, 51, 120, 40, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[9], 0, true, false, false, false, false);
-					oamSet(&oamMain, 52, 120, 120, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[9], 0, true, false, false, false, false);
-					break;
+				bulletly--;
 			}
 		}
 
-		else if (deathframe % 5 == 0)
+		if (keys & KEY_RIGHT)
 		{
-			// The explosion
+			bulletlactivate = true;
+		}
+
+		if (keys & KEY_DOWN)
+		{
+			if (paddlely < 159)
+			{
+				paddlely = paddlely + 2;
+			}
+
+			if (bulletly < 159 && !bulletlactivate)
+			{
+				bulletly++;
+			}
+		}
+
+		switch(difficulty % 10)
+		{
+			case 0:
+				if (keys & KEY_X)
+				{
+					if (paddlery > 0)
+					{
+						paddlery = paddlery - 2;
+					}
+					if (bulletly >= 1 && !bulletractivate)
+					{
+						bulletry++;
+					}
+				}
+
+				if (keys & KEY_Y)
+				{
+					bulletractivate = true;
+				}
+
+				if (keys & KEY_B)
+				{
+					if (paddlery < 159)
+					{
+						paddlery = paddlery + 2;
+					}
+
+					if (bulletry < 159 && !bulletractivate)
+					{
+						bulletry++;
+					}
+				}
+				break;
+			case 1:
+				if (vx < 0)
+				{
+					if (paddlery > 80)
+					{
+						paddlery--;
+					}
+					else if (paddlery < 80)
+					{
+						paddlery++;
+					}
+				}
+				else if (bally > paddlery + 16 && paddlery < 159)
+				{
+					paddlery = paddlery + (1 + rand() % 2);
+				}
+				else if (bally < paddlery + 16 && paddlery > 0)
+				{
+					paddlery = paddlery - (1 + rand() % 2);
+				}
+				break;
+			case 2:
+				if (vx < 0)
+				{
+					if (paddlery > 80)
+					{
+						paddlery--;
+					}
+					else if (paddlery < 80)
+					{
+						paddlery++;
+					}
+				}
+				else if (bally > paddlery + 16 && paddlery < 159)
+				{
+					paddlery = paddlery + 2;
+				}
+				else if (bally < paddlery + 16 && paddlery > 0)
+				{
+					paddlery = paddlery - 2;
+				}
+
+				if (rand() % 360 == 0)
+				{
+					bulletractivate = true;
+				}
+				break;
+			case 3:
+				if (vx < 0)
+				{
+					if (paddlery > 80)
+					{
+						paddlery--;
+					}
+					else if (paddlery < 80)
+					{
+						paddlery++;
+					}
+				}
+				else if (bally > paddlery + 16 && paddlery < 159)
+				{
+					paddlery = paddlery + 2;
+				}
+				else if (bally < paddlery + 16 && paddlery > 0)
+				{
+					paddlery = paddlery - 2;
+				}
+				bulletractivate = true;
+				break;
+		}
+
+		// The paddles
+		oamSet(&oamMain, 0, 0, paddlely, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[secretdiscovered], -1, false, ldead, false, false, false);
+		oamSet(&oamMain, 1, 225, paddlery, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[secretdiscovered], -1, false, rdead, true, false, false);
+
+		// The bullets
+		oamSet(&oamMain, 2, bulletlx, bulletly, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[2], -1, false, rdead || ldead || !bulletlactivate, false, false, false);
+		oamSet(&oamMain, 3, bulletrx, bulletry, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[2], -1, false, rdead || ldead || !bulletractivate, true, false, false);
+
+		// The ball
+		oamSet(&oamMain, 6, ballx, bally, 0, 0, SpriteSize_16x8, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[0], -1, false, at_title, false, false, false);
+
+		// Switch statement to check settings
+		switch (settings_choices)
+		{
+			// Mystery boxes
+			case 1:
+				if (megacorp < 1)
+				{
+					megacorp = rand() % FRAMES_BEFORE_MYSTERYBOX + FRAMES_BEFORE_MYSTERYBOX/2 + tt;
+					gigacorpx = rand() % (256 - 64) + 32;
+					gigacorpy = rand() % (128 - 64) + 32;
+				}
+
+				if (megacorp < tt)
+				{
+					// Rotate the box 0.5° every frame
+					oamRotateScale(&oamMain, 0, degreesToAngle(tt/2), intToFixed(1, 8), intToFixed(1, 8));
+
+					oamSet(&oamMain, 52, gigacorpx, gigacorpy, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[10], 0, true, false, false, false, false);
+					oamSet(&oamMain, 51, gigacorpx+16, gigacorpy+16, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[11], -1, false, false, false, false, false);
+					
+					if (megacorp+1 == tt)
+					{
+						mmEffectEx(&sfx_boxsummon);
+					}
+				}
+
+				/*
+				if (bulletrx == 0 && bulletry > paddlely - 16 && bulletry < paddlely + 20)
+				{
+					// L gets item
+				}
+				if (bulletrx == 0 && bulletry > paddlely - 16 && bulletry < paddlely + 20)
+				{
+					// R gets item
+				}
+				*/
+				break;
+			// Magic shperes
+			case 2:
+				// Rotate the spheres 1° every frame
+				oamRotateScale(&oamMain, 0, degreesToAngle(tt), intToFixed(1, 8), intToFixed(1, 8));
+
+				oamSet(&oamMain, 51, 120, 40, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[9], 0, true, false, false, false, false);
+				oamSet(&oamMain, 52, 120, 120, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[9], 0, true, false, false, false, false);
+				break;
+			// Both boxes and shperes
+			case 3:
+				oamRotateScale(&oamMain, 0, degreesToAngle(tt), intToFixed(1, 8), intToFixed(1, 8));
+
+				oamSet(&oamMain, 51, 120, 40, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[9], 0, true, false, false, false, false);
+				oamSet(&oamMain, 52, 120, 120, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[9], 0, true, false, false, false, false);
+				break;
+		}
+
+		for (int i = 0; ballout && i < 100; i++, swiWaitForVBlank())
+		{
+			if (i == 0)
+			{
+				mmEffectEx(&sfx_ballout);
+			}
+		}
+
+		for (int i = 0; i < 100 && (ldead || rdead); i++, swiWaitForVBlank())
+		{
+			switch(i)
+			{
+				case 5:
+					mmEffectEx(&sfx_boom);
+					explosion_frame++;
+					break;
+				case 10:
+					explosion_frame++;
+					break;
+				case 15:
+				case 20:
+				case 25:
+					explosion_frame--;
+					break;
+			}
+
 			if (ldead)
 			{
-				oamSet(&oamMain, 4, 0, paddlely, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[explosion_frame+3], -1, false, animationdone, false, false, false);
+				oamSet(&oamMain, 4, 0, paddlely, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[explosion_frame+3], -1, false, explosion_frame < 0, false, false, false);
 			}
 
 			if (rdead)
 			{
-				oamSet(&oamMain, 5, 225, paddlery, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[explosion_frame+3], -1, false, animationdone, true, false, false);
+				oamSet(&oamMain, 5, 225, paddlery, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[explosion_frame+3], -1, false, explosion_frame < 0, true, false, false);
 			}
+
+			oamUpdate(&oamMain);
 		}
 
-		if (deathframe == 100 || balloutframe == 100)
+		if (ldead || rdead || ballout)
 		{
 			// If player 1 is dead, increment player 2's score and vice versa
 			if (ldead)
 			{
 				rscore++;
+				seven_segment_draw(20, 90 - (lscore > 9 ? 24 : 0), 10, lscore);
 			}
 
 			if (rdead)
 			{
 				lscore++;
+				seven_segment_draw(20, 90 - (lscore > 9 ? 24 : 0), 10, lscore);
 			}
-
-			// Update the scores
-			seven_segment_draw(20, 90 - (lscore > 9 ? 24 : 0), 10, lscore);
 
 			if (lscore > 9)
 			{
@@ -922,34 +953,6 @@ int main(void)
 			}
 
 			reset();
-		}
-
-		if (balloutframe != 0)
-		{
-			balloutframe++;
-
-			if (balloutframe == 20)
-			{
-				soundKill(ballout);
-			}
-		}
-
-		// Animates the explosion every 5th frame until 25 frames have passed
-		switch(deathframe)
-		{
-			case 5:
-			case 10:
-				explosion_frame++;
-				break;
-			case 15:
-			case 20:
-				explosion_frame--;
-				break;
-			case 25:
-				animationdone = true;
-				break;
-			default:
-				break;
 		}
 
 		scanKeys();
@@ -985,30 +988,6 @@ int main(void)
 			}
 		}
 
-		// If the pong sound has played for 10 frames, kill it and reset the frame counter
-		if (pongi == 10)
-		{
-			soundKill(pong);
-			pongi = 0;
-			pongs = false;
-		}
-		else if (pongs)
-		{
-			pongi++;
-		}
-
-		// If the ping sound has played for 10 frames, kill it and reset the frame counter
-		if (pingi == 10)
-		{
-			soundKill(ping);
-			pingi = 0;
-			pings = false;
-		}
-		else if (pings)
-		{
-			pingi++;
-		}
-
 		// Write the changes to the top screen
 		oamUpdate(&oamMain);
 
@@ -1022,17 +1001,6 @@ int main(void)
 		if (difficulty > 9)
 		{
 			secretdiscovered = true;
-		}
-
-		if (rdead || ldead)
-		{
-			if (deathframe > 9)
-			{
-				soundKill(sadlife);
-				sadlife = soundPlayPSG(1, -1 * deathframe * 100 + 10000, 64, 64);
-			}
-
-			deathframe++;
 		}
 
 		// Wait until the next frame
