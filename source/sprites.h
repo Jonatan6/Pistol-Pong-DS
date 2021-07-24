@@ -1,10 +1,3 @@
-extern const unsigned int paddleTiles[3072];
-extern const unsigned short paddlePal[16];
-extern const unsigned int bulletTiles[3072];
-extern const unsigned short bulletPal[16];
-extern const unsigned int boxTiles[3072];
-extern const unsigned short boxPal[256];
-
 typedef struct 
 {
 	u16* sprite_gfx_mem[12];

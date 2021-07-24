@@ -7,6 +7,11 @@
 
 #include "sprites.h"
 
+// Grit headers
+#include "paddle.h"
+#include "bullet.h"
+#include "box.h"
+
 // Maxmod headers
 #include "soundbank.h"
 #include "soundbank_bin.h"
