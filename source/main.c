@@ -326,11 +326,10 @@ int settings(int choice)
 }
 
 // Prints out the score in big fancy numbers
-void drawscore(int index, int x, int y, int number)
+void seven_segment_draw(int index, int x, int y, int number)
 {
 	oamClear(&oamMain, index, index + 6);
 
-	letmeusecontinueffs:
 	switch(number)
 	{
 		case 0:
@@ -411,8 +410,7 @@ void drawscore(int index, int x, int y, int number)
 			oamSet(&oamMain, index + 6, x - 6, y + 16, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[HORIZONTAL_LINE], -1, false, false, true, false, false);
 			break;
 		default:
-			number = (number - (number % 10)) / 10;
-			goto letmeusecontinueffs;
+			seven_segment_draw(index, x, y, (number - (number % 10)) / 10);
 	}
 }
 
@@ -464,10 +462,8 @@ int main(void)
 	int ping = 0;
 	int pongi = 0;
 	int pingi = 0;
-	int mmi = 0;
 	bool pongs = false;
 	bool pings = false;
-	bool mms = false;
 
 	// Frame of the explosion
 	int explosion_frame = 0;
@@ -481,8 +477,8 @@ int main(void)
 	int rscore = 0;
 	bool animationdone = false;
 
-	int deathcount = 0;
-	int stalcount = 0;
+	int deathframe = 0;
+	int balloutframe = 0;
 
 	// Megacorp. Change name later
 	int megacorp = 0;
@@ -536,8 +532,8 @@ int main(void)
 		explosion_frame = 0;
 		animationdone = false;
 
-		deathcount = 0;
-		stalcount = 0;
+		deathframe = 0;
+		balloutframe = 0;
 
 		megacorp = 0;
 		gigacorpx = 0;
@@ -567,12 +563,12 @@ int main(void)
 	}
 
 	// Draw the score of both playes
-	drawscore(20, 90, 10, 0);
-	drawscore(36, 140, 10, 0);
+	seven_segment_draw(20, 90, 10, 0);
+	seven_segment_draw(36, 140, 10, 0);
 
 	while (1) 
 	{
-		if (deathcount == 0 && stalcount == 0)
+		if (deathframe == 0 && balloutframe == 0)
 		{	
 			t++;
 			tt++;
@@ -621,15 +617,17 @@ int main(void)
 			if (ballx < -16)
 			{
 				rscore++;
-				stalcount = 1;
+				balloutframe = 1;
 				ballout = soundPlayPSG(1, 1000, 64, 64);
 			}
 			if (ballx > 256)
 			{
 				lscore++;
-				stalcount = 1;
+				balloutframe = 1;
 				ballout = soundPlayPSG(1, 1000, 64, 64);
 			}
+
+			// Check if the bullet belonging to player 1 is out of bounds
 			if (bulletlx < 256 && bulletlactivate)
 			{
 				bulletlx = bulletlx + 2;
@@ -641,6 +639,7 @@ int main(void)
 				bulletly = paddlely;
 			}
 
+			// Check if the bullet belonging to player 2 is out of bounds
 			if (bulletrx > -16 && bulletractivate)
 			{
 				bulletrx = bulletrx - 2;
@@ -652,11 +651,13 @@ int main(void)
 				bulletry = paddlery;
 			}
 
+			// Check if player 1 has been shot
 			if (bulletrx == 0 && bulletry > paddlely - 16 && bulletry < paddlely + 20)
 			{
 				ldead = true;
 			}
 
+			// Check if player 2 has been shot
 			if (bulletlx == 230 && bulletly > paddlery - 16 && bulletly < paddlery + 20)
 			{
 				rdead = true;
@@ -822,6 +823,7 @@ int main(void)
 						gigacorpx = rand() % (256 - 64) + 32;
 						gigacorpy = rand() % (128 - 64) + 32;
 					}
+
 					if (megacorp < tt)
 					{
 						// Rotate the box 0.5° every frame
@@ -845,9 +847,19 @@ int main(void)
 							};
 
 							mmEffectEx(&boxsummon);
-							mms = true;
 						}
 					}
+
+					/*
+					if (bulletrx == 0 && bulletry > paddlely - 16 && bulletry < paddlely + 20)
+					{
+						// L gets item
+					}
+					if (bulletrx == 0 && bulletry > paddlely - 16 && bulletry < paddlely + 20)
+					{
+						// R gets item
+					}
+					*/
 					break;
 				// Magic shperes
 				case 2:
@@ -863,25 +875,11 @@ int main(void)
 
 					oamSet(&oamMain, 51, 120, 40, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[9], 0, true, false, false, false, false);
 					oamSet(&oamMain, 52, 120, 120, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[9], 0, true, false, false, false, false);
-
-					if (megacorp < 1)
-					{
-						megacorp = rand() % 500 + 200 + tt;
-					}
-					if (megacorp < tt)
-					{
-						oamSet(&oamMain, 52, 20, 40, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[10], -1, false, false, false, false, false);
-						oamSet(&oamMain, 51, 20, 80, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[11], -1, false, false, false, false, false);
-
-						//megacorp = 0;
-
-					}
-					
 					break;
 			}
 		}
 
-		else if (deathcount % 5 == 0)
+		else if (deathframe % 5 == 0)
 		{
 			// The explosion
 			if (ldead)
@@ -895,7 +893,7 @@ int main(void)
 			}
 		}
 
-		if (deathcount == 100 || stalcount == 100)
+		if (deathframe == 100 || balloutframe == 100)
 		{
 			// If player 1 is dead, increment player 2's score and vice versa
 			if (ldead)
@@ -909,35 +907,35 @@ int main(void)
 			}
 
 			// Update the scores
-			drawscore(20, 90 - (lscore > 9 ? 24 : 0), 10, lscore);
+			seven_segment_draw(20, 90 - (lscore > 9 ? 24 : 0), 10, lscore);
 
 			if (lscore > 9)
 			{
-				drawscore(28, 90, 10, lscore % 10);
+				seven_segment_draw(28, 90, 10, lscore % 10);
 			}
 
-			drawscore(36, 140, 10, rscore);
+			seven_segment_draw(36, 140, 10, rscore);
 
 			if (rscore > 9)
 			{
-				drawscore(44, 164, 10, rscore % 10);
+				seven_segment_draw(44, 164, 10, rscore % 10);
 			}
 
 			reset();
 		}
 
-		if (stalcount != 0)
+		if (balloutframe != 0)
 		{
-			stalcount++;
+			balloutframe++;
 
-			if (stalcount == 20)
+			if (balloutframe == 20)
 			{
 				soundKill(ballout);
 			}
 		}
 
 		// Animates the explosion every 5th frame until 25 frames have passed
-		switch(deathcount)
+		switch(deathframe)
 		{
 			case 5:
 			case 10:
@@ -969,8 +967,8 @@ int main(void)
 			lscore = 0;
 			rscore = 0;
 
-			drawscore(20, 90, 10, 0);
-			drawscore(36, 140, 10, 0);
+			seven_segment_draw(20, 90, 10, 0);
+			seven_segment_draw(36, 140, 10, 0);
 
 			reset();
 		}
@@ -1011,19 +1009,6 @@ int main(void)
 			pingi++;
 		}
 
-		// If any soundeffect loaded by Maxmod has played for 10 frames, kill it and reset the frame counter
-		if (mmi == 10)
-		{
-			mmStop();
-			mmUnloadEffect(SFX_BOX_SUMMON);
-			mmi = 0;
-			mms = false;
-		}
-		else if (mms)
-		{
-			mmi++;
-		}
-		
 		// Write the changes to the top screen
 		oamUpdate(&oamMain);
 
@@ -1041,13 +1026,13 @@ int main(void)
 
 		if (rdead || ldead)
 		{
-			if (deathcount > 9)
+			if (deathframe > 9)
 			{
 				soundKill(sadlife);
-				sadlife = soundPlayPSG(1, -1 * deathcount * 100 + 10000, 64, 64);
+				sadlife = soundPlayPSG(1, -1 * deathframe * 100 + 10000, 64, 64);
 			}
 
-			deathcount++;
+			deathframe++;
 		}
 
 		// Wait until the next frame
