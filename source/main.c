@@ -886,12 +886,12 @@ int main(void)
 			// The explosion
 			if (ldead)
 			{
-				oamSet(&oamMain, 4, 0, paddlely, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[explosion_frame+2], -1, false, animationdone, false, false, false);
+				oamSet(&oamMain, 4, 0, paddlely, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[explosion_frame+3], -1, false, animationdone, false, false, false);
 			}
 
 			if (rdead)
 			{
-				oamSet(&oamMain, 5, 225, paddlery, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[explosion_frame+2], -1, false, animationdone, true, false, false);
+				oamSet(&oamMain, 5, 225, paddlery, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[explosion_frame+3], -1, false, animationdone, true, false, false);
 			}
 		}
 
