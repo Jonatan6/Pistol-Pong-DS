@@ -468,6 +468,9 @@ int main(void)
 	bool pings = false;
 	bool mms = false;
 
+	// Frame of the explosion
+	int explosion_frame = 0;
+
 	int sadlife = 0;
 	int ballout = 0;
 
@@ -504,9 +507,6 @@ int main(void)
 
 	void reset()
 	{
-		bullet.state = 0;
-		bullet.anim_frame = 0;
-
 		bulletlactivate = false;
 		bulletractivate = false;
 
@@ -531,6 +531,8 @@ int main(void)
 
 		ldead = false;
 		rdead = false;
+
+		explosion_frame = 0;
 		animationdone = false;
 
 		deathcount = 0;
@@ -802,8 +804,8 @@ int main(void)
 			oamSet(&oamMain, 1, 225, paddlery, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, paddle.sprite_gfx_mem[secretdiscovered], -1, false, rdead, true, false, false);
 
 			// The bullets
-			oamSet(&oamMain, 2, bulletlx, bulletly, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[bullet.gfx_frame], -1, false, rdead || ldead || !bulletlactivate, false, false, false);
-			oamSet(&oamMain, 3, bulletrx, bulletry, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[bullet.gfx_frame], -1, false, rdead || ldead || !bulletractivate, true, false, false);
+			oamSet(&oamMain, 2, bulletlx, bulletly, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[0], -1, false, rdead || ldead || !bulletlactivate, false, false, false);
+			oamSet(&oamMain, 3, bulletrx, bulletry, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[0], -1, false, rdead || ldead || !bulletractivate, true, false, false);
 
 			// The ball
 			oamSet(&oamMain, 6, ballx, bally, 0, 0, SpriteSize_16x8, SpriteColorFormat_256Color, paddle.sprite_gfx_mem[0], -1, false, at_title, false, false, false);
@@ -883,12 +885,12 @@ int main(void)
 			// The explosion
 			if (ldead)
 			{
-				oamSet(&oamMain, 4, 0, paddlely, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[bullet.gfx_frame], -1, false, animationdone, false, false, false);
+				oamSet(&oamMain, 4, 0, paddlely, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[explosion_frame+2], -1, false, animationdone, false, false, false);
 			}
 
 			if (rdead)
 			{
-				oamSet(&oamMain, 5, 225, paddlery, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[bullet.gfx_frame], -1, false, animationdone, true, false, false);
+				oamSet(&oamMain, 5, 225, paddlery, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, bullet.sprite_gfx_mem[explosion_frame+2], -1, false, animationdone, true, false, false);
 			}
 		}
 
@@ -938,11 +940,11 @@ int main(void)
 		{
 			case 5:
 			case 10:
-				bullet.anim_frame++;
+				explosion_frame++;
 				break;
 			case 15:
 			case 20:
-				bullet.anim_frame--;
+				explosion_frame--;
 				break;
 			case 25:
 				animationdone = true;
@@ -950,8 +952,6 @@ int main(void)
 			default:
 				break;
 		}
-
-		animateBullet(&bullet);
 
 		scanKeys();
 		keys = keysHeld();
@@ -1040,8 +1040,6 @@ int main(void)
 
 		if (rdead || ldead)
 		{
-			bullet.state = 3;
-
 			if (deathcount > 9)
 			{
 				soundKill(sadlife);

@@ -14,10 +14,6 @@ typedef struct
 typedef struct
 {
 	u16* sprite_gfx_mem[12];
-	int gfx_frame;
-
-	int state;
-	int anim_frame;
 
 }Bullet;
 
@@ -59,11 +55,4 @@ void initBox(Box *sprite, u8* gfx)
 		dmaCopy(gfx, sprite->sprite_gfx_mem[i], 32*32);
 		gfx += 32*32;
 	}
-}
-
-
-// TODO: Remove this
-void animateBullet(Bullet *sprite)
-{
-	sprite->gfx_frame = sprite->anim_frame + sprite->state;
 }
