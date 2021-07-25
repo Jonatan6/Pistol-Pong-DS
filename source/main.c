@@ -840,34 +840,41 @@ int main(void)
 				if (megacorp < 1)
 				{
 					megacorp = rand() % FRAMES_BEFORE_MYSTERYBOX + FRAMES_BEFORE_MYSTERYBOX/2 + tt;
-					gigacorpx = rand() % (256 - 64) + 32;
+					gigacorpx = rand() % (256 - 128) + 64;
 					gigacorpy = rand() % (128 - 64) + 32;
 				}
-
-				if (megacorp < tt)
+				else if (megacorp <= tt)
 				{
 					// Rotate the box 0.5° every frame
 					oamRotateScale(&oamMain, 0, degreesToAngle(tt/2), intToFixed(1, 8), intToFixed(1, 8));
 
 					oamSet(&oamMain, 52, gigacorpx, gigacorpy, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[10], 0, true, false, false, false, false);
 					oamSet(&oamMain, 51, gigacorpx+16, gigacorpy+16, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[11], -1, false, false, false, false, false);
-					
-					if (megacorp+1 == tt)
+
+					if (megacorp == tt)
 					{
 						mmEffectEx(&sfx_boxsummon);
 					}
+					// L gets item
+					else if (bulletlx > gigacorpx-16 && bulletlx < gigacorpx+16 && bulletly > gigacorpy - 16 && bulletly < gigacorpy + 16)
+					{
+						megacorp = 0;
+						oamClear(&oamMain, 51, 52);
+
+						bulletlx = 225;
+						bulletlactivate = false;
+					}
+					// R gets item
+					else if (bulletrx > gigacorpx-16 && bulletrx < gigacorpx+16 && bulletry > gigacorpy - 16 && bulletry < gigacorpy + 16)
+					{
+						megacorp = 0;
+						oamClear(&oamMain, 51, 52);
+
+						bulletrx = 0;
+						bulletractivate = false;
+					}
 				}
 
-				/*
-				if (bulletrx == 0 && bulletry > paddlely - 16 && bulletry < paddlely + 20)
-				{
-					// L gets item
-				}
-				if (bulletrx == 0 && bulletry > paddlely - 16 && bulletry < paddlely + 20)
-				{
-					// R gets item
-				}
-				*/
 				break;
 			// Magic shperes
 			case 2:
