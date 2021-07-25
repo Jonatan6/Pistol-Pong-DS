@@ -24,126 +24,361 @@
 #define FRAMES_BEFORE_SPEEDUP 2880
 #define FRAMES_BEFORE_MYSTERYBOX 500
 
+void draw_buttons(int buttons, int active, bool slide)
+{
+
+	if (slide)
+	{
+		for(int i = 0; i <= 234; i+=32)
+		{
+
+			oamClear(&oamSub, 0, 23);
+
+			switch(active)
+			{
+				case 1:
+					oamSet(&oamSub, 0, -256+32*0+i, 8, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[15], -1, false, false, false, false, false);
+					oamSet(&oamSub, 1, -256+32*1+i, 8, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[15], -1, false, false, false, false, false);
+					oamSet(&oamSub, 2, -256+32*2+i, 8, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[15], -1, false, false, false, false, false);
+					oamSet(&oamSub, 3, -256+32*3+i, 8, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[15], -1, false, false, false, false, false);
+					oamSet(&oamSub, 4, -256+32*4+i, 8, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[15], -1, false, false, false, false, false);
+					oamSet(&oamSub, 5, -256+32*5+i, 8, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[15], -1, false, false, false, false, false);
+					oamSet(&oamSub, 6, -256+32*6+i, 8, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[16], -1, false, false, false, false, false);
+					oamSet(&oamSub, 7, -256+32*7+i, 8, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[17], -1, false, false, false, false, false);
+
+					oamSet(&oamSub, 8, -256+32*0+i, 56, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+					oamSet(&oamSub, 9, -256+32*1+i, 56, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+					oamSet(&oamSub, 10, -256+32*2+i, 56, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+					oamSet(&oamSub, 11, -256+32*3+i, 56, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+					oamSet(&oamSub, 12, -256+32*4+i, 56, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+					oamSet(&oamSub, 13, -256+32*5+i, 56, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+					oamSet(&oamSub, 14, -256+32*6+i, 56, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[13], -1, false, false, false, false, false);
+					oamSet(&oamSub, 15, -256+32*7+i, 56, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[14], -1, false, false, false, false, false);
+					
+					if (buttons == 3)
+					{
+						oamSet(&oamSub, 16, -256+32*0+i, 104, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+						oamSet(&oamSub, 17, -256+32*1+i, 104, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+						oamSet(&oamSub, 18, -256+32*2+i, 104, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+						oamSet(&oamSub, 19, -256+32*3+i, 104, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+						oamSet(&oamSub, 20, -256+32*4+i, 104, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+						oamSet(&oamSub, 21, -256+32*5+i, 104, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+						oamSet(&oamSub, 22, -256+32*6+i, 104, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[13], -1, false, false, false, false, false);
+						oamSet(&oamSub, 23, -256+32*7+i, 104, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[14], -1, false, false, false, false, false);
+					}
+					break;
+				case 2:
+					oamSet(&oamSub, 0, -256+32*0+i, 8, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+					oamSet(&oamSub, 1, -256+32*1+i, 8, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+					oamSet(&oamSub, 2, -256+32*2+i, 8, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+					oamSet(&oamSub, 3, -256+32*3+i, 8, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+					oamSet(&oamSub, 4, -256+32*4+i, 8, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+					oamSet(&oamSub, 5, -256+32*5+i, 8, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+					oamSet(&oamSub, 6, -256+32*6+i, 8, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[13], -1, false, false, false, false, false);
+					oamSet(&oamSub, 7, -256+32*7+i, 8, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[14], -1, false, false, false, false, false);
+
+					oamSet(&oamSub, 8, -256+32*0+i, 56, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[15], -1, false, false, false, false, false);
+					oamSet(&oamSub, 9, -256+32*1+i, 56, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[15], -1, false, false, false, false, false);
+					oamSet(&oamSub, 10, -256+32*2+i, 56, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[15], -1, false, false, false, false, false);
+					oamSet(&oamSub, 11, -256+32*3+i, 56, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[15], -1, false, false, false, false, false);
+					oamSet(&oamSub, 12, -256+32*4+i, 56, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[15], -1, false, false, false, false, false);
+					oamSet(&oamSub, 13, -256+32*5+i, 56, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[15], -1, false, false, false, false, false);
+					oamSet(&oamSub, 14, -256+32*6+i, 56, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[16], -1, false, false, false, false, false);
+					oamSet(&oamSub, 15, -256+32*7+i, 56, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[17], -1, false, false, false, false, false);
+					
+					if (buttons == 3)
+					{
+						oamSet(&oamSub, 16, -256+32*0+i, 104, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+						oamSet(&oamSub, 17, -256+32*1+i, 104, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+						oamSet(&oamSub, 18, -256+32*2+i, 104, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+						oamSet(&oamSub, 19, -256+32*3+i, 104, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+						oamSet(&oamSub, 20, -256+32*4+i, 104, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+						oamSet(&oamSub, 21, -256+32*5+i, 104, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+						oamSet(&oamSub, 22, -256+32*6+i, 104, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[13], -1, false, false, false, false, false);
+						oamSet(&oamSub, 23, -256+32*7+i, 104, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[14], -1, false, false, false, false, false);
+					}
+					break;
+				case 3:
+					oamSet(&oamSub, 0, -256+32*0+i, 8, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+					oamSet(&oamSub, 1, -256+32*1+i, 8, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+					oamSet(&oamSub, 2, -256+32*2+i, 8, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+					oamSet(&oamSub, 3, -256+32*3+i, 8, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+					oamSet(&oamSub, 4, -256+32*4+i, 8, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+					oamSet(&oamSub, 5, -256+32*5+i, 8, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+					oamSet(&oamSub, 6, -256+32*6+i, 8, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[13], -1, false, false, false, false, false);
+					oamSet(&oamSub, 7, -256+32*7+i, 8, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[14], -1, false, false, false, false, false);
+
+					oamSet(&oamSub, 8, -256+32*0+i, 56, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+					oamSet(&oamSub, 9, -256+32*1+i, 56, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+					oamSet(&oamSub, 10, -256+32*2+i, 56, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+					oamSet(&oamSub, 11, -256+32*3+i, 56, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+					oamSet(&oamSub, 12, -256+32*4+i, 56, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+					oamSet(&oamSub, 13, -256+32*5+i, 56, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+					oamSet(&oamSub, 14, -256+32*6+i, 56, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[13], -1, false, false, false, false, false);
+					oamSet(&oamSub, 15, -256+32*7+i, 56, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[14], -1, false, false, false, false, false);
+					
+					if (buttons == 3)
+					{
+						oamSet(&oamSub, 16, -256+32*0+i, 104, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[15], -1, false, false, false, false, false);
+						oamSet(&oamSub, 17, -256+32*1+i, 104, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[15], -1, false, false, false, false, false);
+						oamSet(&oamSub, 18, -256+32*2+i, 104, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[15], -1, false, false, false, false, false);
+						oamSet(&oamSub, 19, -256+32*3+i, 104, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[15], -1, false, false, false, false, false);
+						oamSet(&oamSub, 20, -256+32*4+i, 104, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[15], -1, false, false, false, false, false);
+						oamSet(&oamSub, 21, -256+32*5+i, 104, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[15], -1, false, false, false, false, false);
+						oamSet(&oamSub, 22, -256+32*6+i, 104, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[16], -1, false, false, false, false, false);
+						oamSet(&oamSub, 23, -256+32*7+i, 104, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[17], -1, false, false, false, false, false);
+					}
+					break;
+
+			}
+	
+			oamUpdate(&oamSub);
+			swiWaitForVBlank();
+		}
+	}
+	else
+	{
+		switch(active)
+		{
+			case 1:
+				oamSet(&oamSub, 0, 32*0-32, 8, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[15], -1, false, false, false, false, false);
+				oamSet(&oamSub, 1, 32*1-32, 8, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[15], -1, false, false, false, false, false);
+				oamSet(&oamSub, 2, 32*2-32, 8, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[15], -1, false, false, false, false, false);
+				oamSet(&oamSub, 3, 32*3-32, 8, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[15], -1, false, false, false, false, false);
+				oamSet(&oamSub, 4, 32*4-32, 8, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[15], -1, false, false, false, false, false);
+				oamSet(&oamSub, 5, 32*5-32, 8, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[15], -1, false, false, false, false, false);
+				oamSet(&oamSub, 6, 32*6-32, 8, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[16], -1, false, false, false, false, false);
+				oamSet(&oamSub, 7, 32*7-32, 8, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[17], -1, false, false, false, false, false);
+
+				oamSet(&oamSub, 8, 32*0-32, 56, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+				oamSet(&oamSub, 9, 32*1-32, 56, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+				oamSet(&oamSub, 10, 32*2-32, 56, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+				oamSet(&oamSub, 11, 32*3-32, 56, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+				oamSet(&oamSub, 12, 32*4-32, 56, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+				oamSet(&oamSub, 13, 32*5-32, 56, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+				oamSet(&oamSub, 14, 32*6-32, 56, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[13], -1, false, false, false, false, false);
+				oamSet(&oamSub, 15, 32*7-32, 56, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[14], -1, false, false, false, false, false);
+				
+				if (buttons == 3)
+				{
+					oamSet(&oamSub, 16, 32*0-32, 104, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+					oamSet(&oamSub, 17, 32*1-32, 104, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+					oamSet(&oamSub, 18, 32*2-32, 104, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+					oamSet(&oamSub, 19, 32*3-32, 104, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+					oamSet(&oamSub, 20, 32*4-32, 104, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+					oamSet(&oamSub, 21, 32*5-32, 104, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+					oamSet(&oamSub, 22, 32*6-32, 104, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[13], -1, false, false, false, false, false);
+					oamSet(&oamSub, 23, 32*7-32, 104, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[14], -1, false, false, false, false, false);
+				}
+
+				oamUpdate(&oamSub);
+				break;
+			case 2:
+				oamSet(&oamSub, 0, 32*0-32, 8, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+				oamSet(&oamSub, 1, 32*1-32, 8, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+				oamSet(&oamSub, 2, 32*2-32, 8, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+				oamSet(&oamSub, 3, 32*3-32, 8, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+				oamSet(&oamSub, 4, 32*4-32, 8, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+				oamSet(&oamSub, 5, 32*5-32, 8, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+				oamSet(&oamSub, 6, 32*6-32, 8, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[13], -1, false, false, false, false, false);
+				oamSet(&oamSub, 7, 32*7-32, 8, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[14], -1, false, false, false, false, false);
+			
+				oamSet(&oamSub, 8, 32*0-32, 56, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[15], -1, false, false, false, false, false);
+				oamSet(&oamSub, 9, 32*1-32, 56, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[15], -1, false, false, false, false, false);
+				oamSet(&oamSub, 10, 32*2-32, 56, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[15], -1, false, false, false, false, false);
+				oamSet(&oamSub, 11, 32*3-32, 56, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[15], -1, false, false, false, false, false);
+				oamSet(&oamSub, 12, 32*4-32, 56, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[15], -1, false, false, false, false, false);
+				oamSet(&oamSub, 13, 32*5-32, 56, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[15], -1, false, false, false, false, false);
+				oamSet(&oamSub, 14, 32*6-32, 56, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[16], -1, false, false, false, false, false);
+				oamSet(&oamSub, 15, 32*7-32, 56, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[17], -1, false, false, false, false, false);
+
+				if (buttons == 3)
+				{
+					oamSet(&oamSub, 16, 32*0-32, 104, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+					oamSet(&oamSub, 17, 32*1-32, 104, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+					oamSet(&oamSub, 18, 32*2-32, 104, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+					oamSet(&oamSub, 19, 32*3-32, 104, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+					oamSet(&oamSub, 20, 32*4-32, 104, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+					oamSet(&oamSub, 21, 32*5-32, 104, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+					oamSet(&oamSub, 22, 32*6-32, 104, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[13], -1, false, false, false, false, false);
+					oamSet(&oamSub, 23, 32*7-32, 104, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[14], -1, false, false, false, false, false);
+				}
+
+				oamUpdate(&oamSub);
+				break;
+			case 3:
+				oamSet(&oamSub, 0, 32*0-32, 8, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+				oamSet(&oamSub, 1, 32*1-32, 8, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+				oamSet(&oamSub, 2, 32*2-32, 8, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+				oamSet(&oamSub, 3, 32*3-32, 8, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+				oamSet(&oamSub, 4, 32*4-32, 8, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+				oamSet(&oamSub, 5, 32*5-32, 8, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+				oamSet(&oamSub, 6, 32*6-32, 8, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[13], -1, false, false, false, false, false);
+				oamSet(&oamSub, 7, 32*7-32, 8, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[14], -1, false, false, false, false, false);
+
+				oamSet(&oamSub, 8, 32*0-32, 56, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+				oamSet(&oamSub, 9, 32*1-32, 56, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+				oamSet(&oamSub, 10, 32*2-32, 56, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+				oamSet(&oamSub, 11, 32*3-32, 56, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+				oamSet(&oamSub, 12, 32*4-32, 56, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+				oamSet(&oamSub, 13, 32*5-32, 56, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+				oamSet(&oamSub, 14, 32*6-32, 56, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[13], -1, false, false, false, false, false);
+				oamSet(&oamSub, 15, 32*7-32, 56, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[14], -1, false, false, false, false, false);
+
+				if (buttons == 3)
+				{
+					oamSet(&oamSub, 16, 32*0-32, 104, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[15], -1, false, false, false, false, false);
+					oamSet(&oamSub, 17, 32*1-32, 104, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[15], -1, false, false, false, false, false);
+					oamSet(&oamSub, 18, 32*2-32, 104, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[15], -1, false, false, false, false, false);
+					oamSet(&oamSub, 19, 32*3-32, 104, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[15], -1, false, false, false, false, false);
+					oamSet(&oamSub, 20, 32*4-32, 104, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[15], -1, false, false, false, false, false);
+					oamSet(&oamSub, 21, 32*5-32, 104, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[15], -1, false, false, false, false, false);
+					oamSet(&oamSub, 22, 32*6-32, 104, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[16], -1, false, false, false, false, false);
+					oamSet(&oamSub, 23, 32*7-32, 104, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[17], -1, false, false, false, false, false);
+				}
+
+				oamUpdate(&oamSub);
+				break;
+		}
+	}
+}
+
 int title_screen()
 {
 	int difficulty = 0;
+	int active_button = 1;
+
+	int keys = keysHeld();
 
 	vramSetBankC(VRAM_C_SUB_BG);
 
-	PrintConsole bottomScreen;
-	consoleInit(&bottomScreen, 0, BgType_Text4bpp, BgSize_T_256x256, 2, 0, false, true);
+	//touchPosition touch;
+	//touchRead(&touch);
 
-	touchPosition touch;
-	touchRead(&touch);
+	draw_buttons(2, 1, true);
 
-	consoleSelect(&bottomScreen);
+	singlebreak:
 
-	// Make text fall from the sky
-	for (int i = 0; i < 18; i++)
+	while (true)
 	{
-		consoleClear();
+		while (keys & KEY_UP || keys & KEY_DOWN || keys & KEY_A)
+		{
+			keys = keysHeld();
+			scanKeys();
+			swiWaitForVBlank();
+		}
 
-		consoleSetWindow(&bottomScreen, 1, i, 30, 30);
-		iprintf("       VS OTHER PLAYER");
-		consoleSetWindow(&bottomScreen, 1, i-6, 30, 30);
-		iprintf("------------------------------");
-		consoleSetWindow(&bottomScreen, 1, i-12, 30, 30);
-		iprintf("         VS COMPUTER");
+		while (true)
+		{
+			keys = keysHeld();
+			scanKeys();
 
-		// Wait one frame
+			if (keys & KEY_UP)
+			{
+				if (active_button > 1)
+				{
+					active_button--;
+				}
+				draw_buttons(2, active_button, false);
+				break;
+			}
+			if (keys & KEY_DOWN)
+			{
+				if (active_button < 2)
+				{
+					active_button++;
+				}
+				draw_buttons(2, active_button, false);
+				break;
+			}
+			if (keys & KEY_A)
+			{
+				if (active_button == 1)
+				{
+					goto triplebreak;
+				}
+				else
+				{
+					goto doublebreak;
+				}
+			}
+
+			swiWaitForVBlank();
+		}
+
 		swiWaitForVBlank();
 	}
 
-	while (touch.px > 0 && touch.py > 0)
-	{
-		touchRead(&touch);
-	}
+	doublebreak:
 
-	while (1)
-	{
-		touchRead(&touch);
+	active_button = 1;
 
-		if (touch.px > 0 && touch.py < 97)
+	draw_buttons(3, 1, true);
+
+	while (true)
+	{
+		while (keys & KEY_UP || keys & KEY_DOWN || keys & KEY_A)
 		{
-			// Make text fall from the sky
-			for (int i = 0; i < 19; i++)
-			{
-				consoleClear();
-
-				consoleSetWindow(&bottomScreen, 1, i, 30, 30);
-				iprintf("             HARD");
-				consoleSetWindow(&bottomScreen, 1, i-3, 30, 30);
-				iprintf("------------------------------");
-				consoleSetWindow(&bottomScreen, 1, i-6, 30, 30);
-				iprintf("            MEDIUM");
-				consoleSetWindow(&bottomScreen, 1, i-9, 30, 30);
-				iprintf("------------------------------");
-				consoleSetWindow(&bottomScreen, 1, i-12, 30, 30);
-				iprintf("             EASY");
-				
-				// Wait one frame
-				swiWaitForVBlank();
-			}
-
-			while (touch.px > 0 && touch.py > 0)
-			{
-				touchRead(&touch);
-			}
-
-			while (1)
-			{
-				touchRead(&touch);
-
-				if (touch.px > 0 && touch.py < 64)
-				{
-					difficulty = difficulty + 1;
-					break;
-				}
-				else if (touch.px > 0 && touch.py < 128)
-				{
-					difficulty = difficulty + 2;
-					break;
-				}
-				else if (touch.px > 0 && touch.py < 192)
-				{
-					difficulty = difficulty + 3;
-					break;
-				}
-			}
-			consoleClear();
-			break;
+			keys = keysHeld();
+			scanKeys();
+			swiWaitForVBlank();
 		}
-		else if (touch.px > 0 && touch.py > 97)
+
+		while (true)
 		{
-			consoleClear();
-			break;
+			keys = keysHeld();
+			scanKeys();
+
+			if (keys & KEY_UP)
+			{
+				if (active_button > 1)
+				{
+					active_button--;
+				}
+				draw_buttons(3, active_button, false);
+				break;
+			}
+			if (keys & KEY_DOWN)
+			{
+				if (active_button < 3)
+				{
+					active_button++;
+				}
+				draw_buttons(3, active_button, false);
+				break;
+			}
+			if (keys & KEY_A)
+			{
+				difficulty = active_button;
+				goto triplebreak;
+			}
+			if (keys & KEY_B)
+			{
+				oamClear(&oamSub, 16, 24);
+				oamUpdate(&oamSub);
+				goto singlebreak;
+			}
+
+			swiWaitForVBlank();
+
 		}
-	}
 
-	// Make text fall from the sky
-	for (int i = 0; i < 18; i++)
-	{
-		consoleClear();
-
-		consoleSetWindow(&bottomScreen, 1, i, 30, 30);
-		iprintf("------------------------------");
-		consoleSetWindow(&bottomScreen, 1, i-6, 30, 30);
-		iprintf("      RETURN TO THE MENU");
-		consoleSetWindow(&bottomScreen, 1, i-12, 30, 30);
-		iprintf("------------------------------");
-
-		// Wait one frames
 		swiWaitForVBlank();
 	}
 
+	triplebreak:
+
+	keys = keysHeld();
 	scanKeys();
-	int keys = keysHeld();
+
+	oamClear(&oamSub, 0, 24);
+	oamUpdate(&oamSub);
 
 	if (keys & KEY_R && keys & KEY_L)
 	{
 		return difficulty + 10;
 	}
-	else 
+	else
 	{
 		return difficulty;
 	}
@@ -447,6 +682,9 @@ int main(void)
 	initTiles(&tiles, (u8*)tilesTiles);
 
 	dmaCopy(tilesPal, SPRITE_PALETTE, sizeof(tilesPal));
+	dmaCopy(tilesPal, SPRITE_PALETTE_SUB, sizeof(tilesPal));
+
+	swiWaitForVBlank();
 
 	// Seed the rng with the current time
 	srand(time(0));
@@ -598,8 +836,6 @@ int main(void)
 		x0 = ballx;
 		y0 = bally;
 	}
-
-	soundEnable(); 
 
 	// This is the dotted line in the middle of the field... Yes, I am loading each and every line as a seperate sprite
 	for(int i=7, f=4; i != 19; i++, f+=16)
@@ -1014,8 +1250,9 @@ int main(void)
 			}
 		}
 
-		// Write the changes to the top screen
+		// Write the changes to both screens
 		oamUpdate(&oamMain);
+		oamUpdate(&oamSub);
 
 		if (at_title)
 		{
