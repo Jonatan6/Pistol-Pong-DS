@@ -856,7 +856,7 @@ int main(void)
 						mmEffectEx(&sfx_boxsummon);
 					}
 					// L gets item
-					else if (bulletlx > gigacorpx-16 && bulletlx < gigacorpx+16 && bulletly > gigacorpy - 16 && bulletly < gigacorpy + 16)
+					else if (bulletlx > gigacorpx - 8 && bulletlx < gigacorpx + 24 && bulletly > gigacorpy - 8 && bulletly < gigacorpy + 24)
 					{
 						megacorp = 0;
 						oamClear(&oamMain, 51, 52);
@@ -865,7 +865,7 @@ int main(void)
 						bulletlactivate = false;
 					}
 					// R gets item
-					else if (bulletrx > gigacorpx-16 && bulletrx < gigacorpx+16 && bulletry > gigacorpy - 16 && bulletry < gigacorpy + 16)
+					else if (bulletrx > gigacorpx - 8 && bulletrx < gigacorpx + 24 && bulletry > gigacorpy - 8 && bulletry < gigacorpy + 24)
 					{
 						megacorp = 0;
 						oamClear(&oamMain, 51, 52);
