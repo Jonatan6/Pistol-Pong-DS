@@ -218,8 +218,27 @@ int settings(int choice)
 	iprintf("  |       |        |       |");
 	consoleSetWindow(&bottomScreen, 1, 7, 30, 30);
 	iprintf("  |       |        |       |");
-	consoleSetWindow(&bottomScreen, 1, 8, 30, 30);
-	iprintf("  |       |        |       |");
+
+	switch (choice)
+	{
+		case 0:
+			consoleSetWindow(&bottomScreen, 1, 8, 30, 30);
+			iprintf("  |       |        |       |");
+			break;
+		case 1:
+			consoleSetWindow(&bottomScreen, 1, 8, 30, 30);
+			iprintf("  |   X   |        |       |");
+			break;
+		case 2:
+			consoleSetWindow(&bottomScreen, 1, 8, 30, 30);
+			iprintf("  |       |        |   X   |");
+			break;
+		case 3:
+			consoleSetWindow(&bottomScreen, 1, 8, 30, 30);
+			iprintf("  |   X   |        |   X   |");
+			break;
+	}
+
 	consoleSetWindow(&bottomScreen, 1, 9, 30, 30);
 	iprintf("  |       |        |       |");
 	consoleSetWindow(&bottomScreen, 1, 10, 30, 30);
@@ -254,7 +273,7 @@ int settings(int choice)
 			keys = keysHeld();
 		}
 
-		if ((touch.px > 16 && touch.py < 32 && keys & KEY_TOUCH) || keys & KEY_LEFT)
+		if ((touch.px > 32 && touch.px < 96 && touch.py > 60 && touch.py < 108) || keys & KEY_LEFT)
 		{
 			switch (choice)
 			{
@@ -280,7 +299,7 @@ int settings(int choice)
 					break;
 			}
 		}
-		else if ((touch.px < 32 && touch.py < 32 && keys & KEY_TOUCH) || keys & KEY_RIGHT)
+		else if ((touch.px > 128 && touch.px < 224 && touch.py > 60 && touch.py < 108) || keys & KEY_RIGHT)
 		{
 			switch(choice)
 			{
@@ -306,7 +325,7 @@ int settings(int choice)
 					break;
 			}
 		}
-		else if ((touch.px > 0 && touch.py > 148 && keys & KEY_TOUCH) || keys & KEY_SELECT || keys & KEY_START)
+		else if ((touch.px > 0 && touch.py > 148) || keys & KEY_SELECT || keys & KEY_START)
 		{
 			oamClear(&oamMain, 0, 0);
 
