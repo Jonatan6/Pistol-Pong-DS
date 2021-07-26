@@ -7,6 +7,8 @@
 
 // Grit headers
 #include "tiles.h"
+#include "bg.h"
+#include "bgsub.h"
 
 // Maxmod headers
 #include "soundbank.h"
@@ -201,7 +203,15 @@ int title_screen()
 
 	int keys = keysHeld();
 
-	vramSetBankC(VRAM_C_SUB_BG);
+	int bg3 = bgInit(3, BgType_Bmp8, BgSize_B8_256x256, 1, 0);
+	dmaCopy(bgTiles, bgGetGfxPtr(bg3), sizeof(bgTiles));
+	dmaCopy(bgPal, BG_PALETTE, sizeof(bgPal));
+	bgWrapOff(bg3);
+
+	int bgsub3 = bgInitSub(3, BgType_Bmp8, BgSize_B8_256x256, 2, 0);
+	dmaCopy(bgsubTiles, bgGetGfxPtr(bgsub3), sizeof(bgsubTiles));
+	dmaCopy(bgsubPal, BG_PALETTE_SUB, sizeof(bgsubPal));
+	bgWrapOff(bgsub3);
 
 	//touchPosition touch;
 	//touchRead(&touch);
@@ -381,6 +391,27 @@ int title_screen()
 		swiWaitForVBlank();
 	}
 */
+
+	// Fade out the screen for 32 frames
+	for (int i = 0; i < 32; i++)
+	{
+		setBrightness(3, -1 * i / 2);
+		swiWaitForVBlank();
+	}
+
+	// Wait 32 frames
+	for (int i = 0; i < 32; i++)
+	{
+		swiWaitForVBlank();
+	}
+
+	// Hide the backgroun
+	bgHide(bg3);
+	bgHide(bgsub3);
+
+	// Reset brightness 
+	setBrightness(3, 0);
+
 	keys = keysHeld();
 	scanKeys();
 
@@ -401,8 +432,6 @@ int settings(int choice)
 {
 	// Clear the top screen
 	oamClear(&oamMain, 0, 0);
-
-	vramSetBankC(VRAM_C_SUB_BG);
 
 	PrintConsole bottomScreen;
 	consoleInit(&bottomScreen, 0, BgType_Text4bpp, BgSize_T_256x256, 2, 0, false, true);
@@ -683,10 +712,13 @@ void seven_segment_draw(int index, int x, int y, int number)
 
 int main(void) 
 {
-	videoSetMode(MODE_0_2D);
-	videoSetModeSub(MODE_0_2D);
 
-	vramSetBankA(VRAM_A_MAIN_SPRITE);
+	videoSetMode(MODE_5_2D);
+	videoSetModeSub(MODE_5_2D);
+
+	vramSetBankA(VRAM_A_MAIN_BG);
+	vramSetBankB(VRAM_B_MAIN_SPRITE);
+	vramSetBankC(VRAM_C_SUB_BG);
 	vramSetBankD(VRAM_D_SUB_SPRITE);
 
 	oamInit(&oamMain, SpriteMapping_1D_128, false);
