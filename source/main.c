@@ -2,8 +2,6 @@
 #include <maxmod9.h>
 #include <stdio.h>
 #include <time.h>
-#include <nds/input.h>
-#include <nds/touch.h>
 
 // Grit headers
 #include "tiles.h"
@@ -28,7 +26,7 @@
 
 void draw_buttons(int buttons, int active, bool slide)
 {
-
+	// This is very messy currently, I will fix it later
 	if (slide)
 	{
 		for(int i = 0; i <= 234; i+=32)
@@ -399,15 +397,15 @@ int title_screen()
 		swiWaitForVBlank();
 	}
 
+	// Hide the backgroun
+	bgHide(bg3);
+	bgHide(bgsub3);
+
 	// Wait 32 frames
 	for (int i = 0; i < 32; i++)
 	{
 		swiWaitForVBlank();
 	}
-
-	// Hide the backgroun
-	bgHide(bg3);
-	bgHide(bgsub3);
 
 	// Reset brightness 
 	setBrightness(3, 0);
@@ -418,6 +416,7 @@ int title_screen()
 	oamClear(&oamSub, 0, 30);
 	oamUpdate(&oamSub);
 
+	// If L+R are being pressed, return an inflated difficulty
 	if (keys & KEY_R && keys & KEY_L)
 	{
 		return difficulty + 10;
@@ -706,6 +705,7 @@ void seven_segment_draw(int index, int x, int y, int number)
 			oamSet(&oamMain, index + 6, x - 6, y + 16, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[HORIZONTAL_LINE], -1, false, false, true, false, false);
 			break;
 		default:
+			// If the score is over 9, instead print the first digit of the score
 			seven_segment_draw(index, x, y, (number - (number % 10)) / 10);
 	}
 }
@@ -734,9 +734,6 @@ int main(void)
 
 	// Current key(s) being pressed
 	int keys = 0;
-
-	bool title_ready = false;
-	bool at_title = true;
 
 	int difficulty = 0;
 
@@ -767,47 +764,27 @@ int main(void)
 
 	mm_sound_effect sfx_boxsummon =
 	{
-		{SFX_BOX_SUMMON},	// id
-		(int)(1.0f * (1<<10)),	// rate
-		0,			// handle
-		255,			// volume
-		128,			// panning
+		{SFX_BOX_SUMMON}, (int)(1.0f * (1<<10)), 0, 255, 128
 	};
 
 	mm_sound_effect sfx_boom =
 	{
-		{SFX_BOOM},		// id
-		(int)(1.0f * (1<<10)),	// rate
-		0,			// handle
-		255,			// volume
-		128,			// panning
+		{SFX_BOOM}, (int)(1.0f * (1<<10)), 0, 255, 128
 	};
 
 	mm_sound_effect sfx_ping =
 	{
-		{SFX_PING},		// id
-		(int)(1.0f * (1<<10)),	// rate
-		0,			// handle
-		255,			// volume
-		128,			// panning
+		{SFX_PING}, (int)(1.0f * (1<<10)), 0, 255, 128
 	};
 
 	mm_sound_effect sfx_pong =
 	{
-		{SFX_PONG},		// id
-		(int)(1.0f * (1<<10)),	// rate
-		0,			// handle
-		255,			// volume
-		128,			// panning
+		{SFX_PONG}, (int)(1.0f * (1<<10)), 0, 255, 128
 	};
 
 	mm_sound_effect sfx_ballout =
 	{
-		{SFX_BALLOUT},		// id
-		(int)(1.0f * (1<<10)),	// rate
-		0,			// handle
-		255,			// volume
-		128,			// panning
+		{SFX_BALLOUT}, (int)(1.0f * (1<<10)), 0, 255, 128
 	};
 
 	// Frame of the explosion
@@ -815,6 +792,8 @@ int main(void)
 
 	bool ldead = false;
 	bool rdead = false;
+
+	// Scores
 	int lscore = 0;
 	int rscore = 0;
 
@@ -844,6 +823,12 @@ int main(void)
 
 	// Enter the title screen
 	difficulty = title_screen();
+
+	// If L+R were pressed at the title, activate the hidden paddle
+	if (difficulty > 9)
+	{
+		secretdiscovered = true;
+	}
 
 	void reset()
 	{
@@ -906,6 +891,7 @@ int main(void)
 	seven_segment_draw(20, 90, 10, 0);
 	seven_segment_draw(34, 140, 10, 0);
 
+	// Infinite loop that should never be broken out of
 	while (true) 
 	{
 		t++;
@@ -1215,6 +1201,7 @@ int main(void)
 			}
 		}
 
+		// Animate the explosion that appears when a player gets shot
 		for (int i = 0; i < 100 && (ldead || rdead); i++, swiWaitForVBlank())
 		{
 			switch(i)
@@ -1253,26 +1240,11 @@ int main(void)
 			{
 				rscore++;
 			}
-
 			if (rdead)
 			{
 				lscore++;
 			}
 
-			reset();
-		}
-
-		scanKeys();
-		keys = keysHeld();
-
-		if (!(keys & KEY_TOUCH) && !at_title)
-		{
-			title_ready = true;
-		}
-		else if (title_ready)
-		{
-
-			difficulty = title_screen();
 			reset();
 		}
 
@@ -1286,12 +1258,6 @@ int main(void)
 				scanKeys();
 				keys = keysHeld();
 			}
-		}
-
-		// If L+R were pressed at the title, activate the hidden paddle
-		if (difficulty > 9)
-		{
-			secretdiscovered = true;
 		}
 
 		// Write the changes to both screens
