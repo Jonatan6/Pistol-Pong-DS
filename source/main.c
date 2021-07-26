@@ -40,8 +40,8 @@ void draw_buttons(int buttons, int active, bool slide)
 			oamSet(&oamSub, 9, -256+32*3+i, 8, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[15], -1, false, false, false, false, false);
 			oamSet(&oamSub, 10, -256+32*4+i, 8, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[15], -1, false, false, false, false, false);
 			oamSet(&oamSub, 11, -256+32*5+i, 8, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[15], -1, false, false, false, false, false);
-			oamSet(&oamSub, 12, -256+32*6+i, 8, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[16], -1, false, false, false, false, false);
-			oamSet(&oamSub, 13, -256+32*7+i, 8, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[17], -1, false, false, false, false, false);
+			oamSet(&oamSub, 12, -256+32*6+i, 8, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[15], -1, false, false, false, false, false);
+			oamSet(&oamSub, 13, -256+32*7+i, 8, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[16], -1, false, false, false, false, false);
 
 			oamSet(&oamSub, 14, -256+32*0+i, 56, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
 			oamSet(&oamSub, 15, -256+32*1+i, 56, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
@@ -49,8 +49,8 @@ void draw_buttons(int buttons, int active, bool slide)
 			oamSet(&oamSub, 17, -256+32*3+i, 56, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
 			oamSet(&oamSub, 18, -256+32*4+i, 56, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
 			oamSet(&oamSub, 19, -256+32*5+i, 56, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
-			oamSet(&oamSub, 20, -256+32*6+i, 56, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[13], -1, false, false, false, false, false);
-			oamSet(&oamSub, 21, -256+32*7+i, 56, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[14], -1, false, false, false, false, false);
+			oamSet(&oamSub, 20, -256+32*6+i, 56, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+			oamSet(&oamSub, 21, -256+32*7+i, 56, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[13], -1, false, false, false, false, false);
 			
 			if (buttons == 3)
 			{
@@ -60,26 +60,26 @@ void draw_buttons(int buttons, int active, bool slide)
 				oamSet(&oamSub, 25, -256+32*3+i, 104, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
 				oamSet(&oamSub, 26, -256+32*4+i, 104, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
 				oamSet(&oamSub, 27, -256+32*5+i, 104, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
-				oamSet(&oamSub, 28, -256+32*6+i, 104, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[13], -1, false, false, false, false, false);
-				oamSet(&oamSub, 29, -256+32*7+i, 104, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[14], -1, false, false, false, false, false);
+				oamSet(&oamSub, 28, -256+32*6+i, 104, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+				oamSet(&oamSub, 29, -256+32*7+i, 104, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[13], -1, false, false, false, false, false);
 
-				oamSet(&oamSub, 0, -256+32*3+i, 16, 0, 0, SpriteSize_32x16, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[24], -1, false, false, false, false, false);
+				oamSet(&oamSub, 0, -256+32*3+i, 18, 0, 0, SpriteSize_32x16, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[24], -1, false, false, false, false, false);
 
-				oamSet(&oamSub, 1, 3-256+32*3+i, 68, 0, 0, SpriteSize_32x16, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[25], -1, false, false, false, false, false);
-				oamSet(&oamSub, 2, -256+32*4+i, 68, 0, 0, SpriteSize_32x16, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[26], -1, false, false, false, false, false);
+				oamSet(&oamSub, 1, 3-256+32*3+i, 66, 0, 0, SpriteSize_32x16, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[25], -1, false, false, false, false, false);
+				oamSet(&oamSub, 2, -256+32*4+i, 66, 0, 0, SpriteSize_32x16, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[26], -1, false, false, false, false, false);
 
-				oamSet(&oamSub, 3, -256+32*3+i, 116, 0, 0, SpriteSize_32x16, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[27], -1, false, false, false, false, false);
-				oamSet(&oamSub, 4, -256+32*4+i, 116, 0, 0, SpriteSize_32x16, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[28], -1, false, false, false, false, false);
+				oamSet(&oamSub, 3, -256+32*3+i, 114, 0, 0, SpriteSize_32x16, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[27], -1, false, false, false, false, false);
+				oamSet(&oamSub, 4, -256+32*4+i, 114, 0, 0, SpriteSize_32x16, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[28], -1, false, false, false, false, false);
 			}
 			else
 			{
-				oamSet(&oamSub, 0, -256+32*3+i, 16, 0, 0, SpriteSize_32x16, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[18], -1, false, false, false, false, false);
-				oamSet(&oamSub, 1, -256+32*4+i, 16, 0, 0, SpriteSize_32x16, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[19], -1, false, false, false, false, false);
-				oamSet(&oamSub, 2, -256+32*5+i, 16, 0, 0, SpriteSize_32x16, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[20], -1, false, false, false, false, false);
+				oamSet(&oamSub, 0, -256+32*3+i, 18, 0, 0, SpriteSize_32x16, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[21], -1, false, false, false, false, false);
+				oamSet(&oamSub, 1, -256+32*4+i, 18, 0, 0, SpriteSize_32x16, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[22], -1, false, false, false, false, false);
+				oamSet(&oamSub, 2, -256+32*5+i, 18, 0, 0, SpriteSize_32x16, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[23], -1, false, false, false, false, false);
 
-				oamSet(&oamSub, 3, -256+32*3+i, 68, 0, 0, SpriteSize_32x16, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[21], -1, false, false, false, false, false);
-				oamSet(&oamSub, 4, -256+32*4+i, 68, 0, 0, SpriteSize_32x16, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[22], -1, false, false, false, false, false);
-				oamSet(&oamSub, 5, -256+32*5+i, 68, 0, 0, SpriteSize_32x16, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[23], -1, false, false, false, false, false);
+				oamSet(&oamSub, 3, -256+32*3+i, 66, 0, 0, SpriteSize_32x16, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[18], -1, false, false, false, false, false);
+				oamSet(&oamSub, 4, -256+32*4+i, 66, 0, 0, SpriteSize_32x16, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[19], -1, false, false, false, false, false);
+				oamSet(&oamSub, 5, -256+32*5+i, 66, 0, 0, SpriteSize_32x16, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[20], -1, false, false, false, false, false);
 			}
 	
 			oamUpdate(&oamSub);
@@ -97,8 +97,8 @@ void draw_buttons(int buttons, int active, bool slide)
 				oamSet(&oamSub, 9, 32*3-32, 8, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[15], -1, false, false, false, false, false);
 				oamSet(&oamSub, 10, 32*4-32, 8, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[15], -1, false, false, false, false, false);
 				oamSet(&oamSub, 11, 32*5-32, 8, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[15], -1, false, false, false, false, false);
-				oamSet(&oamSub, 12, 32*6-32, 8, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[16], -1, false, false, false, false, false);
-				oamSet(&oamSub, 13, 32*7-32, 8, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[17], -1, false, false, false, false, false);
+				oamSet(&oamSub, 12, 32*6-32, 8, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[15], -1, false, false, false, false, false);
+				oamSet(&oamSub, 13, 32*7-32, 8, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[16], -1, false, false, false, false, false);
 
 				oamSet(&oamSub, 14, 32*0-32, 56, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
 				oamSet(&oamSub, 15, 32*1-32, 56, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
@@ -106,29 +106,19 @@ void draw_buttons(int buttons, int active, bool slide)
 				oamSet(&oamSub, 17, 32*3-32, 56, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
 				oamSet(&oamSub, 18, 32*4-32, 56, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
 				oamSet(&oamSub, 19, 32*5-32, 56, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
-				oamSet(&oamSub, 20, 32*6-32, 56, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[13], -1, false, false, false, false, false);
-				oamSet(&oamSub, 21, 32*7-32, 56, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[14], -1, false, false, false, false, false);
+				oamSet(&oamSub, 20, 32*6-32, 56, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+				oamSet(&oamSub, 21, 32*7-32, 56, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[13], -1, false, false, false, false, false);
 				
 				if (buttons == 3)
 				{
-					oamSet(&oamSub, 21, 32*0-32, 104, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
-					oamSet(&oamSub, 22, 32*1-32, 104, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
-					oamSet(&oamSub, 23, 32*2-32, 104, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
-					oamSet(&oamSub, 24, 32*3-32, 104, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
-					oamSet(&oamSub, 25, 32*4-32, 104, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
-					oamSet(&oamSub, 26, 32*5-32, 104, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
-					oamSet(&oamSub, 27, 32*6-32, 104, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[13], -1, false, false, false, false, false);
-					oamSet(&oamSub, 28, 32*7-32, 104, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[14], -1, false, false, false, false, false);
-				}
-				else
-				{
-					oamSet(&oamSub, 0, 32*3-32, 16, 0, 0, SpriteSize_32x16, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[18], -1, false, false, false, false, false);
-					oamSet(&oamSub, 1, 32*4-32, 16, 0, 0, SpriteSize_32x16, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[19], -1, false, false, false, false, false);
-					oamSet(&oamSub, 2, 32*5-32, 16, 0, 0, SpriteSize_32x16, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[20], -1, false, false, false, false, false);
-
-					oamSet(&oamSub, 3, 32*3-32, 68, 0, 0, SpriteSize_32x16, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[21], -1, false, false, false, false, false);
-					oamSet(&oamSub, 4, 32*4-32, 68, 0, 0, SpriteSize_32x16, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[22], -1, false, false, false, false, false);
-					oamSet(&oamSub, 5, 32*5-32, 68, 0, 0, SpriteSize_32x16, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[23], -1, false, false, false, false, false);
+					oamSet(&oamSub, 22, 32*0-32, 104, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+					oamSet(&oamSub, 23, 32*1-32, 104, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+					oamSet(&oamSub, 24, 32*2-32, 104, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+					oamSet(&oamSub, 25, 32*3-32, 104, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+					oamSet(&oamSub, 26, 32*4-32, 104, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+					oamSet(&oamSub, 27, 32*5-32, 104, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+					oamSet(&oamSub, 28, 32*6-32, 104, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+					oamSet(&oamSub, 29, 32*7-32, 104, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[13], -1, false, false, false, false, false);
 				}
 	
 
@@ -141,8 +131,8 @@ void draw_buttons(int buttons, int active, bool slide)
 				oamSet(&oamSub, 9, 32*3-32, 8, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
 				oamSet(&oamSub, 10, 32*4-32, 8, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
 				oamSet(&oamSub, 11, 32*5-32, 8, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
-				oamSet(&oamSub, 12, 32*6-32, 8, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[13], -1, false, false, false, false, false);
-				oamSet(&oamSub, 13, 32*7-32, 8, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[14], -1, false, false, false, false, false);
+				oamSet(&oamSub, 12, 32*6-32, 8, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+				oamSet(&oamSub, 13, 32*7-32, 8, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[13], -1, false, false, false, false, false);
 			
 				oamSet(&oamSub, 14, 32*0-32, 56, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[15], -1, false, false, false, false, false);
 				oamSet(&oamSub, 15, 32*1-32, 56, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[15], -1, false, false, false, false, false);
@@ -150,8 +140,8 @@ void draw_buttons(int buttons, int active, bool slide)
 				oamSet(&oamSub, 17, 32*3-32, 56, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[15], -1, false, false, false, false, false);
 				oamSet(&oamSub, 18, 32*4-32, 56, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[15], -1, false, false, false, false, false);
 				oamSet(&oamSub, 19, 32*5-32, 56, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[15], -1, false, false, false, false, false);
-				oamSet(&oamSub, 20, 32*6-32, 56, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[16], -1, false, false, false, false, false);
-				oamSet(&oamSub, 21, 32*7-32, 56, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[17], -1, false, false, false, false, false);
+				oamSet(&oamSub, 20, 32*6-32, 56, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[15], -1, false, false, false, false, false);
+				oamSet(&oamSub, 21, 32*7-32, 56, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[16], -1, false, false, false, false, false);
 
 				if (buttons == 3)
 				{
@@ -161,18 +151,8 @@ void draw_buttons(int buttons, int active, bool slide)
 					oamSet(&oamSub, 25, 32*3-32, 104, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
 					oamSet(&oamSub, 26, 32*4-32, 104, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
 					oamSet(&oamSub, 27, 32*5-32, 104, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
-					oamSet(&oamSub, 28, 32*6-32, 104, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[13], -1, false, false, false, false, false);
-					oamSet(&oamSub, 29, 32*7-32, 104, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[14], -1, false, false, false, false, false);
-				}
-				else
-				{
-					oamSet(&oamSub, 0, 32*3-32, 16, 0, 0, SpriteSize_32x16, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[18], -1, false, false, false, false, false);
-					oamSet(&oamSub, 1, 32*4-32, 16, 0, 0, SpriteSize_32x16, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[19], -1, false, false, false, false, false);
-					oamSet(&oamSub, 2, 32*5-32, 16, 0, 0, SpriteSize_32x16, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[20], -1, false, false, false, false, false);
-
-					oamSet(&oamSub, 3, 32*3-32, 68, 0, 0, SpriteSize_32x16, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[21], -1, false, false, false, false, false);
-					oamSet(&oamSub, 4, 32*4-32, 68, 0, 0, SpriteSize_32x16, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[22], -1, false, false, false, false, false);
-					oamSet(&oamSub, 5, 32*5-32, 68, 0, 0, SpriteSize_32x16, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[23], -1, false, false, false, false, false);
+					oamSet(&oamSub, 28, 32*6-32, 104, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+					oamSet(&oamSub, 29, 32*7-32, 104, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[13], -1, false, false, false, false, false);
 				}
 
 				oamUpdate(&oamSub);
@@ -184,8 +164,8 @@ void draw_buttons(int buttons, int active, bool slide)
 				oamSet(&oamSub, 9, 32*3-32, 8, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
 				oamSet(&oamSub, 10, 32*4-32, 8, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
 				oamSet(&oamSub, 11, 32*5-32, 8, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
-				oamSet(&oamSub, 12, 32*6-32, 8, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[13], -1, false, false, false, false, false);
-				oamSet(&oamSub, 13, 32*7-32, 8, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[14], -1, false, false, false, false, false);
+				oamSet(&oamSub, 12, 32*6-32, 8, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+				oamSet(&oamSub, 13, 32*7-32, 8, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[13], -1, false, false, false, false, false);
 
 				oamSet(&oamSub, 14, 32*0-32, 56, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
 				oamSet(&oamSub, 15, 32*1-32, 56, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
@@ -193,8 +173,8 @@ void draw_buttons(int buttons, int active, bool slide)
 				oamSet(&oamSub, 17, 32*3-32, 56, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
 				oamSet(&oamSub, 18, 32*4-32, 56, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
 				oamSet(&oamSub, 19, 32*5-32, 56, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
-				oamSet(&oamSub, 20, 32*6-32, 56, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[13], -1, false, false, false, false, false);
-				oamSet(&oamSub, 21, 32*7-32, 56, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[14], -1, false, false, false, false, false);
+				oamSet(&oamSub, 20, 32*6-32, 56, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+				oamSet(&oamSub, 21, 32*7-32, 56, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[13], -1, false, false, false, false, false);
 
 				if (buttons == 3)
 				{
@@ -204,18 +184,8 @@ void draw_buttons(int buttons, int active, bool slide)
 					oamSet(&oamSub, 25, 32*3-32, 104, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[15], -1, false, false, false, false, false);
 					oamSet(&oamSub, 26, 32*4-32, 104, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[15], -1, false, false, false, false, false);
 					oamSet(&oamSub, 27, 32*5-32, 104, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[15], -1, false, false, false, false, false);
-					oamSet(&oamSub, 28, 32*6-32, 104, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[16], -1, false, false, false, false, false);
-					oamSet(&oamSub, 29, 32*7-32, 104, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[17], -1, false, false, false, false, false);
-				}
-				else
-				{
-					oamSet(&oamSub, 0, 32*3-32, 16, 0, 0, SpriteSize_32x16, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[18], -1, false, false, false, false, false);
-					oamSet(&oamSub, 1, 32*4-32, 16, 0, 0, SpriteSize_32x16, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[19], -1, false, false, false, false, false);
-					oamSet(&oamSub, 2, 32*5-32, 16, 0, 0, SpriteSize_32x16, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[20], -1, false, false, false, false, false);
-
-					oamSet(&oamSub, 3, 32*3-32, 68, 0, 0, SpriteSize_32x16, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[21], -1, false, false, false, false, false);
-					oamSet(&oamSub, 4, 32*4-32, 68, 0, 0, SpriteSize_32x16, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[22], -1, false, false, false, false, false);
-					oamSet(&oamSub, 5, 32*5-32, 68, 0, 0, SpriteSize_32x16, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[23], -1, false, false, false, false, false);
+					oamSet(&oamSub, 28, 32*6-32, 104, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[15], -1, false, false, false, false, false);
+					oamSet(&oamSub, 29, 32*7-32, 104, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[16], -1, false, false, false, false, false);
 				}
 
 				oamUpdate(&oamSub);
@@ -235,6 +205,13 @@ int title_screen()
 
 	//touchPosition touch;
 	//touchRead(&touch);
+
+	// Fade in the screen for 32 frames
+	for (int i = 0; i < 32; i++)
+	{
+		setBrightness(3, i / 2 - 16);
+		swiWaitForVBlank();
+	}
 
 	singlebreak:
 
@@ -276,11 +253,11 @@ int title_screen()
 			{
 				if (active_button == 1)
 				{
-					goto triplebreak;
+					goto doublebreak;
 				}
 				else
 				{
-					goto doublebreak;
+					goto triplebreak;
 				}
 			}
 
@@ -349,10 +326,65 @@ int title_screen()
 
 	triplebreak:
 
+/*	active_button = 1;
+
+	draw_buttons(3, 1, true);
+
+	while (true)
+	{
+		while (keys & KEY_UP || keys & KEY_DOWN || keys & KEY_A)
+		{
+			keys = keysHeld();
+			scanKeys();
+			swiWaitForVBlank();
+		}
+
+		while (true)
+		{
+			keys = keysHeld();
+			scanKeys();
+
+			if (keys & KEY_UP)
+			{
+				if (active_button > 1)
+				{
+					active_button--;
+				}
+				draw_buttons(3, active_button, false);
+				break;
+			}
+			if (keys & KEY_DOWN)
+			{
+				if (active_button < 3)
+				{
+					active_button++;
+				}
+				draw_buttons(3, active_button, false);
+				break;
+			}
+			if (keys & KEY_A)
+			{
+				difficulty = active_button;
+				goto triplebreak;
+			}
+			if (keys & KEY_B)
+			{
+				oamClear(&oamSub, 16, 24);
+				oamUpdate(&oamSub);
+				goto singlebreak;
+			}
+
+			swiWaitForVBlank();
+
+		}
+
+		swiWaitForVBlank();
+	}
+*/
 	keys = keysHeld();
 	scanKeys();
 
-	oamClear(&oamSub, 0, 24);
+	oamClear(&oamSub, 0, 30);
 	oamUpdate(&oamSub);
 
 	if (keys & KEY_R && keys & KEY_L)
@@ -665,8 +697,6 @@ int main(void)
 	dmaCopy(tilesPal, SPRITE_PALETTE, sizeof(tilesPal));
 	dmaCopy(tilesPal, SPRITE_PALETTE_SUB, sizeof(tilesPal));
 
-	swiWaitForVBlank();
-
 	// Seed the rng with the current time
 	srand(time(0));
 
@@ -780,6 +810,9 @@ int main(void)
 
 	int settings_choices = 0;
 
+	// Enter the title screen
+	difficulty = title_screen();
+
 	void reset()
 	{
 		bulletlactivate = false;
@@ -818,8 +851,17 @@ int main(void)
 		y0 = bally;
 
 		// Draw the score of both playes
+
 		seven_segment_draw(20, 90 - (lscore > 9 ? 24 : 0), 10, lscore);
-		seven_segment_draw(27, 140 + (rscore > 9 ? 24 : 0), 10, rscore);
+		if (lscore > 9)
+		{
+			seven_segment_draw(28, 90, 10, lscore % 10);
+		}
+		seven_segment_draw(36, 140, 10, rscore);
+		if (rscore > 9)
+		{
+			seven_segment_draw(44, 164, 10, rscore % 10);
+		}
 	}
 
 	// This is the dotted line in the middle of the field... Yes, I am loading each and every line as a seperate sprite
@@ -830,7 +872,7 @@ int main(void)
 
 	// Draw the score of both playes
 	seven_segment_draw(20, 90, 10, 0);
-	seven_segment_draw(36, 140, 10, 0);
+	seven_segment_draw(34, 140, 10, 0);
 
 	while (true) 
 	{
@@ -1070,7 +1112,7 @@ int main(void)
 		oamSet(&oamMain, 3, bulletrx, bulletry, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[2], -1, false, rdead || ldead || !bulletractivate, true, false, false);
 
 		// The ball
-		oamSet(&oamMain, 6, ballx, bally, 0, 0, SpriteSize_16x8, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[0], -1, false, at_title, false, false, false);
+		oamSet(&oamMain, 6, ballx, bally, 0, 0, SpriteSize_16x8, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[0], -1, false, false, false, false, false);
 
 		// Switch statement to check settings
 		switch (settings_choices)
@@ -1185,18 +1227,6 @@ int main(void)
 				lscore++;
 			}
 
-			if (lscore > 9)
-			{
-				seven_segment_draw(28, 90, 10, lscore % 10);
-			}
-
-			seven_segment_draw(36, 140, 10, rscore);
-
-			if (rscore > 9)
-			{
-				seven_segment_draw(44, 164, 10, rscore % 10);
-			}
-
 			reset();
 		}
 
@@ -1209,15 +1239,8 @@ int main(void)
 		}
 		else if (title_ready)
 		{
-			title_ready = false;
-			at_title = true;
 
-			lscore = 0;
-			rscore = 0;
-
-			seven_segment_draw(20, 90, 10, 0);
-			seven_segment_draw(36, 140, 10, 0);
-
+			difficulty = title_screen();
 			reset();
 		}
 
@@ -1233,21 +1256,15 @@ int main(void)
 			}
 		}
 
-		// Write the changes to both screens
-		oamUpdate(&oamMain);
-		oamUpdate(&oamSub);
-
-		if (at_title)
-		{
-			difficulty = title_screen();
-			at_title = false;
-		}
-
 		// If L+R were pressed at the title, activate the hidden paddle
 		if (difficulty > 9)
 		{
 			secretdiscovered = true;
 		}
+
+		// Write the changes to both screens
+		oamUpdate(&oamMain);
+		oamUpdate(&oamSub);
 
 		// Wait until the next frame
 		swiWaitForVBlank();
