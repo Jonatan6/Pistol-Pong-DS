@@ -221,6 +221,7 @@ int title_screen()
 		swiWaitForVBlank();
 	}
 
+
 	// Start playing title screen music
 	mmStart(MOD_TITLE_SCREEN, MM_PLAY_LOOP);
 
@@ -427,7 +428,7 @@ int title_screen()
 	// Fade out the screen and the music for 32 frames
 	for (int i = 0; i < 32; i++)
 	{
-		setBrightness(3, -1 * i / 2);
+		setBrightness(3, -1 * i / 2 - 1);
 		mmSetModuleVolume(512 - i*16 - 32);
 
 		swiWaitForVBlank();
