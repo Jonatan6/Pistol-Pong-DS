@@ -221,6 +221,9 @@ int title_screen()
 		swiWaitForVBlank();
 	}
 
+	// Start playing title screen music
+	mmStart(MOD_TITLE_SCREEN, MM_PLAY_LOOP);
+
 	singlebreak:
 
 	draw_buttons(2, 1, true);
@@ -390,14 +393,16 @@ int title_screen()
 	}
 */
 
-	// Fade out the screen for 32 frames
+	// Fade out the screen and the music for 32 frames
 	for (int i = 0; i < 32; i++)
 	{
 		setBrightness(3, -1 * i / 2);
+		mmSetModuleVolume(1024 - i*32 - 32);
+
 		swiWaitForVBlank();
 	}
 
-	// Hide the backgroun
+	// Hide the background
 	bgHide(bg3);
 	bgHide(bgsub3);
 
@@ -762,6 +767,8 @@ int main(void)
 	mmLoadEffect(SFX_PONG);
 	mmLoadEffect(SFX_BALLOUT);
 
+	mmLoad(MOD_TITLE_SCREEN);
+
 	mm_sound_effect sfx_boxsummon =
 	{
 		{SFX_BOX_SUMMON}, (int)(1.0f * (1<<10)), 0, 255, 128
@@ -786,6 +793,7 @@ int main(void)
 	{
 		{SFX_BALLOUT}, (int)(1.0f * (1<<10)), 0, 255, 128
 	};
+
 
 	// Frame of the explosion
 	int explosion_frame = 0;
