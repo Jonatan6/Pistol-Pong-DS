@@ -224,6 +224,24 @@ int title_screen()
 	// Start playing title screen music
 	mmStart(MOD_TITLE_SCREEN, MM_PLAY_LOOP);
 
+	// Set volume to 512 (half)
+	mmSetModuleVolume(512);
+
+	mm_sound_effect sfx_move =
+	{
+		{SFX_MOVE}, (int)(1.0f * (1<<10)), 0, 255, 128
+	};
+
+	mm_sound_effect sfx_click =
+	{
+		{SFX_CLICK}, (int)(1.0f * (1<<10)), 0, 255, 128
+	};
+
+	mm_sound_effect sfx_clickb =
+	{
+		{SFX_CLICKB}, (int)(1.0f * (1<<10)), 0, 255, 128
+	};
+
 	singlebreak:
 
 	draw_buttons(2, 1, true);
@@ -247,7 +265,9 @@ int title_screen()
 				if (active_button > 1)
 				{
 					active_button--;
+					mmEffectEx(&sfx_move);
 				}
+
 				draw_buttons(2, active_button, false);
 				break;
 			}
@@ -255,13 +275,17 @@ int title_screen()
 			{
 				if (active_button < 2)
 				{
+					mmEffectEx(&sfx_move);
 					active_button++;
 				}
+
 				draw_buttons(2, active_button, false);
 				break;
 			}
 			if (keys & KEY_A)
 			{
+				mmEffectEx(&sfx_click);
+
 				if (active_button == 1)
 				{
 					goto doublebreak;
@@ -302,6 +326,7 @@ int title_screen()
 			{
 				if (active_button > 1)
 				{
+					mmEffectEx(&sfx_move);
 					active_button--;
 				}
 				draw_buttons(3, active_button, false);
@@ -311,6 +336,7 @@ int title_screen()
 			{
 				if (active_button < 3)
 				{
+					mmEffectEx(&sfx_move);
 					active_button++;
 				}
 				draw_buttons(3, active_button, false);
@@ -318,11 +344,15 @@ int title_screen()
 			}
 			if (keys & KEY_A)
 			{
+				mmEffectEx(&sfx_click);
+
 				difficulty = active_button;
 				goto triplebreak;
 			}
 			if (keys & KEY_B)
 			{
+				mmEffectEx(&sfx_clickb);
+
 				oamClear(&oamSub, 16, 24);
 				oamUpdate(&oamSub);
 				goto singlebreak;
@@ -397,7 +427,7 @@ int title_screen()
 	for (int i = 0; i < 32; i++)
 	{
 		setBrightness(3, -1 * i / 2);
-		mmSetModuleVolume(1024 - i*32 - 32);
+		mmSetModuleVolume(512 - i*16 - 32);
 
 		swiWaitForVBlank();
 	}
@@ -766,6 +796,9 @@ int main(void)
 	mmLoadEffect(SFX_PING);
 	mmLoadEffect(SFX_PONG);
 	mmLoadEffect(SFX_BALLOUT);
+	mmLoadEffect(SFX_MOVE);
+	mmLoadEffect(SFX_CLICK);
+	mmLoadEffect(SFX_CLICKB);
 
 	mmLoad(MOD_TITLE_SCREEN);
 
@@ -793,7 +826,6 @@ int main(void)
 	{
 		{SFX_BALLOUT}, (int)(1.0f * (1<<10)), 0, 255, 128
 	};
-
 
 	// Frame of the explosion
 	int explosion_frame = 0;
