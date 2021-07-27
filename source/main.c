@@ -243,6 +243,7 @@ int title_screen()
 	};
 
 	singlebreak:
+	active_button = 1;
 
 	draw_buttons(2, 1, true);
 
