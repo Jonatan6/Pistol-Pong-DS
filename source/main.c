@@ -201,15 +201,13 @@ int title_screen()
 
 	int keys = keysHeld();
 
-	int bg3 = bgInit(3, BgType_Bmp8, BgSize_B8_256x256, 1, 0);
-	dmaCopy(bgTiles, bgGetGfxPtr(bg3), sizeof(bgTiles));
+	int bg3 = bgInit(3, BgType_Bmp8, BgSize_B8_256x256, 0, 0);
+	dmaCopy(bgBitmap, bgGetGfxPtr(bg3), sizeof(bgBitmap));
 	dmaCopy(bgPal, BG_PALETTE, sizeof(bgPal));
-	bgWrapOff(bg3);
 
-	int bgsub3 = bgInitSub(3, BgType_Bmp8, BgSize_B8_256x256, 2, 0);
-	dmaCopy(bgsubTiles, bgGetGfxPtr(bgsub3), sizeof(bgsubTiles));
+	int bgsub3 = bgInitSub(3, BgType_Bmp8, BgSize_B8_256x256, 0, 0);
+	dmaCopy(bgsubBitmap, bgGetGfxPtr(bgsub3), sizeof(bgsubBitmap));
 	dmaCopy(bgsubPal, BG_PALETTE_SUB, sizeof(bgsubPal));
-	bgWrapOff(bgsub3);
 
 	//touchPosition touch;
 	//touchRead(&touch);
@@ -220,7 +218,6 @@ int title_screen()
 		setBrightness(3, i / 2 - 16);
 		swiWaitForVBlank();
 	}
-
 
 	// Start playing title screen music
 	mmStart(MOD_TITLE_SCREEN, MM_PLAY_LOOP);
