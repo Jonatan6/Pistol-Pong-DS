@@ -24,14 +24,14 @@
 #define FRAMES_BEFORE_SPEEDUP 2880
 #define FRAMES_BEFORE_MYSTERYBOX 500
 
-void draw_buttons(int buttons, int active, bool slide)
+void draw_buttons(int buttons, int active, int slide)
 {
 	// This is very messy currently, I will fix it later
-	if (slide)
+	if (slide == 1)
 	{
 		for(int i = 0; i <= 234; i+=32)
 		{
-
+			// Clear all sprites used
 			oamClear(&oamSub, 0, 30);
 
 			oamSet(&oamSub, 6, -256+32*0+i, 8, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[15], -1, false, false, false, false, false);
@@ -86,7 +86,7 @@ void draw_buttons(int buttons, int active, bool slide)
 			swiWaitForVBlank();
 		}
 	}
-	else
+	else if (slide == 0)
 	{
 		switch(active)
 		{
@@ -192,6 +192,89 @@ void draw_buttons(int buttons, int active, bool slide)
 				break;
 		}
 	}
+	else if (slide == 2)
+	{
+		for(int j = 0; j < 8; j++)
+		{
+			int i;
+
+			if (j == 0)
+			{
+				i = 234;
+			}
+			if (j < 4)
+			{
+				i+=4;
+			}
+			else
+			{
+				i-=4;
+			}
+
+			if (active == 1)
+			{
+				oamSet(&oamSub, 6, -256+32*0+i, 8, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[15], -1, false, false, false, false, false);
+				oamSet(&oamSub, 7, -256+32*1+i, 8, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[15], -1, false, false, false, false, false);
+				oamSet(&oamSub, 8, -256+32*2+i, 8, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[15], -1, false, false, false, false, false);
+				oamSet(&oamSub, 9, -256+32*3+i, 8, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[15], -1, false, false, false, false, false);
+				oamSet(&oamSub, 10, -256+32*4+i, 8, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[15], -1, false, false, false, false, false);
+				oamSet(&oamSub, 11, -256+32*5+i, 8, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[15], -1, false, false, false, false, false);
+				oamSet(&oamSub, 12, -256+32*6+i, 8, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[15], -1, false, false, false, false, false);
+				oamSet(&oamSub, 13, -256+32*7+i, 8, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[16], -1, false, false, false, false, false);
+
+				if (buttons == 3)
+				{
+					oamSet(&oamSub, 0, -256+32*3+i, 18, 0, 0, SpriteSize_32x16, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[24], -1, false, false, false, false, false);
+				}
+				else
+				{
+					oamSet(&oamSub, 0, -256+32*3+i, 18, 0, 0, SpriteSize_32x16, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[21], -1, false, false, false, false, false);
+					oamSet(&oamSub, 1, -256+32*4+i, 18, 0, 0, SpriteSize_32x16, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[22], -1, false, false, false, false, false);
+					oamSet(&oamSub, 2, -256+32*5+i, 18, 0, 0, SpriteSize_32x16, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[23], -1, false, false, false, false, false);
+				}
+			}
+			else if (active == 2)
+			{
+				oamSet(&oamSub, 14, -256+32*0+i, 56, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+				oamSet(&oamSub, 15, -256+32*1+i, 56, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+				oamSet(&oamSub, 16, -256+32*2+i, 56, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+				oamSet(&oamSub, 17, -256+32*3+i, 56, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+				oamSet(&oamSub, 18, -256+32*4+i, 56, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+				oamSet(&oamSub, 19, -256+32*5+i, 56, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+				oamSet(&oamSub, 20, -256+32*6+i, 56, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+				oamSet(&oamSub, 21, -256+32*7+i, 56, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[13], -1, false, false, false, false, false);
+
+				if (buttons == 3)
+				{
+					oamSet(&oamSub, 1, 3-256+32*3+i, 66, 0, 0, SpriteSize_32x16, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[25], -1, false, false, false, false, false);
+					oamSet(&oamSub, 2, -256+32*4+i, 66, 0, 0, SpriteSize_32x16, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[26], -1, false, false, false, false, false);
+				}
+				else
+				{
+					oamSet(&oamSub, 3, -256+32*3+i, 66, 0, 0, SpriteSize_32x16, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[18], -1, false, false, false, false, false);
+					oamSet(&oamSub, 4, -256+32*4+i, 66, 0, 0, SpriteSize_32x16, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[19], -1, false, false, false, false, false);
+					oamSet(&oamSub, 5, -256+32*5+i, 66, 0, 0, SpriteSize_32x16, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[20], -1, false, false, false, false, false);
+				}
+			}
+			else if (active == 3)
+			{
+				oamSet(&oamSub, 22, -256+32*0+i, 104, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+				oamSet(&oamSub, 23, -256+32*1+i, 104, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+				oamSet(&oamSub, 24, -256+32*2+i, 104, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+				oamSet(&oamSub, 25, -256+32*3+i, 104, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+				oamSet(&oamSub, 26, -256+32*4+i, 104, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+				oamSet(&oamSub, 27, -256+32*5+i, 104, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+				oamSet(&oamSub, 28, -256+32*6+i, 104, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[12], -1, false, false, false, false, false);
+				oamSet(&oamSub, 29, -256+32*7+i, 104, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[13], -1, false, false, false, false, false);
+
+				oamSet(&oamSub, 3, -256+32*3+i, 114, 0, 0, SpriteSize_32x16, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[27], -1, false, false, false, false, false);
+				oamSet(&oamSub, 4, -256+32*4+i, 114, 0, 0, SpriteSize_32x16, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[28], -1, false, false, false, false, false);
+			}
+			
+			oamUpdate(&oamSub);
+			swiWaitForVBlank();
+		}
+	}
 }
 
 int title_screen()
@@ -285,6 +368,8 @@ int title_screen()
 			{
 				mmEffectEx(&sfx_click);
 
+				draw_buttons(2, active_button, 2);
+
 				if (active_button == 1)
 				{
 					goto doublebreak;
@@ -343,6 +428,8 @@ int title_screen()
 			}
 			if (keys & KEY_A)
 			{
+				draw_buttons(3, active_button, 2);
+
 				mmEffectEx(&sfx_click);
 
 				difficulty = active_button;
@@ -421,6 +508,9 @@ int title_screen()
 		swiWaitForVBlank();
 	}
 */
+	// Clear all sprites used
+	oamClear(&oamSub, 0, 30);
+	oamUpdate(&oamSub);
 
 	// Fade out the screen and the music for 32 frames
 	for (int i = 0; i < 32; i++)
@@ -446,9 +536,6 @@ int title_screen()
 
 	keys = keysHeld();
 	scanKeys();
-
-	oamClear(&oamSub, 0, 30);
-	oamUpdate(&oamSub);
 
 	// If L+R are being pressed, return an inflated difficulty
 	if (keys & KEY_R && keys & KEY_L)
