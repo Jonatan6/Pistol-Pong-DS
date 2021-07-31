@@ -357,21 +357,12 @@ int title_screen()
 	dmaCopy(bgsubBitmap, bgGetGfxPtr(bgsub3), sizeof(bgsubBitmap));
 	dmaCopy(bgsubPal, BG_PALETTE_SUB, sizeof(bgsubPal));
 
-	//touchPosition touch;
-	//touchRead(&touch);
+	// Sound effect stuff
+	mmLoadEffect(SFX_MOVE);
+	mmLoadEffect(SFX_CLICK);
+	mmLoadEffect(SFX_CLICKB);
 
-	// Fade in the screen for 32 frames
-	for (int i = 0; i < 32; i++)
-	{
-		setBrightness(3, i / 2 - 16);
-		swiWaitForVBlank();
-	}
-
-	// Start playing title screen music
-	mmStart(MOD_TITLE_SCREEN, MM_PLAY_LOOP);
-
-	// Set volume to 512 (half)
-	mmSetModuleVolume(512);
+	mmLoad(MOD_TITLE_SCREEN);
 
 	mm_sound_effect sfx_move =
 	{
@@ -387,6 +378,22 @@ int title_screen()
 	{
 		{SFX_CLICKB}, (int)(1.0f * (1<<10)), 0, 255, 128
 	};
+
+	// Start playing title screen music
+	mmStart(MOD_TITLE_SCREEN, MM_PLAY_LOOP);
+
+	// Set volume to 512 (half)
+	mmSetModuleVolume(512);
+
+	/*touchPosition touch;
+	touchRead(&touch);*/
+
+	// Fade in the screen for 32 frames
+	for (int i = 0; i < 32; i++)
+	{
+		setBrightness(3, i / 2 - 16);
+		swiWaitForVBlank();
+	}
 
 	singlebreak:
 	active_button = 1;
@@ -898,10 +905,8 @@ void seven_segment_draw(int index, int x, int y, int number)
 
 void mystery_boxes(int time)
 {
-
 	// Sound effect stuff
 	mmLoadEffect(SFX_BOX_SUMMON);
-
 	mm_sound_effect sfx_boxsummon =
 	{
 		{SFX_BOX_SUMMON}, (int)(1.0f * (1<<10)), 0, 255, 128
@@ -946,6 +951,74 @@ void mystery_boxes(int time)
 	}
 }
 
+void magic_balls(int time)
+{
+	// Rotate the spheres 1° every frame
+	oamRotateScale(&oamMain, 0, degreesToAngle(time), intToFixed(1, 8), intToFixed(1, 8));
+
+	oamSet(&oamMain, 51, 120, 40, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[9], 0, true, false, false, false, false);
+	oamSet(&oamMain, 52, 120, 120, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[9], 0, true, false, false, false, false);
+}
+
+void ballout_moment()
+{
+	// Sound effect stuff
+	mmLoadEffect(SFX_BALLOUT);
+	mm_sound_effect sfx_ballout =
+	{
+		{SFX_BALLOUT}, (int)(1.0f * (1<<10)), 0, 255, 128
+	};
+
+	for (int i = 0; ballout && i < 100; i++, swiWaitForVBlank())
+	{
+		if (i == 0)
+		{
+			mmEffectEx(&sfx_ballout);
+		}
+	}
+}
+
+void explode_moment()
+{
+	// Sound effect stuff
+	mmLoadEffect(SFX_BOOM);
+	mm_sound_effect sfx_boom =
+	{
+		{SFX_BOOM}, (int)(1.0f * (1<<10)), 0, 255, 128
+	};
+
+	for (int i = 0; i < 100 && (ldead || rdead); i++, swiWaitForVBlank())
+		{
+			switch(i)
+			{
+				case 5:
+					mmEffectEx(&sfx_boom);
+					explosion_frame++;
+					break;
+				case 10:
+					explosion_frame++;
+					break;
+				case 15:
+				case 20:
+				case 25:
+					explosion_frame--;
+					break;
+			}
+
+			if (ldead)
+			{
+				oamSet(&oamMain, 4, 0, paddlely, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[explosion_frame+3], -1, false, explosion_frame < 0, false, false, false);
+			}
+
+			if (rdead)
+			{
+				oamSet(&oamMain, 5, 225, paddlery, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[explosion_frame+3], -1, false, explosion_frame < 0, true, false, false);
+			}
+
+			oamUpdate(&oamMain);
+		}
+}
+
 int main(void) 
 {
 
@@ -967,20 +1040,8 @@ int main(void)
 
 	// Misc. sound effect stuff
 	mmInitDefaultMem((mm_addr)soundbank_bin);
-	mmLoadEffect(SFX_BOOM);
 	mmLoadEffect(SFX_PING);
 	mmLoadEffect(SFX_PONG);
-	mmLoadEffect(SFX_BALLOUT);
-	mmLoadEffect(SFX_MOVE);
-	mmLoadEffect(SFX_CLICK);
-	mmLoadEffect(SFX_CLICKB);
-
-	mmLoad(MOD_TITLE_SCREEN);
-
-	mm_sound_effect sfx_boom =
-	{
-		{SFX_BOOM}, (int)(1.0f * (1<<10)), 0, 255, 128
-	};
 
 	mm_sound_effect sfx_ping =
 	{
@@ -990,11 +1051,6 @@ int main(void)
 	mm_sound_effect sfx_pong =
 	{
 		{SFX_PONG}, (int)(1.0f * (1<<10)), 0, 255, 128
-	};
-
-	mm_sound_effect sfx_ballout =
-	{
-		{SFX_BALLOUT}, (int)(1.0f * (1<<10)), 0, 255, 128
 	};
 
 	// Seed the rng with the current time
@@ -1324,60 +1380,20 @@ int main(void)
 				break;
 			// Magic shperes
 			case 2:
-				// Rotate the spheres 1° every frame
-				oamRotateScale(&oamMain, 0, degreesToAngle(tt), intToFixed(1, 8), intToFixed(1, 8));
-
-				oamSet(&oamMain, 51, 120, 40, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[9], 0, true, false, false, false, false);
-				oamSet(&oamMain, 52, 120, 120, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[9], 0, true, false, false, false, false);
+				magic_balls(tt);
 				break;
 			// Both boxes and shperes
 			case 3:
-				oamRotateScale(&oamMain, 0, degreesToAngle(tt), intToFixed(1, 8), intToFixed(1, 8));
-
-				oamSet(&oamMain, 51, 120, 40, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[9], 0, true, false, false, false, false);
-				oamSet(&oamMain, 52, 120, 120, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[9], 0, true, false, false, false, false);
+				mystery_boxes(tt);
+				magic_balls(tt);
 				break;
 		}
 
-		for (int i = 0; ballout && i < 100; i++, swiWaitForVBlank())
-		{
-			if (i == 0)
-			{
-				mmEffectEx(&sfx_ballout);
-			}
-		}
+		// When the ball goes out of bounds, play a sound effect and wait 100 frames
+		ballout_moment();
 
 		// Animate the explosion that appears when a player gets shot
-		for (int i = 0; i < 100 && (ldead || rdead); i++, swiWaitForVBlank())
-		{
-			switch(i)
-			{
-				case 5:
-					mmEffectEx(&sfx_boom);
-					explosion_frame++;
-					break;
-				case 10:
-					explosion_frame++;
-					break;
-				case 15:
-				case 20:
-				case 25:
-					explosion_frame--;
-					break;
-			}
-
-			if (ldead)
-			{
-				oamSet(&oamMain, 4, 0, paddlely, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[explosion_frame+3], -1, false, explosion_frame < 0, false, false, false);
-			}
-
-			if (rdead)
-			{
-				oamSet(&oamMain, 5, 225, paddlery, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[explosion_frame+3], -1, false, explosion_frame < 0, true, false, false);
-			}
-
-			oamUpdate(&oamMain);
-		}
+		explode_moment();
 
 		if (ldead || rdead || ballout)
 		{
