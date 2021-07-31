@@ -24,6 +24,71 @@
 #define FRAMES_BEFORE_SPEEDUP 2880
 #define FRAMES_BEFORE_MYSTERYBOX 500
 
+#define BALLXSTART 123
+#define BALLYSTART 92
+
+// Current key(s) being pressed
+int keys = 0;
+
+int difficulty = 0;
+
+// Becomes true when the left bullet gets fired
+bool bulletlactivate = false;
+// Becomes true when the right bullet gets fired
+bool bulletractivate = false;
+
+// X postions of the paddles
+int paddlely = 80;
+int paddlery = 80;
+
+// Postions of the ball
+int ballx = BALLXSTART;
+int bally = BALLYSTART;
+
+// Positions of the bullets
+int bulletlx = 0;
+int bulletrx = 225;	
+int bulletly = 0;
+int bulletry = 0;
+
+// Frame of the explosion
+int explosion_frame = 0;
+
+// True if player 1 has been shot
+bool ldead = false;
+// True if player 2 has been shot
+bool rdead = false;
+
+// True if ball went out of bounds
+bool ballout = false;
+
+// Scores
+int lscore = 0;
+int rscore = 0;
+
+// Change this stupid name later
+int megacorp = 0;
+int gigacorpx = 0;
+int gigacorpy = 0;
+
+// Was L+R were pressed at the title?
+bool secretdiscovered = false;
+
+// The time (increments every frame)
+int t = 0;
+// The true time (increments every frame, but doesn't get reset)
+int tt = 0;
+
+// Velocity of the ball
+float vx = 0;
+float vy =0;
+
+// Start position of the ball
+int x0 = BALLXSTART;
+int y0 = BALLYSTART;
+
+int settings_choices = 0;
+
 void draw_buttons(int buttons, int active, int slide)
 {
 	// This is very messy currently, I will fix it later
@@ -831,6 +896,56 @@ void seven_segment_draw(int index, int x, int y, int number)
 	}
 }
 
+void mystery_boxes(int time)
+{
+
+	// Sound effect stuff
+	mmLoadEffect(SFX_BOX_SUMMON);
+
+	mm_sound_effect sfx_boxsummon =
+	{
+		{SFX_BOX_SUMMON}, (int)(1.0f * (1<<10)), 0, 255, 128
+	};
+
+	if (megacorp < 1)
+	{
+		megacorp = rand() % FRAMES_BEFORE_MYSTERYBOX + FRAMES_BEFORE_MYSTERYBOX/2 + time;
+		gigacorpx = rand() % (256 - 128) + 64;
+		gigacorpy = rand() % (128 - 64) + 32;
+	}
+	else if (megacorp <= time)
+	{
+		// Rotate the box 0.5° every frame
+		oamRotateScale(&oamMain, 0, degreesToAngle(time/2), intToFixed(1, 8), intToFixed(1, 8));
+
+		oamSet(&oamMain, 52, gigacorpx, gigacorpy, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[10], 0, true, false, false, false, false);
+		oamSet(&oamMain, 51, gigacorpx+16, gigacorpy+16, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[11], -1, false, false, false, false, false);
+
+		if (megacorp == time)
+		{
+			mmEffectEx(&sfx_boxsummon);
+		}
+		// L gets item
+		else if (bulletlx > gigacorpx - 8 && bulletlx < gigacorpx + 24 && bulletly > gigacorpy - 8 && bulletly < gigacorpy + 24)
+		{
+			megacorp = 0;
+			oamClear(&oamMain, 51, 52);
+
+			bulletlx = 225;
+			bulletlactivate = false;
+		}
+		// R gets item
+		else if (bulletrx > gigacorpx - 8 && bulletrx < gigacorpx + 24 && bulletry > gigacorpy - 8 && bulletry < gigacorpy + 24)
+		{
+			megacorp = 0;
+			oamClear(&oamMain, 51, 52);
+
+			bulletrx = 0;
+			bulletractivate = false;
+		}
+	}
+}
+
 int main(void) 
 {
 
@@ -850,34 +965,8 @@ int main(void)
 	dmaCopy(tilesPal, SPRITE_PALETTE, sizeof(tilesPal));
 	dmaCopy(tilesPal, SPRITE_PALETTE_SUB, sizeof(tilesPal));
 
-	// Seed the rng with the current time
-	srand(time(0));
-
-	// Current key(s) being pressed
-	int keys = 0;
-
-	int difficulty = 0;
-
-	bool bulletlactivate = false;
-	bool bulletractivate = false;
-
-	// Postion of the paddles
-	int paddlely = 80;
-	int paddlery = 80;
-
-	// Postion of the balls
-	int ballx = 123;
-	int bally = 92;
-
-	// Position of the bullets
-	int bulletlx = 0;
-	int bulletrx = 225;	
-	int bulletly = 0;
-	int bulletry = 0;
-
 	// Misc. sound effect stuff
 	mmInitDefaultMem((mm_addr)soundbank_bin);
-	mmLoadEffect(SFX_BOX_SUMMON);
 	mmLoadEffect(SFX_BOOM);
 	mmLoadEffect(SFX_PING);
 	mmLoadEffect(SFX_PONG);
@@ -887,11 +976,6 @@ int main(void)
 	mmLoadEffect(SFX_CLICKB);
 
 	mmLoad(MOD_TITLE_SCREEN);
-
-	mm_sound_effect sfx_boxsummon =
-	{
-		{SFX_BOX_SUMMON}, (int)(1.0f * (1<<10)), 0, 255, 128
-	};
 
 	mm_sound_effect sfx_boom =
 	{
@@ -913,39 +997,8 @@ int main(void)
 		{SFX_BALLOUT}, (int)(1.0f * (1<<10)), 0, 255, 128
 	};
 
-	// Frame of the explosion
-	int explosion_frame = 0;
-
-	bool ldead = false;
-	bool rdead = false;
-
-	// Scores
-	int lscore = 0;
-	int rscore = 0;
-
-	bool ballout = false;
-
-	// Megacorp. Change name later
-	int megacorp = 0;
-	int gigacorpx = 0;
-	int gigacorpy = 0;
-
-	// Was L+R were pressed at the title?
-	bool secretdiscovered = false;
-
-	// The time (increments every frame)
-	int t = 0;
-	// The true time (increments every frame, but doesn't get reset)
-	int tt = 0;
-
-	float vx = (float)(rand() % 2 * 2 - 1);
-	float vy = (float)(rand() % 2 * 2 - 1);
-
-	// Start position of the ball
-	int x0 = ballx;
-	int y0 = bally;
-
-	int settings_choices = 0;
+	// Seed the rng with the current time
+	srand(time(0));
 
 	// Enter the title screen
 	difficulty = title_screen();
@@ -1006,6 +1059,10 @@ int main(void)
 			seven_segment_draw(44, 164, 10, rscore % 10);
 		}
 	}
+
+	// Set value of vx and vy to either or 1 or -1
+	vx = (float)(rand() % 2 * 2 - 1);
+	vy = (float)(rand() % 2 * 2 - 1);
 
 	// This is the dotted line in the middle of the field... Yes, I am loading each and every line as a seperate sprite
 	for(int i=7, f=4; i != 19; i++, f+=16)
@@ -1263,44 +1320,7 @@ int main(void)
 		{
 			// Mystery boxes
 			case 1:
-				if (megacorp < 1)
-				{
-					megacorp = rand() % FRAMES_BEFORE_MYSTERYBOX + FRAMES_BEFORE_MYSTERYBOX/2 + tt;
-					gigacorpx = rand() % (256 - 128) + 64;
-					gigacorpy = rand() % (128 - 64) + 32;
-				}
-				else if (megacorp <= tt)
-				{
-					// Rotate the box 0.5° every frame
-					oamRotateScale(&oamMain, 0, degreesToAngle(tt/2), intToFixed(1, 8), intToFixed(1, 8));
-
-					oamSet(&oamMain, 52, gigacorpx, gigacorpy, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[10], 0, true, false, false, false, false);
-					oamSet(&oamMain, 51, gigacorpx+16, gigacorpy+16, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[11], -1, false, false, false, false, false);
-
-					if (megacorp == tt)
-					{
-						mmEffectEx(&sfx_boxsummon);
-					}
-					// L gets item
-					else if (bulletlx > gigacorpx - 8 && bulletlx < gigacorpx + 24 && bulletly > gigacorpy - 8 && bulletly < gigacorpy + 24)
-					{
-						megacorp = 0;
-						oamClear(&oamMain, 51, 52);
-
-						bulletlx = 225;
-						bulletlactivate = false;
-					}
-					// R gets item
-					else if (bulletrx > gigacorpx - 8 && bulletrx < gigacorpx + 24 && bulletry > gigacorpy - 8 && bulletry < gigacorpy + 24)
-					{
-						megacorp = 0;
-						oamClear(&oamMain, 51, 52);
-
-						bulletrx = 0;
-						bulletractivate = false;
-					}
-				}
-
+				mystery_boxes(tt);
 				break;
 			// Magic shperes
 			case 2:
