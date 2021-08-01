@@ -27,9 +27,15 @@
 #define BALLXSTART 123
 #define BALLYSTART 92
 
+#define PADDLEYSTART 80
+
+#define PLAYER1X 0
+#define PLAYER2X 225
+
 // Current key(s) being pressed
 int keys = 0;
 
+// The current difficulty (0 is multiplayer, 1 is easy, 2 is normal, and 3 is hard)
 int difficulty = 0;
 
 // Becomes true when the left bullet gets fired
@@ -38,16 +44,16 @@ bool bulletlactivate = false;
 bool bulletractivate = false;
 
 // X postions of the paddles
-int paddlely = 80;
-int paddlery = 80;
+int paddlely = PADDLEYSTART;
+int paddlery = PADDLEYSTART;
 
 // Postions of the ball
 int ballx = BALLXSTART;
 int bally = BALLYSTART;
 
 // Positions of the bullets
-int bulletlx = 0;
-int bulletrx = 225;	
+int bulletlx = PLAYER1X;
+int bulletrx = PLAYER2X;	
 int bulletly = 0;
 int bulletry = 0;
 
@@ -89,9 +95,81 @@ int y0 = BALLYSTART;
 
 int settings_choices = 0;
 
+void reset()
+{
+	bulletlactivate = false;
+	bulletractivate = false;
+
+	ballx = BALLXSTART;
+	bally = BALLYSTART;
+
+	bulletlx = PLAYER1X;
+	bulletrx = PLAYER2X;	
+	bulletly = 0;
+	bulletry = 0;
+
+	paddlely = PADDLEYSTART;
+	paddlery = PADDLEYSTART;
+
+	ldead = false;
+	rdead = false;
+
+	explosion_frame = 0;
+
+	ballout = false;
+
+	megacorp = 0;
+	gigacorpx = 0;
+	gigacorpy = 0;
+
+	// Kill all the sound effects
+	mmStop();
+
+	t = 0;
+	tt = 0;
+	vx = (float)(rand() % 2 * 2 - 1);
+	vy = (float)(rand() % 2 * 2 - 1);
+	x0 = BALLXSTART;
+	y0 = BALLYSTART;
+}
+
+void init_everything()
+{
+	// Set video modes
+	videoSetMode(MODE_5_2D);
+	videoSetModeSub(MODE_5_2D);
+
+	// Set vram banks
+	vramSetBankA(VRAM_A_MAIN_BG);
+	vramSetBankB(VRAM_B_MAIN_SPRITE);
+	vramSetBankC(VRAM_C_SUB_BG);
+	vramSetBankD(VRAM_D_SUB_SPRITE);
+
+	// Initialize the sprite engine
+	oamInit(&oamMain, SpriteMapping_1D_128, false);
+	oamInit(&oamSub, SpriteMapping_1D_128, false);
+
+	// Initialize the sprite tiles
+	initTiles(&tiles, (u8*)tilesTiles);
+
+	// Copy the palette to both the main screen and the sub screen
+	dmaCopy(tilesPal, SPRITE_PALETTE, sizeof(tilesPal));
+	dmaCopy(tilesPal, SPRITE_PALETTE_SUB, sizeof(tilesPal));
+
+	// Initialize maxmod
+	mmInitDefaultMem((mm_addr)soundbank_bin);
+
+	// Seed the rng with the current time
+	srand(time(0));
+
+	// Set value of vx and vy to either or 1 or -1
+	vx = (float)(rand() % 2 * 2 - 1);
+	vy = (float)(rand() % 2 * 2 - 1);
+}
+
+// This function is very messy, I will fix it later
 void draw_buttons(int buttons, int active, int slide)
 {
-	// This is very messy currently, I will fix it later
 	if (slide == 1)
 	{
 		for(int i = 0; i <= 234; i+=32)
@@ -609,15 +687,14 @@ int title_screen()
 	keys = keysHeld();
 	scanKeys();
 
-	// If L+R are being pressed, return an inflated difficulty
+	// If L+R are being pressed, activate the hidden paddle
 	if (keys & KEY_R && keys & KEY_L)
 	{
-		return difficulty + 10;
+		secretdiscovered = true;
 	}
-	else
-	{
-		return difficulty;
-	}
+
+	// Return the difficulty (will be 0 if multiplayer was chosen)
+	return difficulty;
 }
 
 int settings(int choice)
@@ -903,6 +980,247 @@ void seven_segment_draw(int index, int x, int y, int number)
 	}
 }
 
+// Runs various checks to make sure that nothing is out of place
+void check_legitimacy()
+{
+	// Sound effect stuff
+	mmLoadEffect(SFX_PING);
+	mmLoadEffect(SFX_PONG);
+
+	mm_sound_effect sfx_ping =
+	{
+		{SFX_PING}, (int)(1.0f * (1<<10)), 0, 255, 128
+	};
+
+	mm_sound_effect sfx_pong =
+	{
+		{SFX_PONG}, (int)(1.0f * (1<<10)), 0, 255, 128
+	};
+
+	// Check if the ball hits the wall
+	if (bally > 182 || bally < 0)
+	{
+		vy = -vy;
+		x0 = ballx;
+		y0 = bally;
+		t = 0;
+
+		mmEffectEx(&sfx_pong);
+	}
+
+	// Check if the ball hits a player
+	if (((ballx < 9 && ballx > 0 && bally > paddlely - 12 && bally < paddlely + 34) || (ballx > 228 && ballx < 237 && bally > paddlery - 12 && bally < paddlery + 34)) && t > 5)
+	{
+		if (ballx < 9)
+		{
+			vy = vy + ((float)bally - (float)paddlely) / 32;
+			vx = -(vx);
+		}
+		else
+		{
+			vy = -vy + ((float)bally - (float)paddlery) / 32;
+			vx = -(vx);
+		}
+
+		x0 = ballx;
+		y0 = bally;
+		t = 0;
+
+		mmEffectEx(&sfx_ping);
+	}
+
+	if (ballx < -16)
+	{
+		rscore++;
+		ballout = true;
+	}
+	else if (ballx > 256)
+	{
+		lscore++;
+		ballout = true;
+	}
+
+	// Check if the bullet belonging to player 1 is not out of bounds
+	if (bulletlx < 256 && bulletlactivate)
+	{
+		bulletlx = bulletlx + 2;
+	}
+	else
+	{
+		bulletlx = 0;
+		bulletlactivate = false;
+		bulletly = paddlely;
+	}
+
+	// Check if the bullet belonging to player 2 is not out of bounds
+	if (bulletrx > -16 && bulletractivate)
+	{
+		bulletrx = bulletrx - 2;
+	}
+	else
+	{
+		bulletrx = 230;
+		bulletractivate = false;
+		bulletry = paddlery;
+	}
+
+	// Check if player 1 has been shot
+	if (bulletrx == 0 && bulletry > paddlely - 16 && bulletry < paddlely + 20)
+	{
+		ldead = true;
+	}
+
+	// Check if player 2 has been shot
+	if (bulletlx == 230 && bulletly > paddlery - 16 && bulletly < paddlery + 20)
+	{
+		rdead = true;
+	}
+}
+
+void check_player_input()
+{
+	scanKeys();
+	keys = keysHeld();
+
+	if (keys & KEY_UP)
+	{
+		if (paddlely > 0)
+		{
+			paddlely = paddlely - 2;
+		}
+
+		if (bulletly > 0 && !bulletlactivate)
+		{
+			bulletly--;
+		}
+	}
+
+	if (keys & KEY_RIGHT)
+	{
+		bulletlactivate = true;
+	}
+
+	if (keys & KEY_DOWN)
+	{
+		if (paddlely < 159)
+		{
+			paddlely = paddlely + 2;
+		}
+
+		if (bulletly < 159 && !bulletlactivate)
+		{
+			bulletly++;
+		}
+	}
+}
+
+void check_cpu_input()
+{
+	switch(difficulty)
+	{
+		case 0:
+			if (keys & KEY_X)
+			{
+				if (paddlery > 0)
+				{
+					paddlery = paddlery - 2;
+				}
+				if (bulletly >= 1 && !bulletractivate)
+				{
+					bulletry++;
+				}
+			}
+
+			if (keys & KEY_Y)
+			{
+				bulletractivate = true;
+			}
+
+			if (keys & KEY_B)
+			{
+				if (paddlery < 159)
+				{
+					paddlery = paddlery + 2;
+				}
+
+				if (bulletry < 159 && !bulletractivate)
+				{
+					bulletry++;
+				}
+			}
+			break;
+		case 1:
+			if (vx < 0)
+			{
+				if (paddlery > PADDLEYSTART)
+				{
+					paddlery--;
+				}
+				else if (paddlery < PADDLEYSTART)
+				{
+					paddlery++;
+				}
+			}
+			else if (bally > paddlery + 16 && paddlery < 159)
+			{
+				paddlery = paddlery + (1 + rand() % 2);
+			}
+			else if (bally < paddlery + 16 && paddlery > 0)
+			{
+				paddlery = paddlery - (1 + rand() % 2);
+			}
+			break;
+		case 2:
+			if (vx < 0)
+			{
+				if (paddlery > PADDLEYSTART)
+				{
+					paddlery--;
+				}
+				else if (paddlery < PADDLEYSTART)
+				{
+					paddlery++;
+				}
+			}
+			else if (bally > paddlery + 16 && paddlery < 159)
+			{
+				paddlery = paddlery + 2;
+			}
+			else if (bally < paddlery + 16 && paddlery > 0)
+			{
+				paddlery = paddlery - 2;
+			}
+
+			if (rand() % 360 == 0)
+			{
+				bulletractivate = true;
+			}
+			break;
+		case 3:
+			if (vx < 0)
+			{
+				if (paddlery > PADDLEYSTART)
+				{
+					paddlery--;
+				}
+				else if (paddlery < PADDLEYSTART)
+				{
+					paddlery++;
+				}
+			}
+			else if (bally > paddlery + 16 && paddlery < 159)
+			{
+				paddlery = paddlery + 2;
+			}
+			else if (bally < paddlery + 16 && paddlery > 0)
+			{
+				paddlery = paddlery - 2;
+			}
+			bulletractivate = true;
+			break;
+	}
+}
+
 void mystery_boxes(int time)
 {
 	// Sound effect stuff
@@ -936,7 +1254,7 @@ void mystery_boxes(int time)
 			megacorp = 0;
 			oamClear(&oamMain, 51, 52);
 
-			bulletlx = 225;
+			bulletlx = PLAYER1X;
 			bulletlactivate = false;
 		}
 		// R gets item
@@ -945,7 +1263,7 @@ void mystery_boxes(int time)
 			megacorp = 0;
 			oamClear(&oamMain, 51, 52);
 
-			bulletrx = 0;
+			bulletrx = PLAYER2X;
 			bulletractivate = false;
 		}
 	}
@@ -1007,12 +1325,12 @@ void explode_moment()
 
 			if (ldead)
 			{
-				oamSet(&oamMain, 4, 0, paddlely, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[explosion_frame+3], -1, false, explosion_frame < 0, false, false, false);
+				oamSet(&oamMain, 4, PLAYER1X, paddlely, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[explosion_frame+3], -1, false, explosion_frame < 0, false, false, false);
 			}
 
 			if (rdead)
 			{
-				oamSet(&oamMain, 5, 225, paddlery, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[explosion_frame+3], -1, false, explosion_frame < 0, true, false, false);
+				oamSet(&oamMain, 5, PLAYER2X, paddlery, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[explosion_frame+3], -1, false, explosion_frame < 0, true, false, false);
 			}
 
 			oamUpdate(&oamMain);
@@ -1021,106 +1339,12 @@ void explode_moment()
 
 int main(void) 
 {
-
-	videoSetMode(MODE_5_2D);
-	videoSetModeSub(MODE_5_2D);
-
-	vramSetBankA(VRAM_A_MAIN_BG);
-	vramSetBankB(VRAM_B_MAIN_SPRITE);
-	vramSetBankC(VRAM_C_SUB_BG);
-	vramSetBankD(VRAM_D_SUB_SPRITE);
-
-	oamInit(&oamMain, SpriteMapping_1D_128, false);
-	oamInit(&oamSub, SpriteMapping_1D_128, false);
-
-	initTiles(&tiles, (u8*)tilesTiles);
-
-	dmaCopy(tilesPal, SPRITE_PALETTE, sizeof(tilesPal));
-	dmaCopy(tilesPal, SPRITE_PALETTE_SUB, sizeof(tilesPal));
-
-	// Misc. sound effect stuff
-	mmInitDefaultMem((mm_addr)soundbank_bin);
-	mmLoadEffect(SFX_PING);
-	mmLoadEffect(SFX_PONG);
-
-	mm_sound_effect sfx_ping =
-	{
-		{SFX_PING}, (int)(1.0f * (1<<10)), 0, 255, 128
-	};
-
-	mm_sound_effect sfx_pong =
-	{
-		{SFX_PONG}, (int)(1.0f * (1<<10)), 0, 255, 128
-	};
-
-	// Seed the rng with the current time
-	srand(time(0));
+	init_everything();
 
 	// Enter the title screen
 	difficulty = title_screen();
 
-	// If L+R were pressed at the title, activate the hidden paddle
-	if (difficulty > 9)
-	{
-		secretdiscovered = true;
-	}
-
-	void reset()
-	{
-		bulletlactivate = false;
-		bulletractivate = false;
-
-		ballx = 123;
-		bally = 92;
-
-		bulletlx = 0;
-		bulletrx = 225;	
-		bulletly = 0;
-		bulletry = 0;
-
-		paddlely = 80;
-		paddlery = 80;
-
-		ldead = false;
-		rdead = false;
-
-		explosion_frame = 0;
-
-		ballout = false;
-
-		megacorp = 0;
-		gigacorpx = 0;
-		gigacorpy = 0;
-
-		// Kill all the sound effects
-		mmStop();
-
-		t = 0;
-		tt = 0;
-		vx = (float)(rand() % 2 * 2 - 1);
-		vy = (float)(rand() % 2 * 2 - 1);
-		x0 = ballx;
-		y0 = bally;
-
-		// Draw the score of both playes
-
-		seven_segment_draw(20, 90 - (lscore > 9 ? 24 : 0), 10, lscore);
-		if (lscore > 9)
-		{
-			seven_segment_draw(28, 90, 10, lscore % 10);
-		}
-		seven_segment_draw(36, 140, 10, rscore);
-		if (rscore > 9)
-		{
-			seven_segment_draw(44, 164, 10, rscore % 10);
-		}
-	}
-
-	// Set value of vx and vy to either or 1 or -1
-	vx = (float)(rand() % 2 * 2 - 1);
-	vy = (float)(rand() % 2 * 2 - 1);
-
-	// This is the dotted line in the middle of the field... Yes, I am loading each and every line as a seperate sprite
+	// Draw the dotted line in the middle of the field
 	for(int i=7, f=4; i != 19; i++, f+=16)
 	{
 		oamSet(&oamMain, i, 123, f, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[0], -1, false, false, false, false, false);
@@ -1133,232 +1357,39 @@ int main(void)
 	// Infinite loop that should never be broken out of
 	while (true) 
 	{
+		// Increment both the time and the "true time™"
 		t++;
 		tt++;
 
 		ballx = (tt < FRAMES_BEFORE_SPEEDUP) ? (x0 + vx * t) : (x0 + vx * t * tt / FRAMES_BEFORE_SPEEDUP);
 		bally = (tt < FRAMES_BEFORE_SPEEDUP) ? (y0 + vy * t) : (y0 + vy * t * tt / FRAMES_BEFORE_SPEEDUP);
 
-		if (vx < 0) vx = vx - 0.0004;
-		if (vx > 0) vx = vx + 0.0004;
-
-		if (vy < 0) vx = vx - 0.0004;
-		if (vy > 0) vy = vy + 0.0004;
-
-		if (bally > 182 || bally < 0)
+		if (vx < 0)
 		{
-			vy = -vy;
-			x0 = ballx;
-			y0 = bally;
-			t = 0;
-
-			mmEffectEx(&sfx_pong);
+			vx = vx - 0.0004;
+		}
+		else if (vx > 0)
+		{
+			vx = vx + 0.0004;
 		}
 
-		if (((ballx < 9 && ballx > 0 && bally > paddlely - 12 && bally < paddlely + 34) || (ballx > 228 && ballx < 237 && bally > paddlery - 12 && bally < paddlery + 34)) && t > 5)
+		if (vy < 0)
 		{
-			if (ballx < 9)
-			{
-				vy = vy + ((float)bally - (float)paddlely) / 32;
-				vx = -(vx);
-			}
-			else
-			{
-				vy = -vy + ((float)bally - (float)paddlery) / 32;
-				vx = -(vx);
-			}
-
-			x0 = ballx;
-			y0 = bally;
-			t = 0;
-
-			mmEffectEx(&sfx_ping);
+			vx = vx - 0.0004;
+		}
+		else if (vy > 0)
+		{
+			vy = vy + 0.0004;
 		}
 
-		if (ballx < -16)
-		{
-			rscore++;
-			ballout = true;
-		}
-		else if (ballx > 256)
-		{
-			lscore++;
-			ballout = true;
-		}
+		// Check for any oddities
+		check_legitimacy();
 
-		// Check if the bullet belonging to player 1 is out of bounds
-		if (bulletlx < 256 && bulletlactivate)
-		{
-			bulletlx = bulletlx + 2;
-		}
-		else
-		{
-			bulletlx = 0;
-			bulletlactivate = false;
-			bulletly = paddlely;
-		}
+		// Check if player 1 has moved their paddle or fired their pistol
+		check_player_input();
 
-		// Check if the bullet belonging to player 2 is out of bounds
-		if (bulletrx > -16 && bulletractivate)
-		{
-			bulletrx = bulletrx - 2;
-		}
-		else
-		{
-			bulletrx = 230;
-			bulletractivate = false;
-			bulletry = paddlery;
-		}
-
-		// Check if player 1 has been shot
-		if (bulletrx == 0 && bulletry > paddlely - 16 && bulletry < paddlely + 20)
-		{
-			ldead = true;
-		}
-
-		// Check if player 2 has been shot
-		if (bulletlx == 230 && bulletly > paddlery - 16 && bulletly < paddlery + 20)
-		{
-			rdead = true;
-		}
-
-		scanKeys();
-		keys = keysHeld();
-
-		if (keys & KEY_UP)
-		{
-			if (paddlely > 0)
-			{
-				paddlely = paddlely - 2;
-			}
-
-			if (bulletly > 0 && !bulletlactivate)
-			{
-				bulletly--;
-			}
-		}
-
-		if (keys & KEY_RIGHT)
-		{
-			bulletlactivate = true;
-		}
-
-		if (keys & KEY_DOWN)
-		{
-			if (paddlely < 159)
-			{
-				paddlely = paddlely + 2;
-			}
-
-			if (bulletly < 159 && !bulletlactivate)
-			{
-				bulletly++;
-			}
-		}
-
-		switch(difficulty % 10)
-		{
-			case 0:
-				if (keys & KEY_X)
-				{
-					if (paddlery > 0)
-					{
-						paddlery = paddlery - 2;
-					}
-					if (bulletly >= 1 && !bulletractivate)
-					{
-						bulletry++;
-					}
-				}
-
-				if (keys & KEY_Y)
-				{
-					bulletractivate = true;
-				}
-
-				if (keys & KEY_B)
-				{
-					if (paddlery < 159)
-					{
-						paddlery = paddlery + 2;
-					}
-
-					if (bulletry < 159 && !bulletractivate)
-					{
-						bulletry++;
-					}
-				}
-				break;
-			case 1:
-				if (vx < 0)
-				{
-					if (paddlery > 80)
-					{
-						paddlery--;
-					}
-					else if (paddlery < 80)
-					{
-						paddlery++;
-					}
-				}
-				else if (bally > paddlery + 16 && paddlery < 159)
-				{
-					paddlery = paddlery + (1 + rand() % 2);
-				}
-				else if (bally < paddlery + 16 && paddlery > 0)
-				{
-					paddlery = paddlery - (1 + rand() % 2);
-				}
-				break;
-			case 2:
-				if (vx < 0)
-				{
-					if (paddlery > 80)
-					{
-						paddlery--;
-					}
-					else if (paddlery < 80)
-					{
-						paddlery++;
-					}
-				}
-				else if (bally > paddlery + 16 && paddlery < 159)
-				{
-					paddlery = paddlery + 2;
-				}
-				else if (bally < paddlery + 16 && paddlery > 0)
-				{
-					paddlery = paddlery - 2;
-				}
-
-				if (rand() % 360 == 0)
-				{
-					bulletractivate = true;
-				}
-				break;
-			case 3:
-				if (vx < 0)
-				{
-					if (paddlery > 80)
-					{
-						paddlery--;
-					}
-					else if (paddlery < 80)
-					{
-						paddlery++;
-					}
-				}
-				else if (bally > paddlery + 16 && paddlery < 159)
-				{
-					paddlery = paddlery + 2;
-				}
-				else if (bally < paddlery + 16 && paddlery > 0)
-				{
-					paddlery = paddlery - 2;
-				}
-				bulletractivate = true;
-				break;
-		}
+		// Check if player 2 has moved their paddle or fired their pistol
+		check_cpu_input();
 
 		// The paddles
 		oamSet(&oamMain, 0, 0, paddlely, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[secretdiscovered], -1, false, ldead, false, false, false);
@@ -1392,7 +1423,7 @@ int main(void)
 		// When the ball goes out of bounds, play a sound effect and wait 100 frames
 		ballout_moment();
 
-		// Animate the explosion that appears when a player gets shot
+		// When a player gets shot, play a sound effect and animate the explosion for 100 frames 
 		explode_moment();
 
 		if (ldead || rdead || ballout)
@@ -1407,7 +1438,20 @@ int main(void)
 				lscore++;
 			}
 
+			// Reset everything (almost)
 			reset();
+
+			// Draw the score of both playes
+			seven_segment_draw(20, 90 - (lscore > 9 ? 24 : 0), 10, lscore);
+			if (lscore > 9)
+			{
+				seven_segment_draw(28, 90, 10, lscore % 10);
+			}
+			seven_segment_draw(36, 140, 10, rscore);
+			if (rscore > 9)
+			{
+				seven_segment_draw(44, 164, 10, rscore % 10);
+			}
 		}
 
 		if (keys & KEY_SELECT || keys & KEY_START)
