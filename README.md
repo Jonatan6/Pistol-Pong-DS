@@ -1,5 +1,6 @@
 # Pistol Pong DS
-![screenshot](https://i.imgur.com/a2jxjvi.png)
+![titlescreen](https://i.imgur.com/PysIzrE.png)
+![ingame](https://i.imgur.com/a2jxjvi.png)
 
 Pistol Pong DS is a game for the Nintendo DS, 
 based on the classic game pong, but it has a twist, **there's guns**!
@@ -28,7 +29,7 @@ When you have that installed, follow these steps:
 2. Type `cd Pistol-Pong-DS`
 3. Type `make`
 
-*note that you need to have mingw installed if you want to compile on Windows*
+*Note that you need to have mingw installed if you want to compile on Windows*
 
 ## License
 
@@ -39,7 +40,7 @@ more information can be found in the LICENSE document or online [here](https://w
 ### Graphics and sound effects
 All of the graphics (and most of the sound effects) were created by me and are therefore licensed under the aforementioned license, the GPL.
 Some of the sound effects were not created by me and because of that I can't control how they're licensed.
-The sound effects in question  can be found inside the `music` folder, titled:
+The sound effects in question can be found inside the `music` folder, titled:
 * box_summon.wav
 * powerup.wav
 
