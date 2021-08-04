@@ -3,11 +3,6 @@
 #include <stdio.h>
 #include <time.h>
 
-bool is_odd(n)
-{
-	return n%2;
-}
-
 // Grit headers
 #include "tiles.h"
 #include "tilessub.h"
