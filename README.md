@@ -1,6 +1,6 @@
 # Pistol Pong DS
-![titlescreen](https://i.imgur.com/PysIzrE.png)
-![ingame](https://i.imgur.com/a2jxjvi.png)
+<img src="https://i.imgur.com/PysIzrE.png" alt="Title screen" width="378"/>
+<img src="https://i.imgur.com/a2jxjvi.png" alt="Ongoing game" width="378"/>
 
 Pistol Pong DS is a game for the Nintendo DS, 
 based on the classic game pong, but it has a twist, **there's guns**!
