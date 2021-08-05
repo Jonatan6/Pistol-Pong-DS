@@ -99,6 +99,8 @@ int y0 = BALLYSTART;
 
 // The mystery boxes effects (0 is deactivated, 1 is activated by player 1, 2 is activated bt player 2)
 int mystery_box_effect = 0;
+// True if player 2 has shot a mystery box
+int r_has_effect = 0;
 
 void reset()
 {
@@ -1247,6 +1249,7 @@ void check_cpu_input()
 void get_mystery_box_effect(bool player1)
 {
 	mystery_box_effect = rand() % 4 + 1;
+	r_has_effect = !player1;
 
 	// Sound effect stuff
 	mmLoadEffect(SFX_POWERUP);
@@ -1418,7 +1421,7 @@ int bullet_offset(int effect)
 			return 5;
 		default:
 			return 2;
-	}
+		}
 }
 
 int main(void) 
@@ -1462,12 +1465,12 @@ int main(void)
 		check_cpu_input();
 
 		// Draw the paddles
-		oamSet(&oamMain, 0, 0, paddlely, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[paddle_offset(mystery_box_effect)], -1, false, ldead, false, false, false);
-		oamSet(&oamMain, 1, 225, paddlery, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[paddle_offset(mystery_box_effect)], -1, false, rdead, true, false, false);
+		oamSet(&oamMain, 0, 0, paddlely, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[paddle_offset((!r_has_effect) ? mystery_box_effect : 0)], -1, false, ldead, false, false, false);
+		oamSet(&oamMain, 1, 225, paddlery, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[paddle_offset((r_has_effect) ? mystery_box_effect : 0)], -1, false, rdead, true, false, false);
 
 		// Draw the bullets
-		oamSet(&oamMain, 2, bulletlx, bulletly, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[bullet_offset(mystery_box_effect)], -1, false, rdead || ldead || !bulletlactivate, false, false, false);
-		oamSet(&oamMain, 3, bulletrx, bulletry, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[bullet_offset(mystery_box_effect)], -1, false, rdead || ldead || !bulletractivate, true, false, false);
+		oamSet(&oamMain, 2, bulletlx, bulletly, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[bullet_offset((!r_has_effect) ? mystery_box_effect : 0)], -1, false, rdead || ldead || !bulletlactivate, false, false, false);
+		oamSet(&oamMain, 3, bulletrx, bulletry, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[bullet_offset((r_has_effect) ? mystery_box_effect : 0)], -1, false, rdead || ldead || !bulletractivate, true, false, false);
 
 		// Draw the ball
 		oamSet(&oamMain, 6, ballx, bally, 0, 0, SpriteSize_16x8, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[0], -1, false, false, false, false, false);
