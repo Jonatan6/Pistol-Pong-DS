@@ -102,6 +102,9 @@ int mystery_box_effect = 0;
 // True if player 2 has shot a mystery box
 int r_has_effect = 0;
 
+// The button that's gray (anything over 7 is none)
+int gray_button = 8;
+
 void reset()
 {
 	bulletlactivate = false;
@@ -346,7 +349,7 @@ void draw_options(int active, bool slide)
 			// Draw small arrows
 			for (int j = 0; j < 8; j++)
 			{
-				oamSet(&oamSub, j, -256 + 64 + ((j < 4) ? 120 : 0) + 32 + i, 4 + j % 4 * 40, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tilessub.sprite_gfx_mem[4], -1, false, false, j < 4, false, false);
+				oamSet(&oamSub, j, -256 + 64 + (j < 4 ? 120 : 0) + 32 + i, 4 + j % 4 * 40, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tilessub.sprite_gfx_mem[4 + !(gray_button - j)], -1, false, false, j < 4, false, false);
 			}
 
 			oamUpdate(&oamSub);
@@ -373,7 +376,7 @@ void draw_options(int active, bool slide)
 		// Draw small arrows
 		for (int j = 0; j < 8; j++)
 		{
-			oamSet(&oamSub, j, 64 + ((j < 4) ? 120 : 0), 4 + j%4*40, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tilessub.sprite_gfx_mem[4], -1, false, false, j < 4, false, false);
+			oamSet(&oamSub, j, 64 + (j < 4 ? 120 : 0), 4 + j%4*40, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tilessub.sprite_gfx_mem[4 + !(gray_button - j)], -1, false, false, j < 4, false, false);
 		}
 
 		oamUpdate(&oamSub);
@@ -407,6 +410,7 @@ int title_screen()
 {
 	int difficulty = 0;
 	int active_button = 1;
+	int button_stage = 0;
 
 	// Initiate the main background
 	int bg3 = bgInit(3, BgType_Bmp8, BgSize_B8_256x256, 0, 0);
@@ -587,11 +591,14 @@ int title_screen()
 	// Reset button position
 	active_button = 1;
 
-	// Draw options
+	// Draw options (with sliding effect)
 	draw_options(active_button, true);
 
 	while (true)
 	{
+		// Redraw options (with no sliding effect)
+		draw_options(active_button, false);
+
 		// Stay in while loop until nothing is pressed
 		while (keys & KEY_UP || keys & KEY_DOWN || keys & KEY_LEFT || keys & KEY_RIGHT || keys & KEY_A)
 		{
@@ -611,7 +618,6 @@ int title_screen()
 				{
 					active_button--;
 				}
-				draw_options(active_button, false);
 				break;
 			}
 			if (keys & KEY_DOWN)
@@ -620,45 +626,42 @@ int title_screen()
 				{
 					active_button++;
 				}
-				draw_options(active_button, false);
 				break;
 			}
 			if (keys & KEY_LEFT)
 			{
-				switch (active_button)
+				if (button_stage > -2)
 				{
-					case 1:
-						if (settings_choices <= 3 && settings_choices >= 1)
-						{
-							settings_choices--;
-						}
-						break;
-					case 2:
-						if (settings_choices <= 3 && settings_choices >= 2)
-						{
-							settings_choices-=2;
-						}
-						break;
+					button_stage--;
+
+					if (button_stage > -2)
+					{
+						gray_button = (active_button - 1) + 4;
+					}
+					else
+					{
+						gray_button = 8;
+					}
 				}
+
 				break;
 			}
 			if (keys & KEY_RIGHT)
 			{
-				switch (active_button)
+				if (button_stage < 2)
 				{
-					case 1:
-						if (settings_choices <= 2 && settings_choices >= 0)
-						{
-							settings_choices++;
-						}
-						break;
-					case 2:
-						if (settings_choices <= 2 && settings_choices >= 1)
-						{
-							settings_choices+=2;
-						}
-						break;
+					button_stage++;
+
+					if (button_stage < 2)
+					{
+						gray_button = (active_button - 1);						
+					}
+					else
+					{
+						gray_button = 8;
+					}
 				}
+
 				break;
 			}
 			if (keys & KEY_A)
