@@ -21,7 +21,7 @@ player (sharing the DS).
 **Multiplayer works like this:**
 
 * Player 1 control their paddle by pressing up and down on the dpad, and fires their gun by pressing right on the dpad
-* Player 2 control their paddle by pressing <kbd>X<kbd/> to go up and <kbd>B<kbd/> to go down, and fires their gun by pressing <kbd>Y<kbd/>
+* Player 2 control their paddle by pressing <kbd>X</kbd> to go up and <kbd>B</kbd> to go down, and fires their gun by pressing <kbd>Y</kbd>
 * If a player gets shot or misses the ball, the opposing player gains one point
 
 ## Compiling
