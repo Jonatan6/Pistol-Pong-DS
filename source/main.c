@@ -614,7 +614,7 @@ int title_screen()
 	while (true)
 	{
 		// Redraw options (without sliding effect)
-		draw_options(4, active_button, false);
+		draw_buttons(4, active_button, false);
 
 		// Stay in while loop until nothing is pressed
 		while (keys & KEY_UP || keys & KEY_DOWN || keys & KEY_LEFT || keys & KEY_RIGHT || keys & KEY_A)
