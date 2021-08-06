@@ -1,7 +1,11 @@
-#include <nds.h>
-#include <maxmod9.h>
+// Standard headers
 #include <stdio.h>
 #include <time.h>
+#include <stdbool.h>
+
+// Devkitpro headers
+#include <nds.h>
+#include <maxmod9.h>
 
 // Grit headers
 #include "tiles.h"
@@ -178,10 +182,77 @@ void init_everything()
 	vy = (float)(rand() % 2 * 2 - 1);
 }
 
+void draw_options(int active, bool slide)
+{
+	if (slide)
+	{
+		for (int i = 0; i <= 234; i+=32)
+		{
+			// Clear all sprites used
+			oamClear(&oamSub, 0, 0);
+
+			// Draw wide planks
+			for (int j = 0; j < 32; j++)
+			{
+				oamSet(&oamSub, 12 + j, -256 + 32 * (j % 8) + i, 4 + j / 8 * 40, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tilessub.sprite_gfx_mem[!((j + 1) % 8) + ((active == 1 + j / 8) ? 2 : 0)], -1, false, false, false, false, false);
+			}
+
+			// Draw text
+			for (int j = 0; j < 4; j++)
+			{
+				oamSet(&oamSub, 8 + j, -256 + 32 + i, j * 40 + 12, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tilessub.sprite_gfx_mem[17], -1, false, false, false, false, false);
+			}
+
+			// Draw small arrows
+			for (int j = 0; j < 8; j++)
+			{
+				oamSet(&oamSub, j, -256 + 64 + (j < 4 ? 120 : 0) + 32 + i, 4 + j % 4 * 40, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tilessub.sprite_gfx_mem[4 + !(gray_button - j)], -1, false, false, j < 4, false, false);
+			}
+
+			oamUpdate(&oamSub);
+			swiWaitForVBlank();
+		}
+	}
+	else
+	{
+		// Clear all sprites used
+		oamClear(&oamSub, 0, 0);
+
+		// Draw wide planks
+		for (int j = 0; j < 32; j++)
+		{
+			oamSet(&oamSub, 12 + j, 32 * (j % 8) - 32, 4 + j / 8 * 40, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tilessub.sprite_gfx_mem[!((j+1)%8) + ((active == 1+j/8) ? 2 : 0)], -1, false, false, false, false, false);
+		}
+
+		// Draw text
+		for (int j = 0; j < 4; j++)
+		{
+			oamSet(&oamSub, 8 + j, 0, j * 40 + 12, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tilessub.sprite_gfx_mem[17], -1, false, false, false, false, false);
+		}
+
+		// Draw small arrows
+		for (int j = 0; j < 8; j++)
+		{
+			oamSet(&oamSub, j, 64 + (j < 4 ? 120 : 0), 4 + j%4*40, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tilessub.sprite_gfx_mem[4 + !(gray_button - j)], -1, false, false, j < 4, false, false);
+		}
+
+		oamUpdate(&oamSub);
+		swiWaitForVBlank();
+	}
+
+	oamUpdate(&oamSub);
+}
+
 // This function is very messy, I will fix it later
 void draw_buttons(int buttons, int active, int slide)
 {
-	if (slide == 1)
+
+	if (buttons == 4)
+	{
+		draw_options(active, slide);
+	}
+
+	else if (slide == 1)
 	{
 		for(int i = 0; i <= 234; i+=32)
 		{
@@ -324,68 +395,6 @@ void draw_buttons(int buttons, int active, int slide)
 	}
 }
 
-// TODO: merge this function with draw_buttons()
-void draw_options(int active, bool slide)
-{
-	if (slide)
-	{
-		for (int i = 0; i <= 234; i+=32)
-		{
-			// Clear all sprites used
-			oamClear(&oamSub, 0, 0);
-
-			// Draw wide planks
-			for (int j = 0; j < 32; j++)
-			{
-				oamSet(&oamSub, 12 + j, -256 + 32 * (j % 8) + i, 4 + j / 8 * 40, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tilessub.sprite_gfx_mem[!((j + 1) % 8) + ((active == 1 + j / 8) ? 2 : 0)], -1, false, false, false, false, false);
-			}
-
-			// Draw text
-			for (int j = 0; j < 4; j++)
-			{
-				oamSet(&oamSub, 8 + j, -256 + 32 + i, j * 40 + 12, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tilessub.sprite_gfx_mem[17], -1, false, false, false, false, false);
-			}
-
-			// Draw small arrows
-			for (int j = 0; j < 8; j++)
-			{
-				oamSet(&oamSub, j, -256 + 64 + (j < 4 ? 120 : 0) + 32 + i, 4 + j % 4 * 40, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tilessub.sprite_gfx_mem[4 + !(gray_button - j)], -1, false, false, j < 4, false, false);
-			}
-
-			oamUpdate(&oamSub);
-			swiWaitForVBlank();
-		}
-	}
-	else
-	{
-		// Clear all sprites used
-		oamClear(&oamSub, 0, 0);
-
-		// Draw wide planks
-		for (int j = 0; j < 32; j++)
-		{
-			oamSet(&oamSub, 12 + j, 32 * (j % 8) - 32, 4 + j / 8 * 40, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tilessub.sprite_gfx_mem[!((j+1)%8) + ((active == 1+j/8) ? 2 : 0)], -1, false, false, false, false, false);
-		}
-
-		// Draw text
-		for (int j = 0; j < 4; j++)
-		{
-			oamSet(&oamSub, 8 + j, 0, j * 40 + 12, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tilessub.sprite_gfx_mem[17], -1, false, false, false, false, false);
-		}
-
-		// Draw small arrows
-		for (int j = 0; j < 8; j++)
-		{
-			oamSet(&oamSub, j, 64 + (j < 4 ? 120 : 0), 4 + j%4*40, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tilessub.sprite_gfx_mem[4 + !(gray_button - j)], -1, false, false, j < 4, false, false);
-		}
-
-		oamUpdate(&oamSub);
-		swiWaitForVBlank();
-	}
-
-	oamUpdate(&oamSub);
-}
-
 // Fades in the screen for 32 frames
 void fade_in()
 {
@@ -450,18 +459,25 @@ int title_screen()
 	// Set volume to 512 (half)
 	mmSetModuleVolume(512);
 
+	// Fade in the screen
+	fade_in();
+
 	/*touchPosition touch;
 	touchRead(&touch);*/
 
-	fade_in();
-
 	singlebreak:
+
+	// Reset button position
 	active_button = 1;
 
-	draw_buttons(2, 1, true);
+	// Draw buttons (with sliding effect)
+	draw_buttons(2, active_button, true);
 
 	while (true)
 	{
+		// Draw buttons (without sliding effect)
+		draw_buttons(2, active_button, false);
+
 		// Stay in while loop until nothing is pressed
 		while (keys & KEY_UP || keys & KEY_DOWN || keys & KEY_A)
 		{
@@ -483,7 +499,6 @@ int title_screen()
 					mmEffectEx(&sfx_move);
 				}
 
-				draw_buttons(2, active_button, false);
 				break;
 			}
 			if (keys & KEY_DOWN)
@@ -524,10 +539,14 @@ int title_screen()
 	// Reset button position
 	active_button = 1;
 
-	draw_buttons(3, 1, true);
+	// Draw buttons (with sliding effect)
+	draw_buttons(3, active_button, true);
 
 	while (true)
 	{
+		// Draw buttons (without sliding effect)
+		draw_buttons(3, active_button, false);
+
 		// Stay in while loop until nothing is pressed
 		while (keys & KEY_UP || keys & KEY_DOWN || keys & KEY_A)
 		{
@@ -548,7 +567,6 @@ int title_screen()
 					mmEffectEx(&sfx_move);
 					active_button--;
 				}
-				draw_buttons(3, active_button, false);
 				break;
 			}
 			if (keys & KEY_DOWN)
@@ -558,7 +576,6 @@ int title_screen()
 					mmEffectEx(&sfx_move);
 					active_button++;
 				}
-				draw_buttons(3, active_button, false);
 				break;
 			}
 			if (keys & KEY_A)
@@ -592,12 +609,12 @@ int title_screen()
 	active_button = 1;
 
 	// Draw options (with sliding effect)
-	draw_options(active_button, true);
+	draw_buttons(4, active_button, true);
 
 	while (true)
 	{
-		// Redraw options (with no sliding effect)
-		draw_options(active_button, false);
+		// Redraw options (without sliding effect)
+		draw_options(4, active_button, false);
 
 		// Stay in while loop until nothing is pressed
 		while (keys & KEY_UP || keys & KEY_DOWN || keys & KEY_LEFT || keys & KEY_RIGHT || keys & KEY_A)
