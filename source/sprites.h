@@ -22,7 +22,7 @@ void initTiles(Tiles *sprite, u8* gfx)
 }
 void initTilessub(Tilessub *sprite, u8* gfx)
 {
-	for(int i = 0; i < 18; i++)
+	for(int i = 0; i < 21; i++)
 	{
 		sprite->sprite_gfx_mem[i] = oamAllocateGfx(&oamSub, SpriteSize_32x32, SpriteColorFormat_256Color);
 		dmaCopy(gfx, sprite->sprite_gfx_mem[i], 32*32);

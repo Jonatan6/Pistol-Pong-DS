@@ -183,7 +183,7 @@ void draw_buttons(int buttons, int active, int slide)
 		for(int i = 0; i <= 234; i+=32)
 		{
 			// Clear all sprites used
-			oamClear(&oamSub, 0, 30);
+			oamClear(&oamSub, 0, 0);
 
 			for (int j = 0; j < 8; j++)
 			{
@@ -321,6 +321,7 @@ void draw_buttons(int buttons, int active, int slide)
 	}
 }
 
+// TODO: merge this function with draw_buttons()
 void draw_options(int active, bool slide)
 {
 	if (slide)
@@ -328,12 +329,18 @@ void draw_options(int active, bool slide)
 		for (int i = 0; i <= 234; i+=32)
 		{
 			// Clear all sprites used
-			oamClear(&oamSub, 0, 40);
+			oamClear(&oamSub, 0, 0);
 
 			// Draw wide planks
 			for (int j = 0; j < 32; j++)
 			{
-				oamSet(&oamSub, 8+j, -256 + 32 * (j % 8) + i, 4 + j / 8 * 40, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tilessub.sprite_gfx_mem[!((j + 1) % 8) + ((active == 1 + j / 8) ? 2 : 0)], -1, false, false, false, false, false);
+				oamSet(&oamSub, 12 + j, -256 + 32 * (j % 8) + i, 4 + j / 8 * 40, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tilessub.sprite_gfx_mem[!((j + 1) % 8) + ((active == 1 + j / 8) ? 2 : 0)], -1, false, false, false, false, false);
+			}
+
+			// Draw text
+			for (int j = 0; j < 4; j++)
+			{
+				oamSet(&oamSub, 8 + j, -256 + 32 + i, j * 40 + 12, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tilessub.sprite_gfx_mem[17], -1, false, false, false, false, false);
 			}
 
 			// Draw small arrows
@@ -349,12 +356,18 @@ void draw_options(int active, bool slide)
 	else
 	{
 		// Clear all sprites used
-		oamClear(&oamSub, 0, 40);
+		oamClear(&oamSub, 0, 0);
 
 		// Draw wide planks
 		for (int j = 0; j < 32; j++)
 		{
-			oamSet(&oamSub, 8 + j, 32 * (j % 8) - 32, 4 + j / 8 * 40, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tilessub.sprite_gfx_mem[!((j+1)%8) + ((active == 1+j/8) ? 2 : 0)], -1, false, false, false, false, false);
+			oamSet(&oamSub, 12 + j, 32 * (j % 8) - 32, 4 + j / 8 * 40, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tilessub.sprite_gfx_mem[!((j+1)%8) + ((active == 1+j/8) ? 2 : 0)], -1, false, false, false, false, false);
+		}
+
+		// Draw text
+		for (int j = 0; j < 4; j++)
+		{
+			oamSet(&oamSub, 8 + j, 0, j * 40 + 12, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tilessub.sprite_gfx_mem[17], -1, false, false, false, false, false);
 		}
 
 		// Draw small arrows
@@ -673,7 +686,7 @@ int title_screen()
 	quadruplebreak:
 
 	// Clear all sprites used
-	oamClear(&oamSub, 0, 40);
+	oamClear(&oamSub, 0, 0);
 	oamUpdate(&oamSub);
 
 	// Fade out the screen and the music for 32 frames
