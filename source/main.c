@@ -194,13 +194,14 @@ void draw_options(int active, bool slide)
 			// Draw wide planks
 			for (int j = 0; j < 32; j++)
 			{
-				oamSet(&oamSub, 12 + j, -256 + 32 * (j % 8) + i, 4 + j / 8 * 40, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tilessub.sprite_gfx_mem[!((j + 1) % 8) + ((active == 1 + j / 8) ? 2 : 0)], -1, false, false, false, false, false);
+				oamSet(&oamSub, 16 + j, -256 + 32 * (j % 8) + i, 4 + j / 8 * 40, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tilessub.sprite_gfx_mem[!((j + 1) % 8) + ((active == 1 + j / 8) ? 2 : 0)], -1, false, false, false, false, false);
 			}
 
 			// Draw text
 			for (int j = 0; j < 4; j++)
 			{
-				oamSet(&oamSub, 8 + j, -256 + 32 + i, j * 40 + 12, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tilessub.sprite_gfx_mem[17], -1, false, false, false, false, false);
+				oamSet(&oamSub, 8 + j, -256 + 32 + i, j * 40 + 12, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tilessub.sprite_gfx_mem[17+j*2], -1, false, false, false, false, false);
+				oamSet(&oamSub, 12 + j, -256 + 64 + i, j * 40 + 12, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tilessub.sprite_gfx_mem[18+j*2], -1, false, false, false, false, false);
 			}
 
 			// Draw small arrows
@@ -221,13 +222,14 @@ void draw_options(int active, bool slide)
 		// Draw wide planks
 		for (int j = 0; j < 32; j++)
 		{
-			oamSet(&oamSub, 12 + j, 32 * (j % 8) - 32, 4 + j / 8 * 40, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tilessub.sprite_gfx_mem[!((j+1)%8) + ((active == 1+j/8) ? 2 : 0)], -1, false, false, false, false, false);
+			oamSet(&oamSub, 16 + j, 32 * (j % 8) - 32, 4 + j / 8 * 40, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tilessub.sprite_gfx_mem[!((j+1)%8) + ((active == 1+j/8) ? 2 : 0)], -1, false, false, false, false, false);
 		}
 
 		// Draw text
 		for (int j = 0; j < 4; j++)
 		{
-			oamSet(&oamSub, 8 + j, 0, j * 40 + 12, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tilessub.sprite_gfx_mem[17], -1, false, false, false, false, false);
+			oamSet(&oamSub, 8 + j, 0, j * 40 + 12, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tilessub.sprite_gfx_mem[17+j*2], -1, false, false, false, false, false);
+			oamSet(&oamSub, 12 + j, 32, j * 40 + 12, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tilessub.sprite_gfx_mem[18+j*2], -1, false, false, false, false, false);
 		}
 
 		// Draw small arrows
@@ -515,7 +517,6 @@ int title_screen()
 			if (keys & KEY_A)
 			{
 				mmEffectEx(&sfx_click);
-
 				draw_buttons(2, active_button, 2);
 
 				if (active_button == 1)
@@ -581,7 +582,6 @@ int title_screen()
 			if (keys & KEY_A)
 			{
 				draw_buttons(3, active_button, 2);
-
 				mmEffectEx(&sfx_click);
 
 				difficulty = active_button;
@@ -633,6 +633,7 @@ int title_screen()
 			{
 				if (active_button > 1)
 				{
+					mmEffectEx(&sfx_move);
 					active_button--;
 				}
 				break;
@@ -641,6 +642,7 @@ int title_screen()
 			{
 				if (active_button < 4)
 				{
+					mmEffectEx(&sfx_move);
 					active_button++;
 				}
 				break;
@@ -683,8 +685,10 @@ int title_screen()
 			}
 			if (keys & KEY_A)
 			{
-				if (active_button == 3)
+				if (active_button == 4)
 				{
+					mmEffectEx(&sfx_click);
+
 					difficulty = active_button;
 					goto quadruplebreak;
 				}
