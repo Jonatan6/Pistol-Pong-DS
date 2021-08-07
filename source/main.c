@@ -109,6 +109,9 @@ int r_has_effect = 0;
 // The button that's gray (anything over 7 is none)
 int gray_button = 8;
 
+// True if the the game is multiplayer
+bool is_multiplayer = false;
+
 void reset()
 {
 	bulletlactivate = false;
@@ -200,8 +203,8 @@ void draw_options(int active, bool slide)
 			// Draw text
 			for (int j = 0; j < 4; j++)
 			{
-				oamSet(&oamSub, 8 + j, -256 + 32 + i, j * 40 + 12, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tilessub.sprite_gfx_mem[17+j*2], -1, false, false, false, false, false);
-				oamSet(&oamSub, 12 + j, -256 + 64 + i, j * 40 + 12, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tilessub.sprite_gfx_mem[18+j*2], -1, false, false, false, false, false);
+				oamSet(&oamSub, 8 + j, -256 + 32 + i, j * 40 + 12, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tilessub.sprite_gfx_mem[is_multiplayer && !j ? 18 : 17+j*2], -1, false, false, false, false, false);
+				if (j) oamSet(&oamSub, 12 + j, -256 + 64 + i, j * 40 + 12, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tilessub.sprite_gfx_mem[18+j*2], -1, false, false, false, false, false);
 			}
 
 			// Draw small arrows
@@ -228,8 +231,8 @@ void draw_options(int active, bool slide)
 		// Draw text
 		for (int j = 0; j < 4; j++)
 		{
-			oamSet(&oamSub, 8 + j, 0, j * 40 + 12, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tilessub.sprite_gfx_mem[17+j*2], -1, false, false, false, false, false);
-			oamSet(&oamSub, 12 + j, 32, j * 40 + 12, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tilessub.sprite_gfx_mem[18+j*2], -1, false, false, false, false, false);
+			oamSet(&oamSub, 8 + j, 0, j * 40 + 12, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tilessub.sprite_gfx_mem[is_multiplayer && !j ? 18 : 17+j*2], -1, false, false, false, false, false);
+			if (j) oamSet(&oamSub, 12 + j, 32, j * 40 + 12, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tilessub.sprite_gfx_mem[18+j*2], -1, false, false, false, false, false);
 		}
 
 		// Draw small arrows
@@ -469,6 +472,9 @@ int title_screen()
 
 	singlebreak:
 
+	// This will only be true if multiplayer is turned on
+	is_multiplayer = !difficulty;
+
 	// Reset button position
 	active_button = 1;
 
@@ -525,6 +531,7 @@ int title_screen()
 				}
 				else
 				{
+					difficulty = 0;
 					goto triplebreak;
 				}
 			}
@@ -536,6 +543,9 @@ int title_screen()
 	}
 
 	doublebreak:
+
+	// This will only be true if multiplayer is turned on
+	is_multiplayer = !difficulty;
 
 	// Reset button position
 	active_button = 1;
@@ -605,6 +615,9 @@ int title_screen()
 
 	triplebreak:
 
+	// This will only be true if multiplayer is turned on
+	is_multiplayer = !difficulty;
+
 	// Reset button position
 	active_button = 1;
 
@@ -662,7 +675,6 @@ int title_screen()
 						gray_button = 8;
 					}
 				}
-
 				break;
 			}
 			if (keys & KEY_RIGHT)
