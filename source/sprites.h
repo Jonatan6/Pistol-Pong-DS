@@ -1,11 +1,14 @@
+#define MAINTILES 18
+#define SUBTILES 33
+
 typedef struct 
 {
-	u16* sprite_gfx_mem[30];
+	u16* sprite_gfx_mem[MAINTILES];
 }Tiles;
 
 typedef struct 
 {
-	u16* sprite_gfx_mem[30];
+	u16* sprite_gfx_mem[SUBTILES];
 }Tilessub;
 
 Tiles tiles = {};
@@ -13,7 +16,7 @@ Tilessub tilessub = {};
 
 void initTiles(Tiles *sprite, u8* gfx)
 {
-	for(int i = 0; i < 18; i++)
+	for(int i = 0; i < MAINTILES; i++)
 	{
 		sprite->sprite_gfx_mem[i] = oamAllocateGfx(&oamMain, SpriteSize_32x32, SpriteColorFormat_256Color);
 		dmaCopy(gfx, sprite->sprite_gfx_mem[i], 32*32);
@@ -22,7 +25,7 @@ void initTiles(Tiles *sprite, u8* gfx)
 }
 void initTilessub(Tilessub *sprite, u8* gfx)
 {
-	for(int i = 0; i < 27; i++)
+	for(int i = 0; i < SUBTILES; i++)
 	{
 		sprite->sprite_gfx_mem[i] = oamAllocateGfx(&oamSub, SpriteSize_32x32, SpriteColorFormat_256Color);
 		dmaCopy(gfx, sprite->sprite_gfx_mem[i], 32*32);
