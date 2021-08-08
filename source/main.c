@@ -114,6 +114,9 @@ int joe1 = 0;
 int joe2 = -1;
 int joe3 = 0;
 
+// 700 frames before speedup
+int speed = 0;
+
 void reset()
 {
 	bulletlactivate = false;
@@ -615,12 +618,15 @@ int title_screen()
 				{
 					case 1:
 						if (joe1 > -1) joe1--;
+						difficulty = joe1+2;
 						break;
 					case 2:
 						if (joe2 > -1) joe2--;
+						speed = joe2+1;
 						break;
 					case 3:
 						if (joe3 == 1) joe3--;
+						settings_choices = 1;
 						break;
 				}				
 				break;
@@ -631,12 +637,15 @@ int title_screen()
 				{
 					case 1:
 						if (joe1 < 1) joe1++;
+						difficulty = joe1+2;
 						break;
 					case 2:
 						if (joe2 < 1) joe2++;
+						speed = joe2+1;
 						break;
 					case 3:
 						if (joe3 == 0) joe3++;
+						settings_choices = joe3;
 						break;
 				}
 				break;
@@ -646,9 +655,7 @@ int title_screen()
 				if (active_button == 4)
 				{
 					mmEffectEx(&sfx_click);
-
-					difficulty = active_button;
-					goto quadruplebreak;
+					goto triplebreak;
 				}
 			}
 			if (keys & KEY_B)
@@ -666,7 +673,7 @@ int title_screen()
 		swiWaitForVBlank();
 	}
 
-	quadruplebreak:
+	triplebreak:
 
 	// Clear all sprites used
 	oamClear(&oamSub, 0, 0);
@@ -1253,8 +1260,8 @@ int main(void)
 		t++;
 		tt++;
 
-		ballx = (tt < FRAMES_BEFORE_SPEEDUP) ? (x0 + vx * t) : (x0 + vx * t * tt / FRAMES_BEFORE_SPEEDUP);
-		bally = (tt < FRAMES_BEFORE_SPEEDUP) ? (y0 + vy * t) : (y0 + vy * t * tt / FRAMES_BEFORE_SPEEDUP);
+		ballx = (tt < FRAMES_BEFORE_SPEEDUP-700*speed) ? (x0 + vx * t) : (x0 + vx * t * tt * / (FRAMES_BEFORE_SPEEDUP-700*speed));
+		bally = (tt < FRAMES_BEFORE_SPEEDUP-700*speed) ? (y0 + vy * t) : (y0 + vy * t * tt * / (FRAMES_BEFORE_SPEEDUP-700*speed));
 
 		// Check for any oddities
 		check_legitimacy();
