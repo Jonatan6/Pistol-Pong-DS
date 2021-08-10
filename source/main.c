@@ -1,7 +1,7 @@
 // Standard headers
 #include <stdio.h>
-#include <time.h>
 #include <stdbool.h>
+#include <time.h>
 
 // Devkitpro headers
 #include <nds.h>
@@ -1260,8 +1260,8 @@ int main(void)
 		t++;
 		tt++;
 
-		ballx = (tt < FRAMES_BEFORE_SPEEDUP-700*speed) ? (x0 + vx * t) : (x0 + vx * t * tt * / (FRAMES_BEFORE_SPEEDUP-700*speed));
-		bally = (tt < FRAMES_BEFORE_SPEEDUP-700*speed) ? (y0 + vy * t) : (y0 + vy * t * tt * / (FRAMES_BEFORE_SPEEDUP-700*speed));
+		ballx = (tt < FRAMES_BEFORE_SPEEDUP-700*speed) ? (x0 + vx * t) : (x0 + vx * t * tt / (FRAMES_BEFORE_SPEEDUP-700*speed));
+		bally = (tt < FRAMES_BEFORE_SPEEDUP-700*speed) ? (y0 + vy * t) : (y0 + vy * t * tt / (FRAMES_BEFORE_SPEEDUP-700*speed));
 
 		// Check for any oddities
 		check_legitimacy();
