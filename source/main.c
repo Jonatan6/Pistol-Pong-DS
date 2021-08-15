@@ -876,7 +876,7 @@ void check_legitimacy()
 	// Check if the bullet belonging to player 1 is not out of bounds
 	if (bulletlx < 256 && bulletlactivate)
 	{
-		bulletlx = bulletlx + 2;
+		bulletlx = bulletlx + 2 + 2 * ((!(mystery_box_effect - 3) * !r_has_effect));
 	}
 	else
 	{
@@ -888,7 +888,7 @@ void check_legitimacy()
 	// Check if the bullet belonging to player 2 is not out of bounds
 	if (bulletrx > -16 && bulletractivate)
 	{
-		bulletrx = bulletrx - 2;
+		bulletrx = bulletrx - 2 - 2 * ((!(mystery_box_effect - 3) * r_has_effect));
 	}
 	else
 	{
@@ -898,13 +898,13 @@ void check_legitimacy()
 	}
 
 	// Check if player 1 has been shot
-	if (bulletrx == 0 && bulletry > paddlely - 16 && bulletry < paddlely + 20)
+	if (bulletrx < 4 && bulletry > paddlely - 16 && bulletry < paddlely + 20)
 	{
 		ldead = true;
 	}
 
 	// Check if player 2 has been shot
-	if (bulletlx == 230 && bulletly > paddlery - 16 && bulletly < paddlery + 20)
+	if (bulletlx > 226 && bulletly > paddlery - 16 && bulletly < paddlery + 20)
 	{
 		rdead = true;
 	}
