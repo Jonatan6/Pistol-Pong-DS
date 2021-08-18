@@ -103,8 +103,8 @@ int mystery_box_effect = 0;
 // True if player 2 has shot a mystery box
 int r_has_effect = 0;
 
-// The button that's gray (anything over 7 is none)
-int gray_button = 8;
+// The button(s) that's gray
+bool gray_button[6] = {false, false, false, false, true, true};
 
 // True if the the game is multiplayer
 bool is_multiplayer = false;
@@ -319,7 +319,7 @@ void draw_options(int active, bool slide)
 		// Draw small arrows
 		for (int j = 0; j < 6; j++)
 		{
-			oamSet(&oamSub, j, 64 + (j < 3 ? 120 : 0), 4 + j%3*40, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tilessub.sprite_gfx_mem[4 + !(gray_button - j)], -1, false, false, j < 3, false, false);
+			oamSet(&oamSub, j, 64 + (j < 3 ? 120 : 0), 4 + j%3*40, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tilessub.sprite_gfx_mem[4 + gray_button[j]], -1, false, false, j < 3, false, false);
 		}
 
 		oamUpdate(&oamSub);
@@ -578,6 +578,18 @@ int title_screen()
 
 	while (true)
 	{
+		// If multiplayer has been choosen, button number 0, and button number 3 become gray
+		if (is_multiplayer)
+		{
+			gray_button[0] = true;
+			gray_button[3] = true;
+		}
+		else
+		{
+			gray_button[0] = (joe1 == 1) || is_multiplayer;
+			gray_button[3] = (joe1 == -1) || is_multiplayer;
+		}
+
 		// Redraw options (without sliding effect)
 		draw_buttons(4, active_button, false);
 
@@ -617,16 +629,23 @@ int title_screen()
 				switch (active_button)
 				{
 					case 1:
+						gray_button[0] = false;
 						if (joe1 > -1) joe1--;
 						difficulty = joe1+2;
+						if (!(joe1 > -1)) gray_button[3] = true;
 						break;
 					case 2:
+						gray_button[1] = false;
 						if (joe2 > -1) joe2--;
 						speed = joe2+1;
+						if (!(joe2 > -1)) gray_button[4] = true;
+
 						break;
 					case 3:
+						gray_button[2] = false;
 						if (joe3 == 1) joe3--;
 						settings_choices = 1;
+						if (joe3 != 1) gray_button[5] = true;
 						break;
 				}				
 				break;
@@ -636,16 +655,22 @@ int title_screen()
 				switch (active_button)
 				{
 					case 1:
+						gray_button[3] = false;
 						if (joe1 < 1) joe1++;
 						difficulty = joe1+2;
+						if (!(joe1 < 1)) gray_button[0] = true;
 						break;
 					case 2:
+						gray_button[4] = false;
 						if (joe2 < 1) joe2++;
 						speed = joe2+1;
+						if (!(joe2 < 1)) gray_button[1] = true;
 						break;
 					case 3:
+						gray_button[5] = false;
 						if (joe3 == 0) joe3++;
 						settings_choices = joe3;
+						if (joe3 != 0) gray_button[2] = true;
 						break;
 				}
 				break;
@@ -667,7 +692,6 @@ int title_screen()
 			}
 
 			swiWaitForVBlank();
-
 		}
 
 		swiWaitForVBlank();
