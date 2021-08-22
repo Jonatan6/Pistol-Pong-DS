@@ -12,16 +12,15 @@ endif
 # This allows you to set ROM info and icon easy
 # Please update this block from DS_RULES file at every DEVKITARM update
 #---------------------------------------------------------------------------------
-#include $(DEVKITARM)/base_rules
+include $(DEVKITARM)/ds_rules
 
 LIBNDS	:=	$(DEVKITPRO)/libnds
 GAME_TITLE	:=	Pistol Pong DS
 GAME_SUBTITLE1	:=	By Jonatan!
-GAME_SUBTITLE2	:=	N
-GAME_ICON		:=	$(CURDIR)/../icon.bmp
+GAME_SUBTITLE2	:=	
+GAME_ICON	:=	$(CURDIR)/../icon.bmp
 
 _ADDFILES	:=	-d $(NITRO_FILES)
-include $(DEVKITARM)/ds_rules
 
 #---------------------------------------------------------------------------------
 # TARGET is the name of the output
