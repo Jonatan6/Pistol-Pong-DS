@@ -579,16 +579,8 @@ int title_screen()
 	while (true)
 	{
 		// If multiplayer has been choosen, button number 0, and button number 3 become gray
-		if (is_multiplayer)
-		{
-			gray_button[0] = true;
-			gray_button[3] = true;
-		}
-		else
-		{
-			gray_button[0] = (joe1 == 1) || is_multiplayer;
-			gray_button[3] = (joe1 == -1) || is_multiplayer;
-		}
+		gray_button[0] = (joe1 == 1) || is_multiplayer;
+		gray_button[3] = (joe1 == -1) || is_multiplayer;
 
 		// Redraw options (without sliding effect)
 		draw_buttons(4, active_button, false);
@@ -734,7 +726,7 @@ void seven_segment_draw(int index, int x, int y, int number)
 {
 	oamClear(&oamMain, index, index + 6);
 
-	switch(number)
+	switch (number)
 	{
 		case 0:
 			oamSet(&oamMain, index + 0, x, y, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[VERTICAL_LINE], -1, false, false, true, false, false);
@@ -973,7 +965,7 @@ void check_player_input()
 
 void check_cpu_input()
 {
-	switch(difficulty)
+	switch (difficulty)
 	{
 		case 0:
 			if (keys & KEY_X)
@@ -1213,6 +1205,8 @@ void explode_moment()
 				case 25:
 					explosion_frame--;
 					break;
+				default:
+					break;
 			}
 
 			if (ldead)
@@ -1268,7 +1262,7 @@ int main(void)
 	fade_in();
 
 	// Draw the dotted line in the middle of the field
-	for(int i=7, j=4; i < 19; i++, j+=16)
+	for (int i=7, j=4; i < 19; i++, j+=16)
 	{
 		oamSet(&oamMain, i, 123, j, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[0], -1, false, false, false, false, false);
 	}
