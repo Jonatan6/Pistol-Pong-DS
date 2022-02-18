@@ -89,6 +89,8 @@ bool secretdiscovered = false;
 int t = 0;
 // The true time (increments every frame, but doesn't get reset)
 int tt = 0;
+// The true true time (increments every frame, and ACTUALLY doesn't get reset)
+int ttt = 0;
 
 // Velocity of the ball
 float vx = 0;
@@ -1223,6 +1225,30 @@ void explode_moment()
 		}
 }
 
+void countdown()
+{
+	// Sound effect stuff
+	mmLoadEffect(SFX_COUNTDOWN);
+	mm_sound_effect sfx_countdown =
+	{
+		{SFX_COUNTDOWN}, (int)(1.0f * (1<<10)), 0, 255, 128
+	};
+
+	for (int i = 0; i < 260; i++, swiWaitForVBlank())
+	{
+		switch (i)
+		{
+			case 5:
+				mmEffectEx(&sfx_countdown);
+				break;
+			default:
+				break;
+		}
+
+		oamUpdate(&oamMain);
+	}
+}
+
 int paddle_offset(int effect)
 {
 	switch (effect)
@@ -1274,9 +1300,10 @@ int main(void)
 	// Infinite loop that should never be broken out of
 	while (true) 
 	{
-		// Increment both the time and the "true time™"
-		t++;
-		tt++;
+		// Increment both the time, the true time and the true true time
+		++t;
+		++tt;
+		++ttt;
 
 		ballx = (tt < FRAMES_BEFORE_SPEEDUP-700*speed) ? (x0 + vx * t) : (x0 + vx * t * tt / (FRAMES_BEFORE_SPEEDUP-700*speed));
 		bally = (tt < FRAMES_BEFORE_SPEEDUP-700*speed) ? (y0 + vy * t) : (y0 + vy * t * tt / (FRAMES_BEFORE_SPEEDUP-700*speed));
@@ -1297,6 +1324,12 @@ int main(void)
 		// Draw the bullets
 		oamSet(&oamMain, 2, bulletlx, bulletly, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[bullet_offset(!r_has_effect * mystery_box_effect)], -1, false, rdead || ldead || !bulletlactivate, false, false, false);
 		oamSet(&oamMain, 3, bulletrx, bulletry, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[bullet_offset(r_has_effect * mystery_box_effect)], -1, false, rdead || ldead || !bulletractivate, true, false, false);
+
+		// Spawn the screaming voice on the first frame
+		if (ttt == 1)
+		{
+			countdown();
+		}
 
 		// Draw the ball
 		oamSet(&oamMain, 6, ballx, bally, 0, 0, SpriteSize_16x8, SpriteColorFormat_256Color, tiles.sprite_gfx_mem[0], -1, false, false, false, false, false);
