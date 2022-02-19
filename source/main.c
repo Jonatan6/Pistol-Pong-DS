@@ -89,8 +89,6 @@ bool secretdiscovered = false;
 int t = 0;
 // The true time (increments every frame, but doesn't get reset)
 int tt = 0;
-// The true true time (increments every frame, and ACTUALLY doesn't get reset)
-int ttt = 0;
 
 // Velocity of the ball
 float vx = 0;
@@ -150,7 +148,6 @@ void reset()
 	mmStop();
 
 	t = 0;
-	tt = 0;
 	vx = (float)(rand() % 2 * 2 - 1);
 	vy = (float)(rand() % 2 * 2 - 1);
 	x0 = BALLXSTART;
@@ -357,13 +354,15 @@ void draw_buttons(int buttons, int active, int slide)
 				oamSet(&oamSub, 14+j, -256+32*j+i, 56, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tilessub[j/7], -1, false, false, false, false, false);
 			}
 
-			oamSet(&oamSub, 0, -256+32*3+i, 18, 0, 0, SpriteSize_32x16, SpriteColorFormat_256Color, tilessub[9], -1, false, false, false, false, false);
-			oamSet(&oamSub, 1, -256+32*4+i, 18, 0, 0, SpriteSize_32x16, SpriteColorFormat_256Color, tilessub[10], -1, false, false, false, false, false);
-			oamSet(&oamSub, 2, -256+32*5+i, 18, 0, 0, SpriteSize_32x16, SpriteColorFormat_256Color, tilessub[11], -1, false, false, false, false, false);
+			for (int j = 0; j < 3; j++)
+			{
+				oamSet(&oamSub, j, -256+32*(j+3)+i, 18, 0, 0, SpriteSize_32x16, SpriteColorFormat_256Color, tilessub[j+9], -1, false, false, false, false, false);
+			}
 
-			oamSet(&oamSub, 3, -256+32*3+i, 66, 0, 0, SpriteSize_32x16, SpriteColorFormat_256Color, tilessub[6], -1, false, false, false, false, false);
-			oamSet(&oamSub, 4, -256+32*4+i, 66, 0, 0, SpriteSize_32x16, SpriteColorFormat_256Color, tilessub[7], -1, false, false, false, false, false);
-			oamSet(&oamSub, 5, -256+32*5+i, 66, 0, 0, SpriteSize_32x16, SpriteColorFormat_256Color, tilessub[8], -1, false, false, false, false, false);
+			for (int j = 0; j < 3; j++)
+			{
+				oamSet(&oamSub, j+3, -256+32*(j+3)+i, 66, 0, 0, SpriteSize_32x16, SpriteColorFormat_256Color, tilessub[j+6], -1, false, false, false, false, false);
+			}
 
 			oamUpdate(&oamSub);
 			swiWaitForVBlank();
@@ -410,9 +409,10 @@ void draw_buttons(int buttons, int active, int slide)
 					oamSet(&oamSub, 6+j, -256+32*j+i, 8, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tilessub[j/7+2], -1, false, false, false, false, false);
 				}
 
-				oamSet(&oamSub, 0, -256+32*3+i, 18, 0, 0, SpriteSize_32x16, SpriteColorFormat_256Color, tilessub[9], -1, false, false, false, false, false);
-				oamSet(&oamSub, 1, -256+32*4+i, 18, 0, 0, SpriteSize_32x16, SpriteColorFormat_256Color, tilessub[10], -1, false, false, false, false, false);
-				oamSet(&oamSub, 2, -256+32*5+i, 18, 0, 0, SpriteSize_32x16, SpriteColorFormat_256Color, tilessub[11], -1, false, false, false, false, false);
+				for (int j = 0; j < 3; j++)
+				{
+					oamSet(&oamSub, j, -256+32*(j+3)+i, 18, 0, 0, SpriteSize_32x16, SpriteColorFormat_256Color, tilessub[j+9], -1, false, false, false, false, false);
+				}
 			}
 			else if (active == 2)
 			{
@@ -421,9 +421,10 @@ void draw_buttons(int buttons, int active, int slide)
 					oamSet(&oamSub, 14+j, -256+32*j+i, 56, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tilessub[j/7+2], -1, false, false, false, false, false);
 				}
 
-				oamSet(&oamSub, 3, -256+32*3+i, 66, 0, 0, SpriteSize_32x16, SpriteColorFormat_256Color, tilessub[6], -1, false, false, false, false, false);
-				oamSet(&oamSub, 4, -256+32*4+i, 66, 0, 0, SpriteSize_32x16, SpriteColorFormat_256Color, tilessub[7], -1, false, false, false, false, false);
-				oamSet(&oamSub, 5, -256+32*5+i, 66, 0, 0, SpriteSize_32x16, SpriteColorFormat_256Color, tilessub[8], -1, false, false, false, false, false);
+				for (int j = 0; j < 3; j++)
+				{
+					oamSet(&oamSub, j+3, -256+32*(j+3)+i, 66, 0, 0, SpriteSize_32x16, SpriteColorFormat_256Color, tilessub[j+6], -1, false, false, false, false, false);
+				}
 			}
 			
 			oamUpdate(&oamSub);
@@ -1300,13 +1301,12 @@ int main(void)
 	// Infinite loop that should never be broken out of
 	while (true) 
 	{
-		// Increment both the time, the true time and the true true time
+		// Increment both the time and the true time
 		++t;
 		++tt;
-		++ttt;
 
-		ballx = (tt < FRAMES_BEFORE_SPEEDUP-700*speed) ? (x0 + vx * t) : (x0 + vx * t * tt / (FRAMES_BEFORE_SPEEDUP-700*speed));
-		bally = (tt < FRAMES_BEFORE_SPEEDUP-700*speed) ? (y0 + vy * t) : (y0 + vy * t * tt / (FRAMES_BEFORE_SPEEDUP-700*speed));
+		ballx = (t < FRAMES_BEFORE_SPEEDUP-700*speed) ? (x0 + vx * t) : (x0 + vx * t * t / (FRAMES_BEFORE_SPEEDUP-700*speed));
+		bally = (t < FRAMES_BEFORE_SPEEDUP-700*speed) ? (y0 + vy * t) : (y0 + vy * t * t / (FRAMES_BEFORE_SPEEDUP-700*speed));
 
 		// Check for any oddities
 		check_legitimacy();
@@ -1326,7 +1326,7 @@ int main(void)
 		oamSet(&oamMain, 3, bulletrx, bulletry, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles[bullet_offset(r_has_effect * mystery_box_effect)], -1, false, rdead || ldead || !bulletractivate, true, false, false);
 
 		// Spawn the screaming voice on the first frame
-		if (ttt == 1)
+		if (tt == 1)
 		{
 			countdown();
 		}
@@ -1339,16 +1339,16 @@ int main(void)
 		{
 			// Mystery boxes
 			case 1:
-				mystery_boxes(tt);
+				mystery_boxes(t);
 				break;
 			// Magic shperes
 			case 2:
-				magic_balls(tt);
+				magic_balls(t);
 				break;
 			// Both boxes and shperes
 			case 3:
-				mystery_boxes(tt);
-				magic_balls(tt);
+				mystery_boxes(t);
+				magic_balls(t);
 				break;
 		}
 
