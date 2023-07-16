@@ -727,90 +727,30 @@ int title_screen()
 // Prints out the score in big fancy numbers
 void seven_segment_draw(int index, int x, int y, int number)
 {
-	oamClear(&oamMain, index, index + 6);
-
-	switch (number)
+	// If the score is more than one digit, instead print each digit of the score separately
+	if (number > 9)
 	{
-		case 0:
-			oamSet(&oamMain, index + 0, x, y, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles[VERTICAL_LINE], -1, false, false, true, false, false);
-			oamSet(&oamMain, index + 2, x, y + 28, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles[VERTICAL_LINE], -1, false, false, true, false, false);
-			oamSet(&oamMain, index + 3, x - 22, y, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles[HORIZONTAL_LINE], -1, false, false, true, false, false);
-			oamSet(&oamMain, index + 4, x - 22, y + 16, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles[HORIZONTAL_LINE], -1, false, false, true, false, false);
-			oamSet(&oamMain, index + 5, x - 6, y, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles[HORIZONTAL_LINE], -1, false, false, true, false, false);
-			oamSet(&oamMain, index + 6, x - 6, y + 16, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles[HORIZONTAL_LINE], -1, false, false, true, false, false);
-			break;
+		seven_segment_draw(index, x, y, number / 10);
+		seven_segment_draw(index + 7, x + 24, y, number % 10);
+		return;
+	}
 
-		case 1:
-			oamSet(&oamMain, index + 3, x - 22, y, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles[HORIZONTAL_LINE], -1, false, false, true, false, false);
-			oamSet(&oamMain, index + 4, x - 22, y + 16, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles[HORIZONTAL_LINE], -1, false, false, true, false, false);
-			break;
+	// 7 bits is all we need for a seven segment display!
+	char wtf[10] = {2, 103, 72, 24, 21, 48, 32, 30, 0, 16};
+	//	[0] = 2;	00000010
+	//	[1] = 103;	01100111
+	//	[2] = 72;	01001000
+	//	[3] = 24;	00011000
+	//	[4] = 21;	00010101
+	//	[5] = 48;	00110000
+	//	[6] = 32;	00100000
+	//	[7] = 30;	00011110
+	//	[8] = 0;	00000000
+	//	[9] = 16;	00010000
 
-		case 2:
-			oamSet(&oamMain, index + 0, x, y, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles[VERTICAL_LINE], -1, false, false, true, false, false);
-			oamSet(&oamMain, index + 1, x, y + 14, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles[VERTICAL_LINE], -1, false, false, true, false, false);
-			oamSet(&oamMain, index + 2, x, y + 28, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles[VERTICAL_LINE], -1, false, false, true, false, false);
-			oamSet(&oamMain, index + 4, x - 22, y + 16, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles[HORIZONTAL_LINE], -1, false, false, true, false, false);
-			oamSet(&oamMain, index + 5, x - 6, y, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles[HORIZONTAL_LINE], -1, false, false, true, false, false);
-			break;
-		case 3:
-			oamSet(&oamMain, index + 0, x, y, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles[VERTICAL_LINE], -1, false, false, true, false, false);
-			oamSet(&oamMain, index + 1, x, y + 14, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles[VERTICAL_LINE], -1, false, false, true, false, false);
-			oamSet(&oamMain, index + 2, x, y + 28, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles[VERTICAL_LINE], -1, false, false, true, false, false);
-			oamSet(&oamMain, index + 5, x - 6, y, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles[HORIZONTAL_LINE], -1, false, false, true, false, false);
-			oamSet(&oamMain, index + 6, x - 6, y + 16, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles[HORIZONTAL_LINE], -1, false, false, true, false, false);
-			break;
-
-		case 4:
-			oamSet(&oamMain, index + 1, x, y + 14, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles[VERTICAL_LINE], -1, false, false, true, false, false);
-			oamSet(&oamMain, index + 3, x - 22, y, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles[HORIZONTAL_LINE], -1, false, false, true, false, false);
-			oamSet(&oamMain, index + 5, x - 6, y, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles[HORIZONTAL_LINE], -1, false, false, true, false, false);
-			oamSet(&oamMain, index + 6, x - 6, y + 16, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles[HORIZONTAL_LINE], -1, false, false, true, false, false);
-			break;
-
-		case 5:
-			oamSet(&oamMain, index + 0, x, y, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles[VERTICAL_LINE], -1, false, false, true, false, false);
-			oamSet(&oamMain, index + 1, x, y + 14, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles[VERTICAL_LINE], -1, false, false, true, false, false);
-			oamSet(&oamMain, index + 2, x, y + 28, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles[VERTICAL_LINE], -1, false, false, true, false, false);
-			oamSet(&oamMain, index + 3, x - 22, y, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles[HORIZONTAL_LINE], -1, false, false, true, false, false);
-			oamSet(&oamMain, index + 6, x - 6, y + 16, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles[HORIZONTAL_LINE], -1, false, false, true, false, false);
-			break;
-
-		case 6:
-			oamSet(&oamMain, index + 0, x, y, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles[VERTICAL_LINE], -1, false, false, true, false, false);
-			oamSet(&oamMain, index + 1, x, y + 14, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles[VERTICAL_LINE], -1, false, false, true, false, false);
-			oamSet(&oamMain, index + 2, x, y + 28, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles[VERTICAL_LINE], -1, false, false, true, false, false);
-			oamSet(&oamMain, index + 3, x - 22, y, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles[HORIZONTAL_LINE], -1, false, false, true, false, false);
-			oamSet(&oamMain, index + 4, x - 22, y + 16, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles[HORIZONTAL_LINE], -1, false, false, true, false, false);
-			oamSet(&oamMain, index + 6, x - 6, y + 16, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles[HORIZONTAL_LINE], -1, false, false, true, false, false);
-			break;
-
-		case 7:
-			oamSet(&oamMain, index + 0, x, y, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles[VERTICAL_LINE], -1, false, false, true, false, false);
-			oamSet(&oamMain, index + 5, x - 6, y, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles[HORIZONTAL_LINE], -1, false, false, true, false, false);
-			oamSet(&oamMain, index + 6, x - 6, y + 16, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles[HORIZONTAL_LINE], -1, false, false, true, false, false);
-			break;
-
-		case 8:
-			oamSet(&oamMain, index + 0, x, y, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles[VERTICAL_LINE], -1, false, false, true, false, false);
-			oamSet(&oamMain, index + 1, x, y + 14, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles[VERTICAL_LINE], -1, false, false, true, false, false);
-			oamSet(&oamMain, index + 2, x, y + 28, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles[VERTICAL_LINE], -1, false, false, true, false, false);
-			oamSet(&oamMain, index + 3, x - 22, y, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles[HORIZONTAL_LINE], -1, false, false, true, false, false);
-			oamSet(&oamMain, index + 4, x - 22, y + 16, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles[HORIZONTAL_LINE], -1, false, false, true, false, false);
-			oamSet(&oamMain, index + 5, x - 6, y, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles[HORIZONTAL_LINE], -1, false, false, true, false, false);
-			oamSet(&oamMain, index + 6, x - 6, y + 16, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles[HORIZONTAL_LINE], -1, false, false, true, false, false);
-			break;
-
-		case 9:
-			oamSet(&oamMain, index + 0, x, y, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles[VERTICAL_LINE], -1, false, false, true, false, false);
-			oamSet(&oamMain, index + 1, x, y + 14, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles[VERTICAL_LINE], -1, false, false, true, false, false);
-			oamSet(&oamMain, index + 2, x, y + 28, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles[VERTICAL_LINE], -1, false, false, true, false, false);
-			oamSet(&oamMain, index + 3, x - 22, y, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles[HORIZONTAL_LINE], -1, false, false, true, false, false);
-			oamSet(&oamMain, index + 5, x - 6, y, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles[HORIZONTAL_LINE], -1, false, false, true, false, false);
-			oamSet(&oamMain, index + 6, x - 6, y + 16, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles[HORIZONTAL_LINE], -1, false, false, true, false, false);
-			break;
-		default:
-			// If the score is over 9, instead print the first digit of the score
-			seven_segment_draw(index, x, y, (number - (number % 10)) / 10);
+	for (int i = 0; i < 7; i++)
+	{
+		oamSet(&oamMain, index + i, x - (i > 2)*22 + (i > 4)*16 , y + (i > 2 ? !(i&1)*16 : i*14), 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles[(i > 2) ? HORIZONTAL_LINE : VERTICAL_LINE], -1, false, wtf[number] >> i & 1, true, false, false);
 	}
 }
 
@@ -1298,8 +1238,7 @@ int main(void)
 	seven_segment_draw(20, 90, 10, 0);
 	seven_segment_draw(34, 140, 10, 0);
 
-	// Infinite loop that should never be broken out of
-	while (true) 
+	while (1) 
 	{
 		// Increment both the time and the true time
 		++t;
@@ -1374,16 +1313,9 @@ int main(void)
 			reset();
 
 			// Draw the score of both playes
-			seven_segment_draw(20, 90 - (lscore > 9 ? 24 : 0), 10, lscore);
-			if (lscore > 9)
-			{
-				seven_segment_draw(28, 90, 10, lscore % 10);
-			}
-			seven_segment_draw(36, 140, 10, rscore);
-			if (rscore > 9)
-			{
-				seven_segment_draw(44, 164, 10, rscore % 10);
-			}
+			seven_segment_draw(20, 90, 10, lscore);
+			seven_segment_draw(34, 140, 10, rscore);
+
 		}
 
 		// Write the changes to both screens
