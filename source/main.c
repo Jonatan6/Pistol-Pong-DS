@@ -117,6 +117,152 @@ int joe3 = 0;
 // 700 frames before speedup
 int speed = 0;
 
+void reset();
+void init_everything();
+void draw_buttons(int buttons, int active, int slide);
+void fade_in();
+void fade_out();
+int title_screen();
+void seven_segment_draw(int index, int x, int y, int number);
+void check_legitimacy();
+void check_player_input();
+void check_cpu_input();
+void get_mystery_box_effect(bool player1);
+void mystery_boxes(int time);
+void ballout_moment();
+void explode_moment();
+void countdown();
+
+int paddle_offset(int effect)
+{
+	switch (effect)
+	{
+		case 3:
+			// Recharge gun
+			return 4;
+		case 4:
+			// Nuke gun
+			return 3;
+		default:
+			return secretdiscovered;
+	}
+}
+
+int bullet_offset(int effect)
+{
+	switch (effect)
+	{
+		case 4:
+			// Nuke gun
+			return 5;
+		default:
+			return 2;
+	}
+}
+
+int main(void) 
+{
+	// Initialize a bunch of stuff
+	init_everything();
+
+	// Enter the title screen
+	difficulty = title_screen();
+
+	// Fade in the screen
+	fade_in();
+
+	// Draw the dotted line in the middle of the field
+	for (int i=7, j=4; i < 19; i++, j+=16)
+	{
+		oamSet(&oamMain, i, 123, j, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, tiles[0], -1, false, false, false, false, false);
+	}
+
+	// Draw the score of both playes
+	seven_segment_draw(20, 90, 10, 0);
+	seven_segment_draw(34, 140, 10, 0);
+
+	while (1) 
+	{
+		// Increment both the time and the true time
+		++t;
+		++tt;
+
+		ballx = (t < FRAMES_BEFORE_SPEEDUP-700*speed) ? (x0 + vx * t) : (x0 + vx * t * t / (FRAMES_BEFORE_SPEEDUP-700*speed));
+		bally = (t < FRAMES_BEFORE_SPEEDUP-700*speed) ? (y0 + vy * t) : (y0 + vy * t * t / (FRAMES_BEFORE_SPEEDUP-700*speed));
+
+		// Check for any oddities
+		check_legitimacy();
+
+		// Check if player 1 has moved their paddle or fired their pistol
+		check_player_input();
+
+		// Check if player 2 has moved their paddle or fired their pistol
+		check_cpu_input();
+
+		// Draw the paddles
+		oamSet(&oamMain, 0, 0, paddlely, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles[paddle_offset(!r_has_effect * mystery_box_effect)], -1, false, ldead, false, false, false);
+		oamSet(&oamMain, 1, 225, paddlery, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles[paddle_offset(r_has_effect * mystery_box_effect)], -1, false, rdead, true, false, false);
+
+		// Draw the bullets
+		oamSet(&oamMain, 2, bulletlx, bulletly, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles[bullet_offset(!r_has_effect * mystery_box_effect)], -1, false, rdead || ldead || !bulletlactivate, false, false, false);
+		oamSet(&oamMain, 3, bulletrx, bulletry, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles[bullet_offset(r_has_effect * mystery_box_effect)], -1, false, rdead || ldead || !bulletractivate, true, false, false);
+
+		// Spawn the screaming voice on the first frame
+		if (tt == 1)
+		{
+			countdown();
+		}
+
+		// Draw the ball
+		oamSet(&oamMain, 6, ballx, bally, 0, 0, SpriteSize_16x8, SpriteColorFormat_256Color, tiles[0], -1, false, false, false, false, false);
+
+		// Switch statement to check settings
+		switch (settings_choices)
+		{
+			case 1:
+				mystery_boxes(t);
+				break;
+		}
+
+		// When the ball goes out of bounds, play a sound effect and wait 100 frames
+		ballout_moment();
+
+		// When a player gets shot, play a sound effect and animate the explosion for 100 frames 
+		explode_moment();
+
+		if (ldead || rdead || ballout)
+		{
+			// If player 1 is dead, increment player 2's score and vice versa
+			if (ldead)
+			{
+				rscore++;
+			}
+			if (rdead)
+			{
+				lscore++;
+			}
+
+			// Reset everything (almost)
+			reset();
+
+			// Draw the score of both playes
+			seven_segment_draw(20, 90, 10, lscore);
+			seven_segment_draw(34, 140, 10, rscore);
+
+		}
+
+		// Write the changes to both screens
+		oamUpdate(&oamMain);
+		oamUpdate(&oamSub);
+
+		// Wait until the next frame
+		swiWaitForVBlank();
+	}
+
+	return 0;
+}
+
+
 void reset()
 {
 	bulletlactivate = false;
@@ -736,7 +882,7 @@ void seven_segment_draw(int index, int x, int y, int number)
 	}
 
 	// 7 bits is all we need for a seven segment display!
-	char wtf[10] = {2, 103, 72, 24, 21, 48, 32, 30, 0, 16};
+	char wtf[] = {2, 103, 72, 24, 21, 48, 32, 30, 0, 16};
 	//	[0] = 2;	00000010
 	//	[1] = 103;	01100111
 	//	[2] = 72;	01001000
@@ -1096,15 +1242,6 @@ void mystery_boxes(int time)
 	}
 }
 
-void magic_balls(int time)
-{
-	// Rotate the spheres 1° every frame
-	oamRotateScale(&oamMain, 0, degreesToAngle(time), intToFixed(1, 8), intToFixed(1, 8));
-
-	oamSet(&oamMain, 51, 120, 40, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles[12], 0, true, false, false, false, false);
-	oamSet(&oamMain, 52, 120, 120, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles[12], 0, true, false, false, false, false);
-}
-
 void ballout_moment()
 {
 	// Sound effect stuff
@@ -1188,143 +1325,4 @@ void countdown()
 
 		oamUpdate(&oamMain);
 	}
-}
-
-int paddle_offset(int effect)
-{
-	switch (effect)
-	{
-		case 3:
-			// Recharge gun
-			return 4;
-		case 4:
-			// Nuke gun
-			return 3;
-		default:
-			return secretdiscovered;
-	}
-}
-
-int bullet_offset(int effect)
-{
-	switch (effect)
-	{
-		case 4:
-			// Nuke gun
-			return 5;
-		default:
-			return 2;
-		}
-}
-
-int main(void) 
-{
-	// Initialize a bunch of stuff
-	init_everything();
-
-	// Enter the title screen
-	difficulty = title_screen();
-
-	// Fade in the screen
-	fade_in();
-
-	// Draw the dotted line in the middle of the field
-	for (int i=7, j=4; i < 19; i++, j+=16)
-	{
-		oamSet(&oamMain, i, 123, j, 0, 0, SpriteSize_8x8, SpriteColorFormat_256Color, tiles[0], -1, false, false, false, false, false);
-	}
-
-	// Draw the score of both playes
-	seven_segment_draw(20, 90, 10, 0);
-	seven_segment_draw(34, 140, 10, 0);
-
-	while (1) 
-	{
-		// Increment both the time and the true time
-		++t;
-		++tt;
-
-		ballx = (t < FRAMES_BEFORE_SPEEDUP-700*speed) ? (x0 + vx * t) : (x0 + vx * t * t / (FRAMES_BEFORE_SPEEDUP-700*speed));
-		bally = (t < FRAMES_BEFORE_SPEEDUP-700*speed) ? (y0 + vy * t) : (y0 + vy * t * t / (FRAMES_BEFORE_SPEEDUP-700*speed));
-
-		// Check for any oddities
-		check_legitimacy();
-
-		// Check if player 1 has moved their paddle or fired their pistol
-		check_player_input();
-
-		// Check if player 2 has moved their paddle or fired their pistol
-		check_cpu_input();
-
-		// Draw the paddles
-		oamSet(&oamMain, 0, 0, paddlely, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles[paddle_offset(!r_has_effect * mystery_box_effect)], -1, false, ldead, false, false, false);
-		oamSet(&oamMain, 1, 225, paddlery, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles[paddle_offset(r_has_effect * mystery_box_effect)], -1, false, rdead, true, false, false);
-
-		// Draw the bullets
-		oamSet(&oamMain, 2, bulletlx, bulletly, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles[bullet_offset(!r_has_effect * mystery_box_effect)], -1, false, rdead || ldead || !bulletlactivate, false, false, false);
-		oamSet(&oamMain, 3, bulletrx, bulletry, 0, 0, SpriteSize_32x32, SpriteColorFormat_256Color, tiles[bullet_offset(r_has_effect * mystery_box_effect)], -1, false, rdead || ldead || !bulletractivate, true, false, false);
-
-		// Spawn the screaming voice on the first frame
-		if (tt == 1)
-		{
-			countdown();
-		}
-
-		// Draw the ball
-		oamSet(&oamMain, 6, ballx, bally, 0, 0, SpriteSize_16x8, SpriteColorFormat_256Color, tiles[0], -1, false, false, false, false, false);
-
-		// Switch statement to check settings
-		switch (settings_choices)
-		{
-			// Mystery boxes
-			case 1:
-				mystery_boxes(t);
-				break;
-			// Magic shperes
-			case 2:
-				magic_balls(t);
-				break;
-			// Both boxes and shperes
-			case 3:
-				mystery_boxes(t);
-				magic_balls(t);
-				break;
-		}
-
-		// When the ball goes out of bounds, play a sound effect and wait 100 frames
-		ballout_moment();
-
-		// When a player gets shot, play a sound effect and animate the explosion for 100 frames 
-		explode_moment();
-
-		if (ldead || rdead || ballout)
-		{
-			// If player 1 is dead, increment player 2's score and vice versa
-			if (ldead)
-			{
-				rscore++;
-			}
-			if (rdead)
-			{
-				lscore++;
-			}
-
-			// Reset everything (almost)
-			reset();
-
-			// Draw the score of both playes
-			seven_segment_draw(20, 90, 10, lscore);
-			seven_segment_draw(34, 140, 10, rscore);
-
-		}
-
-		// Write the changes to both screens
-		oamUpdate(&oamMain);
-		oamUpdate(&oamSub);
-
-		// Wait until the next frame
-		swiWaitForVBlank();
-	}
-
-	return 0;
 }
